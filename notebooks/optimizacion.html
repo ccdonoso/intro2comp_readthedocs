@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. Optimización &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Mecanismos" href="mecanismos.html" />
+    <link rel="prev" title="2. Métodos Numéricos (2/2)" href="metodos_numericos_2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Optimización</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Conceptos">3.1. Conceptos</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Función-objetivo">3.1.1. Función objetivo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Variables-de-decisión">3.1.2. Variables de decisión</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Solución-de-un-problema-de-optimización">3.1.3. Solución de un problema de optimización</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Espacio-Decisión">3.1.4. Espacio Decisión</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Óptimo-Local-y-Global">3.1.5. Óptimo Local y Global</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Mínimo-Global">3.1.5.1. Mínimo Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Mínimo-Local">3.1.5.2. Mínimo Local</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Optimización-con-el-método-de-Newton-y-Gradientes-Descendientes.">3.2. Optimización con el método de Newton y Gradientes Descendientes.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Gradientes-descendientes">3.2.1. Gradientes descendientes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Resolver-el-siguiente-problema-de-Optimización:">3.2.2. Resolver el siguiente problema de Optimización:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Optimización-por-enjambre-de-Partículas">3.3. Optimización por enjambre de Partículas</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Ecuaciones-de-posición-y-velocidad">3.3.1. Ecuaciones de posición y velocidad</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Bibliografía">3.4. Bibliografía</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>Optimización</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/optimizacion.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Optimización">
+<h1><span class="section-number">3. </span>Optimización<a class="headerlink" href="#Optimización" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> : Optimización. - Fundamentos optimización - Optimización sin restricciones: - Método de Newton - Gradientes descendientes - Optimización por Enjambres de Partículas</p>
+<section id="Conceptos">
+<h2><span class="section-number">3.1. </span>Conceptos<a class="headerlink" href="#Conceptos" title="Link to this heading"></a></h2>
+<section id="Función-objetivo">
+<h3><span class="section-number">3.1.1. </span>Función objetivo<a class="headerlink" href="#Función-objetivo" title="Link to this heading"></a></h3>
+<p>La función objetivo es lo que se desea optimizar. El objetivo puede ser maximizado o minimizado al escoger variables que cumplan con todas las restricciones del problema. La calidad de un conjunto de variables como posibles soluciones de un problema de optimización, es medido con el valor de la función objetivo para ese conjunto de parámetros. Ejem:</p>
+<div class="math notranslate nohighlight">
+\[\Large \min_{\mathbf{x} \in \mathbb{A}^n} f(\mathbf{x})\]</div>
+</section>
+<section id="Variables-de-decisión">
+<h3><span class="section-number">3.1.2. </span>Variables de decisión<a class="headerlink" href="#Variables-de-decisión" title="Link to this heading"></a></h3>
+<p>Las variables de decisión determinan el valor de la función objetivo. En cada problema de optimización se buscan las mejores variables de decisión que maximicen/minimicen el valor de la función objetivo. En algunos problemas de optimización las variables de decisión se encuentran restringidas por un límite superior y un límite inferior. Este tipo de variables de decisión forman un espacio continuo de decisión. Por ejemplo, escoger una proporción adecuada de químicos para fabricar un medicamento
+involucra variables de decisión en un espacio continuo, en el cual las proporciones pueden tomar cualquier valor entre [0,1]. Por otro lado, hay problemas de optimización en los que las variables de decisión son discretas. Las variables de decisión discretas son las que tienen valores específicos entre un límite superior y un límite inferior. Los números enteros son un ejemplo de variables discretas. Por ejemplo, la cantidad de vacunas que se pueden producir en un intervalo de tiempo está
+determinado por un valor entero. Los números binarios también son de tipo de variable de decisión discreta. Un caso típico es cuando se selecciona 1 para realizar una acción y 0 para no realizarla. Los problemas de optimización con variables de decisión continuas son llamados <strong>problemas continuos</strong> y aquellos definidos por variables de decisión discretas son llamados <strong>problemas discretos</strong>. También existen problemas de optimización que involucran variables de decisión discretas y continuas,
+estos se llamas problemas mixtos.</p>
+</section>
+<section id="Solución-de-un-problema-de-optimización">
+<h3><span class="section-number">3.1.3. </span>Solución de un problema de optimización<a class="headerlink" href="#Solución-de-un-problema-de-optimización" title="Link to this heading"></a></h3>
+<p>Cada función objetivo esta expresada en términos de las variables de decisión. Cuando solo hay una variable de decisión, el problema de optimización es denominado como unidimensional, mientras que los problemas de optimización que tienen dos o mas variables de decisión, son denominados como <span class="math notranslate nohighlight">\(N\)</span>-dimensionales. Un problema de optimización <span class="math notranslate nohighlight">\(N\)</span>-dimensional tiene soluciones expresadas en términos de uno o más de un conjunto de soluciones, en los que la solución tiene <span class="math notranslate nohighlight">\(N\)</span> variables
+de decisión.</p>
+</section>
+<section id="Espacio-Decisión">
+<h3><span class="section-number">3.1.4. </span>Espacio Decisión<a class="headerlink" href="#Espacio-Decisión" title="Link to this heading"></a></h3>
+<p>El conjunto de variables de decisión que satisfacen las restricciones del problema de optimización es denominado como espacio factible de decisión. En un problema <span class="math notranslate nohighlight">\(N\)</span>-dimensional cada posible solución es un vector de <span class="math notranslate nohighlight">\(N\)</span> variables. Cada elemento de este es una variable de decisión. Los algoritmos de optimización buscan, uno o varios puntos en el espacio de decisión, que optimizan la función objetivo. Por ejemplo, se puede definir un conjunto <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> que contiene los
+elementos pertenecientes al espacio de decisión de un problema no restringido, definido por las variables de decisión N-dimensional <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> <span class="math">\begin{equation}
+\mathbf{A}=\left \{\boldsymbol{x}\in \mathbb{R}^n    \right \} \:.
+\end{equation}</span></p>
+<p>Un problema de optimización puede tener dos tipos de restricciones. Aquellas que limitan de forma directa el posible valor de la variable de decisión como, por ejemplo, que una variable de decisión sea de valor real y positiva, es decir <span class="math notranslate nohighlight">\(x&gt;0\)</span>, y aquellas que restringen el problema de optimización de manera implícita como <span class="math notranslate nohighlight">\(x_1+x_2&lt;c\)</span>. La finalidad del problema de optimización es encontrar una solución óptima en el espacio factible. En la figura 1, se puede observar un problema
+restringido en un espacio de decisión bi-dimensional. El espacio de todas las soluciones factibles constituyen el espacio factible de decisión. Evidentemente, la solución óptima tiene que estar en el espacio factible. Otra forma de clasificar los tipos de restricciones es considerando restricciones de igualdad o restricciones de inequidad. Se puede definir un vector <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> que representa <span class="math notranslate nohighlight">\(p\)</span> restricciones de igualdad <span class="math">\begin{equation}
+h_j(\boldsymbol{x})=0 , j=1..p  \: \quad (1).
+\label{eq:r_e}
+\end{equation}</span> De forma similar, se define un vector <span class="math notranslate nohighlight">\(\mathbf{g}\)</span> de restricción de inequidad <span class="math">\begin{equation}
+g_i(\boldsymbol{x})\leq0 , i=1..m  \: \quad (2)..
+\label{eq:r_d}
+\end{equation}</span></p>
+<p><img alt="rest" class="no-scaled-link" src="../_images/restricciones.png" style="width: 600px;" /></p>
+<center><p>Figura 1</p>
+</center></section>
+<section id="Óptimo-Local-y-Global">
+<h3><span class="section-number">3.1.5. </span>Óptimo Local y Global<a class="headerlink" href="#Óptimo-Local-y-Global" title="Link to this heading"></a></h3>
+<p>Se ha establecido que un problema de optimización bien definido tiene un espacio de decisión bien definido. Cada punto del espacio de decisión define un valor de la función objetivo. La región de soluciones factibles constituye el conjunto <span class="math notranslate nohighlight">\(\mathbf{A}\)</span> y se escribe en términos de las restricciones 1 , 2 y el vector de las variables decisión <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span></p>
+<p><span class="math">\begin{equation}
+\mathbf{A}=\left \{\boldsymbol{x}| h_j(\boldsymbol{x})=0 , j=1..p ; g_i(\boldsymbol{x})<=0 , i=1..m\right \} \:.
+\end{equation}</span></p>
+<p>En una función pueden existir dos tipos de óptimos: óptimos locales y óptimos globales. Para entender la diferencia entre estos se puede considerar una función <span class="math notranslate nohighlight">\(f(x)\)</span> de una variable, mostrada en la figura 2. En esta figura, donde <span class="math notranslate nohighlight">\(x\)</span> esta sin restringir <span class="math notranslate nohighlight">\((-\infty\leq x \leq \infty)\)</span>, los puntos <span class="math notranslate nohighlight">\(x_B\)</span> y <span class="math notranslate nohighlight">\(x_D\)</span> son mínimos locales, ya que son los valores más pequeños en sus cercanías. Al desplazarse a la izquierda o derecha de esos puntos, la función crece. Por lo
+tanto, estos puntos son llamados mínimos locales, por que son los mejores valores en sus cercanías.</p>
+<p>Similarmente, <span class="math notranslate nohighlight">\(x_A\)</span> y <span class="math notranslate nohighlight">\(x_C\)</span> son máximos locales para <span class="math notranslate nohighlight">\(f(x)\)</span>. Para determinar si un óptimo es global, se necesita examinar todo el dominio de la función y determinar su posición. De acuerdo a estas definiciones, no existe un óptimo global para la función 2, ya que el dominio de la función <span class="math notranslate nohighlight">\(f(x)\)</span> no tiene un límite superior o inferior. En cambio, si es que la función objetivo se restringe entre <span class="math notranslate nohighlight">\(-a\)</span> y <span class="math notranslate nohighlight">\(b\)</span>, como en la figura 3, entonces el punto <span class="math notranslate nohighlight">\(x_E\)</span> sería
+el mínimo global y <span class="math notranslate nohighlight">\(x_F\)</span> el máximo global. Estos dos puntos tienen restricciones activas, mientras que los puntos <span class="math notranslate nohighlight">\(x_A,x_B,x_C\)</span>, y <span class="math notranslate nohighlight">\(x_D\)</span> son no restringidos.</p>
+<p><img alt="rest1" class="no-scaled-link" src="../_images/optimolocal.svg" width="600" /></p>
+<center><p>Figura 2</p>
+</center><p><img alt="rest2" class="no-scaled-link" src="../_images/optimoglobaj.png" style="width: 600px;" /></p>
+<center><p>Figura 3</p>
+</center><ul class="simple">
+<li><p>Un óptimo global, es aquel punto perteneciente al espacio factible con el mejor valor de la función objetivo en todo el espacio de soluciones factibles.</p></li>
+<li><p>Un óptimo local es aquel punto perteneciente al espacio factible que presenta el mejor valor de la función objetivo en su vecindad.</p></li>
+</ul>
+<p>Con estos conceptos descritos, se puede dar una definición más precisa de lo que es un óptimo local y un óptimo global. Estos definen con base en la minimización, ya que un problema de maximización puede convertirse en uno de minimización multiplicando la función objetivo por <span class="math notranslate nohighlight">\(-1\)</span>.</p>
+<section id="Mínimo-Global">
+<h4><span class="section-number">3.1.5.1. </span>Mínimo Global<a class="headerlink" href="#Mínimo-Global" title="Link to this heading"></a></h4>
+<p>Una función <span class="math notranslate nohighlight">\(f(\boldsymbol{x})\)</span> de <span class="math notranslate nohighlight">\(n\)</span> variables tiene un mínimo global en <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> si al ser evaluada en <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> es menor o igual que cualquier otro punto de la función evaluada en <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span>, perteneciente al conjunto del espacio factible <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>. Es decir</p>
+<p><span class="math">\begin{equation}
+f(\boldsymbol{x}^*)\leq f(\boldsymbol{x}) \:.
+\label{eq:global_in}
+\end{equation}</span></p>
+<p>Si se que cumple la inequidad de forma estricta para todo <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> perteneciente al conjunto factible soluciones <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>, entonces <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> es un mínimo global fuerte y si no fuese así, se llamaría un mínimo global débil.</p>
+</section>
+<section id="Mínimo-Local">
+<h4><span class="section-number">3.1.5.2. </span>Mínimo Local<a class="headerlink" href="#Mínimo-Local" title="Link to this heading"></a></h4>
+<p>Una función <span class="math notranslate nohighlight">\(f(\boldsymbol{x})\)</span> de <span class="math notranslate nohighlight">\(n\)</span> variables tiene un mínimo local en <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span>, si la inequidad 4 se cumple para todo <span class="math notranslate nohighlight">\(\boldsymbol{x}\)</span> en una pequeña vecindad <span class="math notranslate nohighlight">\(N\)</span> del punto <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> perteneciente al conjunto del espacio factible <span class="math notranslate nohighlight">\(\mathbf{A}\)</span>. Si la inequidad es estricta, entonces el óptimo local se llama óptimo local fuerte, en caso contrario, se denomina óptimo local débil.</p>
+<p>La vecindad <span class="math notranslate nohighlight">\(N\)</span> del punto <span class="math notranslate nohighlight">\(\boldsymbol{x}^*\)</span> es definida como un conjunto de puntos tales que</p>
+<p><span class="math">\begin{equation}
+N=\left \{\boldsymbol{x}| \boldsymbol{x}\in\mathbf{A} ; \left \|\boldsymbol{x}-\boldsymbol{x}^* \right \|< \delta  \right \} \:. (4)
+\end{equation}</span></p>
+<p>Este conjunto esta definido por un pequeño <span class="math notranslate nohighlight">\(\delta&gt;0\)</span>. Geométricamente, consiste en una pequeña región del espacio factible.</p>
+<h3 style="color:blue"><p>Optimización sin restricciones</p>
+</h3><p>Un punto critico de una función <span class="math notranslate nohighlight">\(f\)</span> es un punto <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> en el que se cumple que <span class="math notranslate nohighlight">\(\triangledown f(\mathbf{x})=\mathbf{0}\)</span>. Podemos clasificar un punto critico <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> de <span class="math notranslate nohighlight">\(f:\mathbb{R}^n \rightarrow \mathbb{R}\)</span> como un maximo, un minimo o un punto silla al observar el Hessiano <span class="math notranslate nohighlight">\(Hf(\mathbf{x}) = \triangledown^2f(\mathbf{x})\)</span>. Este es una versión multivariable de la segunda derivada y es posible utilizar información de esta matriz <strong>en el punto crítico</strong>
+para clasificar que tipo de punto critico tiene una función. Si esta matriz es:</p>
+<ul class="simple">
+<li><p>Definida positiva, entonces <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> es un mínimo estricto.</p></li>
+<li><p>Definida negativa, entonces <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> es un máximo estricto.</p></li>
+<li><p>Positiva/ Negativa semidefinida, entonces <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> no es un mínimo/máximo estricto.</p></li>
+<li><p>Indefinida, entonces es un punto de estancamiento.</p></li>
+</ul>
+<p>Excelente, entonces con los valores propios de la matriz Hessiana es posible saber si es que un punto es un mínimo, máximo o un punto de estancamiento.</p>
+<ul class="simple">
+<li><p>Si todos los valores propios son positivos, entonces la matriz es definida positiva.</p></li>
+<li><p>Si todos los valores propios son negativos, entonces la matriz es definida negativa.</p></li>
+<li><p>Si alguno de los valores propios es cero, entonces la matriz es semidefinida.</p></li>
+<li><p>Si los valores propios tiene signos cambiados, entonces es un punto de estancamiento.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="Optimización-con-el-método-de-Newton-y-Gradientes-Descendientes.">
+<h2><span class="section-number">3.2. </span>Optimización con el método de Newton y Gradientes Descendientes.<a class="headerlink" href="#Optimización-con-el-método-de-Newton-y-Gradientes-Descendientes." title="Link to this heading"></a></h2>
+<p>Estos métodos permiten optimizar funciones convexas sin restricciones, por ejemplo:</p>
+<div class="math notranslate nohighlight">
+\[\Large \min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x})\]</div>
+<p>Se desea encontrar un Óptimo Local que cumpla con <span class="math notranslate nohighlight">\(\triangledown f(\mathbf{x})=\mathbf{0}\)</span>. Si se dan cuenta, se puede encontrar un punto que cumpla con la condición de la primera derivada al resolver un sistemas de ecuaciones no lineales. El jacobiano del vector de funciones sera igual al Hessiano <span class="math notranslate nohighlight">\(Hf(\mathbf{x}) = \triangledown^2f(\mathbf{x})\)</span> y utilizando estas ecuaciones es posible utilizar el método de Newton para resolver el problema de optimización de forma iterativa, como:</p>
+<div class="math notranslate nohighlight">
+\[\large \mathbf{x}_{k+1} = \mathbf{x}_k - (\triangledown^2f(\mathbf{x}_k))^{-1}\triangledown f(\mathbf{x}_k) \quad k = 0,1,2,\dots\]</div>
+<p>Tambien se puede entender como:</p>
+<div class="math notranslate nohighlight">
+\[\large \mathbf{x}_{k+1} = \mathbf{x}_k - (Hf(\mathbf{x}_k))^{-1}\triangledown f(\mathbf{x}_k)\]</div>
+<p>En este caso, por cada iteración, se esta minimizando una serie de Taylor de segundo orden dado por:</p>
+<div class="math notranslate nohighlight">
+\[f(\mathbf{y}) \approx f(\mathbf{x}) + \triangledown f(\mathbf{x}) \mathbf{dx} + \frac{1}{2}\mathbf{dx}^T \triangledown^2 f(\mathbf{x}) \mathbf{dx}\]</div>
+<section id="Gradientes-descendientes">
+<h3><span class="section-number">3.2.1. </span>Gradientes descendientes<a class="headerlink" href="#Gradientes-descendientes" title="Link to this heading"></a></h3>
+<p>El método de gradientes descendientes itera utilizando solo el gradiente:</p>
+<div class="math notranslate nohighlight">
+\[\large \mathbf{x}_{k+1} = \mathbf{x}_k - \alpha \triangledown f(\mathbf{x}_k) \quad k = 0,1,2,\dots\]</div>
+<p>En este caso se utiliza la siguiente aproximación para minimizar la función:</p>
+<div class="math notranslate nohighlight">
+\[f(\mathbf{y}) \approx f(\mathbf{x}) + \triangledown f(\mathbf{x}) \mathbf{dx} + \frac{1}{2 \alpha}\mathbf{dx}^T \mathbf{dx}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">go_fast</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> <span class="c1"># Function is compiled and runs in machine code</span>
+    <span class="n">trace</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">trace</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">trace</span>
+
+<span class="c1"># DO NOT REPORT THIS... COMPILATION TIME IS INCLUDED IN THE EXECUTION TIME!</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">go_fast</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Elapsed (with compilation) = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span>
+
+<span class="c1"># NOW THE FUNCTION IS COMPILED, RE-TIME IT EXECUTING FROM CACHE</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">go_fast</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Elapsed (after compilation) = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Elapsed (with compilation) = 0.13591408729553223
+Elapsed (after compilation) = 3.790855407714844e-05
+</pre></div></div>
+</div>
+</section>
+<section id="Resolver-el-siguiente-problema-de-Optimización:">
+<h3><span class="section-number">3.2.2. </span>Resolver el siguiente problema de Optimización:<a class="headerlink" href="#Resolver-el-siguiente-problema-de-Optimización:" title="Link to this heading"></a></h3>
+<p>Considerar una inicialización <span class="math notranslate nohighlight">\(\mathbf{x}=(20,20)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\Large \min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x}) =\frac{1}{2}(10x_1^2 + x_2^2 ) + 5\log(1 + exp( -x_1-x_2))\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@jit</span>
+<span class="k">def</span> <span class="nf">fmin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">10.</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span><span class="o">/</span><span class="mf">2.</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">))</span>
+
+<span class="n">delta</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">20.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mf">20.</span><span class="p">,</span> <span class="mf">20.</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">fmin</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span> <span class="n">levels</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+<span class="c1"># Programar Gradiente descendiente.</span>
+<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">grad_num</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">grad</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">h</span><span class="p">)</span>
+
+    <span class="n">grad</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">-</span><span class="n">h</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="n">h</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">grad</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mf">20.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">400</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">lr</span> <span class="o">*</span> <span class="n">grad_num</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r.&#39;</span><span class="p">)</span>
+
+<span class="c1">#-----------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_optimizacion_13_0.png" src="../_images/notebooks_optimizacion_13_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span> <span class="n">levels</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+<span class="c1"># Programar el método de Newton.</span>
+
+<span class="k">def</span> <span class="nf">hessian</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Numeric Hessian</span>
+<span class="sd">       df2/dx2  df2/dxdy</span>
+<span class="sd">       df2/dydx df2/dy2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="mf">2.</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">)</span><span class="o">-</span><span class="mf">2.</span><span class="o">*</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">-</span><span class="n">h</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">h</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="o">-</span><span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">)</span> <span class="o">+</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">h</span><span class="p">,</span><span class="n">y</span><span class="o">-</span><span class="n">h</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">h</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">H</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="mf">20.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">lr</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="p">[</span> <span class="n">x</span> <span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">inv_hessian</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">hessian</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">grad_num</span><span class="p">(</span><span class="n">fmin</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">inv_hessian</span><span class="p">,</span><span class="n">grad</span><span class="p">)</span>
+    <span class="n">sol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">sol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span><span class="n">sol</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+
+<span class="n">x</span>
+<span class="c1"># -------------------------------------------------------------------</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0.11246718, 1.12467184])
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_optimizacion_14_1.png" src="../_images/notebooks_optimizacion_14_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Optimización-por-enjambre-de-Partículas">
+<h2><span class="section-number">3.3. </span>Optimización por enjambre de Partículas<a class="headerlink" href="#Optimización-por-enjambre-de-Partículas" title="Link to this heading"></a></h2>
+<p>La optimización por Enjambre de Partículas, <em>Particle Swarm Optimization (PSO)</em>, es un algoritmo de optimización que está inspirado en el comportamiento de bandadas y enjambres, para solucionar problemas no lineales, no convexos o problemas de combinatoria. Este método fue introducido el año 1995 por James Kennedy y Russel Ebehart [1].</p>
+<p><img alt="rest6" class="no-scaled-link" src="../_images/pso.gif" style="width: 700px;" /></p>
+<p>Kennedy y Eberhart [1] desarrollaron el modelo PSO para optimizar funciones. En PSO, las soluciones son obtenidas a través de una búsqueda aleatoria y la inteligencia del enjambre. Esta búsqueda es realizada a través de un conjunto aleatorio de posibles soluciones, este conjunto es conocido como <em>enjambre</em> y cada solución potencial es conocida como <em>partícula</em>.</p>
+<p>En PSO, las partículas son influenciadas por dos tipos de aprendizaje. Cada partícula aprende de otra partícula y de su experiencia previa al moverse. El aprendizaje a partir de otros es generalmente referido como <em>aprendizaje social</em>, mientras que el aprendizaje basado en las experiencias propias es denominado como <em>aprendizaje cognitivo</em>. Como resultado del aprendizaje social, las partículas almacenan en su memoria la mejor solución visitada por el enjambre, denominada como <strong>gbest</strong>. Como
+resultado del aprendizaje cognitivo, la partícula almacena en su memoria la mejor solución visitada por ella misma, denominada como <strong>pbest</strong>.</p>
+<p>El cambio de la dirección y de la magnitud de cualquier partícula es decidido por un factor denominado como <em>velocidad</em>. Este es el cambio de la posición respecto al tiempo. En un marco referente a PSO el tiempo es definido por las iteraciones. De esta manera, para PSO la velocidad puede ser definida como la tasa de cambio de la posición respecto a las iteraciones. Como el número de estas crece unitariamente, la dimensión de la velocidad <span class="math notranslate nohighlight">\(v\)</span> y el de la posición <span class="math notranslate nohighlight">\(x\)</span> es la misma.</p>
+<p>Para un espacio de búsqueda N-dimensional, la <span class="math notranslate nohighlight">\(i\)</span>-ésima partícula de un enjambre en un paso de tiempo <span class="math notranslate nohighlight">\(t\)</span> es representada por un vector N-dimensional, <span class="math notranslate nohighlight">\(x_i^t=(x_{i1}^t,x_{i2}^t,...,x_{iN}^t)^T\)</span> y su velocidad es representada por un otro vector N-dimensional <span class="math notranslate nohighlight">\(v_i^t=(v_{i1}^t,v_{i2}^t,...,v_{iN}^t)^T\)</span>. A su vez, la mejor posición visitada por una partícula es denotada como <span class="math notranslate nohighlight">\(p_i^t=(p_{i1}^t,p_{i2}^t,...,p_{iN}^t)^T\)</span>. El índice <span class="math notranslate nohighlight">\(g\)</span> indica cual es la mejor
+partícula del enjambre. La velocidad y la posición de una partícula pueden ser actualizadas utilizando respectivamente las ecuaciones (4) y la ecuación (5).</p>
+<p><span class="math">\begin{equation}
+v_{in}^{t+1}=v_{in}^{t}+c_1r_1(p_{in}^t-x_{in}^t)+c_2r_2(p_{gn}^t-x_{id}^t) \quad (4)
+\label{eq3:vpso}
+\end{equation}</span></p>
+<p><span class="math">\begin{equation}
+x_{in}^{t+1}=x_{in}^{t}+v_{in}^{t+1}, \quad (5)
+\label{eq3:xpso}
+\end{equation}</span></p>
+<p>donde <span class="math notranslate nohighlight">\(n=1,2,...,N\)</span> representa la dimensión, <span class="math notranslate nohighlight">\(i=1,2,...,S\)</span> representan el índice de la partícula, <span class="math notranslate nohighlight">\(S\)</span> es el tamaño del enjambre y <span class="math notranslate nohighlight">\(c_1\)</span> y <span class="math notranslate nohighlight">\(c_2\)</span> son constantes denominadas como parámetros cognitivo o social, respectivamente, o simplemente coeficientes de aceleración. De igual forma, <span class="math notranslate nohighlight">\(r_1\)</span> y <span class="math notranslate nohighlight">\(r_2\)</span> son números aleatorios en el rango <span class="math notranslate nohighlight">\([0,1]\)</span> con distribución uniforme. Se puede observar de las ecuaciones 4 y 5 que cada dimensión es actualizada
+independiente de las otras. La única relación entre las dimensiones está dada por la función objetivo a través de <span class="math notranslate nohighlight">\(pbest\)</span> y <span class="math notranslate nohighlight">\(gbest\)</span>. Las ecuaciones 4 y 5 definen la versión básica de PSO. Un procedimiento algorítmico para PSO es definido en la siguiente tabla.</p>
+<p><img alt="rest3" class="no-scaled-link" src="../_images/PSO.png" style="width: 600px;" /></p>
+<p>La ecuaciones 3.14 y 3.15 son las ecuaciones 4 y 5, respectivamente.</p>
+<section id="Ecuaciones-de-posición-y-velocidad">
+<h3><span class="section-number">3.3.1. </span>Ecuaciones de posición y velocidad<a class="headerlink" href="#Ecuaciones-de-posición-y-velocidad" title="Link to this heading"></a></h3>
+<p>El lado derecho de la expresión 4 contiene tres términos aditivos, que se pueden interpretar como:</p>
+<ul class="simple">
+<li><p>La velocidad anterior <span class="math notranslate nohighlight">\(v\)</span> puede ser vista como el momento de la partícula. Este término previene un cambio drástico de la velocidad de la partícula.</p></li>
+<li><p>El segundo término es conocido como la componente cognitiva o egoísta. Este término atrae a la partícula a la mejor posición en la que ella ha estado. De esta manera, durante el proceso de búsqueda, la partícula recuerda su posición y evita deambular. Es importante notar que <span class="math notranslate nohighlight">\((p_{in}^t-x_{in}^t)\)</span> es un vector que apunta hacia la mejor posición de la partícula. Es importante mantener el orden, ya que, en caso contrario la partícula seria repelida de esta posición.</p></li>
+<li><p>El tercer término es llamado componente social y es responsable de compartir la información a todo el enjambre. Debido a este término, cada partícula es atraída a la mejor posición del enjambre. El término <span class="math notranslate nohighlight">\((p_{gn}^t-x_{id}^t)\)</span> apunta hacia la mejor posición del enjambre.</p></li>
+</ul>
+<p><img alt="rest5" class="no-scaled-link" src="../_images/PSO2.png" style="width: 600px;" /></p>
+<p>Es claro que los términos <span class="math notranslate nohighlight">\(c_1\)</span> y <span class="math notranslate nohighlight">\(c_2\)</span> restringen cuanto se va a desplazar la partícula, en la dirección de la mejor posición de la partícula y la mejor posición del enjambre, respectivamente. Al controlar estos parámetros se puede controlar la velocidad o éxito de la convergencia.</p>
+<p>La figura representa geométricamente el movimiento de las partículas en un plano 2D. En todo paso de tiempo de PSO el enjambre sigue la posición de <span class="math notranslate nohighlight">\(gbest\)</span> y <span class="math notranslate nohighlight">\(pbest\)</span> y por ende, cumple con el principio de calidad. Como la partícula se mueve aleatoriamente hacia <span class="math notranslate nohighlight">\(gbest\)</span> y <span class="math notranslate nohighlight">\(pbest\)</span>, se cumple el principio de diversidad. El principio de estabilidad se justifica por que el enjambre no se mueve aleatoriamente, solo las partículas. En enjambre cambia su comportamiento cuando
+<span class="math notranslate nohighlight">\(gbest\)</span> cambia, por lo tanto, se adhiere al principio de adaptabilidad.</p>
+</section>
+</section>
+<section id="Bibliografía">
+<h2><span class="section-number">3.4. </span>Bibliografía<a class="headerlink" href="#Bibliografía" title="Link to this heading"></a></h2>
+<p>[1] KENNEDY, James y EBERHART, Russell. Particle swarm optimization. En: Procee- dings of ICNN’95-International Conference on Neural Networks. 1995, vol. 4, págs. 1942-1948.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metodos_numericos_2.html" class="btn btn-neutral float-left" title="2. Métodos Numéricos (2/2)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mecanismos.html" class="btn btn-neutral float-right" title="4. Mecanismos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

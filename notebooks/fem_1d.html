@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5. Método de elementos finitos de Galerkin &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Elasticidad Lineal en FEniCS 3D." href="elasticity_3d.html" />
+    <link rel="prev" title="4. Método de residuos ponderados" href="metodo_residuos_ponderados.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Método de elementos finitos de Galerkin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Programando-la-aproximación">5.1. Programando la aproximación</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Función-de-prueba-n_i(x)">5.1.1. Función de prueba <span class="math notranslate nohighlight">\(n_i(x)\)</span></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#La-aproximación">5.2. La aproximación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Las-funciones-de-formas">5.3. Las funciones de formas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Calculando-la-aproximación-con-los-valores-nodales">5.4. Calculando la aproximación con los valores nodales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#La-función-residuo">5.5. La función residuo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Minimizar-el-residuo">5.6. Minimizar el residuo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Método-de-Residuos-Ponderados.">5.6.1. Método de Residuos Ponderados.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Método-de-Galerkin">5.6.2. Método de Galerkin</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">5.7. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Formulación-del-elemento">5.8. Formulación del elemento</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Podemos-escribir-esto-de-forma-matricial:">5.8.1. Podemos escribir esto de forma matricial:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Ecuación-diferencial-=&gt;-Sistema-de-ecuaciones">5.8.2. Ecuación diferencial =&gt; Sistema de ecuaciones</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Ejemplo-1D---Elasticidad-Lineal">5.9. Ejemplo 1D - Elasticidad Lineal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Es-importante-observar-que-hemos-llegado-a-la-misma-ecuación-que-fue-presentada-en-la-clase-de-Estructuras-con-el-método-de-elementos-finitos.-Revisar-la-diapositiva-13-del-siguiente-enlace.">5.9.1. Es importante observar que hemos llegado a la misma ecuación que fue presentada en la clase de Estructuras con el método de elementos finitos. Revisar la diapositiva 13 del siguiente enlace.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Ejemplo-1D---Transferencia-de-Calor">5.10. Ejemplo 1D - Transferencia de Calor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema-Ejemplo">5.11. Problema Ejemplo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Solución">5.11.1. Solución</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Referencias">5.12. Referencias</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5. </span>Método de elementos finitos de Galerkin</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/fem_1d.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Método-de-elementos-finitos-de-Galerkin">
+<h1><span class="section-number">5. </span>Método de elementos finitos de Galerkin<a class="headerlink" href="#Método-de-elementos-finitos-de-Galerkin" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> - Elementos finitos 1. Grandes ideas de elementos finitos 2. Programando la aproximación 3. La función residuo 4. Método de elementos finitos de Galerkin 5. Formulación de elemento 6. Ejemplo 1D - Elasticidad Lineal 7. Ejemplo 1D - Transferencia de Calor</p>
+<p><strong>Librerias</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+<p>El método clásico de residuos ponderados descrito en el notebook anterior, utiliza funciones de prueba que son globales; es decir, cada <strong>función de prueba</strong> debe aplicarse en <strong>todo el dominio de interés y satisfacer idénticamente las condiciones de contorno</strong>. Especialmente en los casos más prácticos de problemas bidimensionales y tridimensionales gobernados por ecuaciones diferenciales parciales, el “descubrimiento” de las funciones de prueba apropiadas y la determinación de la precisión de
+las soluciones resultantes son tareas formidables. Sin embargo, el concepto de <strong>minimización del error residual</strong> se adapta fácilmente adaptada al contexto de los <strong>elementos finitos</strong> utilizando el enfoque de <strong>Galerkin</strong> como sigue. Para ilustrar, consideramos la ecuación diferencial</p>
+<div class="math notranslate nohighlight">
+\[\frac{d^2y}{dx} + f(x) = 0 \quad  a \leq x \leq b \quad \quad eq. (A)\]</div>
+<p>Sujeto a:</p>
+<div class="math notranslate nohighlight">
+\[y(a)=y_a  \quad y(b)=y_b\]</div>
+<p>Claramente, el problema se describe a través de un operador diferencial lineal, donde, es necesario encontrar la función <span class="math notranslate nohighlight">\(y(x)\)</span>.</p>
+<p>El dominio del problema es divido en <span class="math notranslate nohighlight">\(M\)</span> <strong>elementos</strong> (Palabra clave de este método), esta discretización espacial se presenta en la figura 1.</p>
+<p><img alt="logo1" class="no-scaled-link" src="../_images/elementos.svg" width="800" /></p>
+<p>Es importante reconocer que la discretización espacial está determinada por <span class="math notranslate nohighlight">\(M+1\)</span> <strong>nodos</strong> y <span class="math notranslate nohighlight">\(M\)</span> <strong>elementos</strong>. Los valores de las variables <span class="math notranslate nohighlight">\(x_i\)</span> son variables independientes, tal que <span class="math notranslate nohighlight">\(x_1 = x_a\)</span> y <span class="math notranslate nohighlight">\(x_{M+1}=x_b\)</span>, para asegurar inclusión de las fronteras globales. Se asume una solución aproximada de la forma:</p>
+<div class="math notranslate nohighlight">
+\[\tilde{y}(x) = \sum_{i=1}^{M+1}y_i n_i(x)\]</div>
+<p>donde <span class="math notranslate nohighlight">\(y_i\)</span> es el valor de la función solución en <span class="math notranslate nohighlight">\(x = x_i\)</span> y <span class="math notranslate nohighlight">\(n_i(x)\)</span> es la función de prueba correspondiente. <strong>Nótese que, en este enfoque, los parámetros constantes desconocidos :math:`a_i` del método de los residuos ponderados se convierten en valores discretos desconocidos de la función solución evaluados en puntos específicos del dominio</strong>. También existe una diferencia importante en las <strong>funciones de prueba</strong> <span class="math notranslate nohighlight">\(n_i(x)\)</span>, estas son distintas de cero solo en una
+pequeña parte del dominio global del problema. En concreto, una función de prueba <span class="math notranslate nohighlight">\(n_i(x)\)</span> es distinta de cero solo en el intervalo <span class="math notranslate nohighlight">\(x_{i-1} \lt x \lt x_{i+1}\)</span>. Para ejemplificar su uso, se presentan las siguientes funciones lineales de prueba:</p>
+<div class="math notranslate nohighlight">
+\[n_i(x) = \frac{x-x_{i-1}}{x_i-x_{i-1}} \quad x_{i-1} \leq x \leq x_i\]</div>
+<div class="math notranslate nohighlight">
+\[n_i(x) = \frac{x_{i+1}-x}{x_{i+1}-x_{i}} \quad x_{i} \leq x \leq x_{i+1}\]</div>
+<div class="math notranslate nohighlight">
+\[n_i(x) = 0 \quad x\lt x_{i-1} \quad x \gt x_{i+1}\]</div>
+<section id="Programando-la-aproximación">
+<h2><span class="section-number">5.1. </span>Programando la aproximación<a class="headerlink" href="#Programando-la-aproximación" title="Link to this heading"></a></h2>
+<p>Para entender mejor como funciona la función de forma (o de prueba), la graficaremos y para ello escribiremos una implementación <em>naive</em>. En este caso, obtendremos la famosa función de sombrero.</p>
+<section id="Función-de-prueba-n_i(x)">
+<h3><span class="section-number">5.1.1. </span>Función de prueba <span class="math notranslate nohighlight">\(n_i(x)\)</span><a class="headerlink" href="#Función-de-prueba-n_i(x)" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">interval_nodes</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    función de prueba para el caso 1D con interpolación lineal</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    x: float</span>
+<span class="sd">        input</span>
+<span class="sd">    interval_nodes: list</span>
+<span class="sd">        Contiene la información de los nodos [x_{i-1},xi,x_{i+1}]</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n: float</span>
+<span class="sd">        test function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">interval_nodes</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">x0</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">x1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x1</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">x1</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">x2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">x2</span><span class="o">-</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">x2</span><span class="o">-</span><span class="n">x1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test cell</span>
+<span class="c1"># Si todo anda bien, debería graficarse la función sombrero</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">101</span><span class="p">)</span>
+<span class="n">interval_nodes</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_fun</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">interval_nodes</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$n_i(x)$&quot;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Hat function&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;g-&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x7f935496ec80&gt;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_fem_1d_6_1.png" src="../_images/notebooks_fem_1d_6_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="La-aproximación">
+<h2><span class="section-number">5.2. </span>La aproximación<a class="headerlink" href="#La-aproximación" title="Link to this heading"></a></h2>
+<p>Recordemos que estamos planteando que la solución es una combinación lineal de funciones de forma, denotado por:</p>
+<div class="math notranslate nohighlight">
+\[\LARGE \tilde{y}(x) = \sum_{i=1}^{M+1}y_i n_i(x)\]</div>
+<p>Para entender mejor la aproximación, discretizaremos el dominio <span class="math notranslate nohighlight">\([0,1]\)</span>. Esta discretización constará de 5 elementos y 6 nodos. Recordemos que <span class="math notranslate nohighlight">\(M\)</span> es la cantidad de elementos. Primero graficaremos cada una de las 6 funciones de forma (o de prueba), y después graficaremos la combinación lineal de estas funciones por los valores nodales <span class="math notranslate nohighlight">\(y_i\)</span>.</p>
+</section>
+<section id="Las-funciones-de-formas">
+<h2><span class="section-number">5.3. </span>Las funciones de formas<a class="headerlink" href="#Las-funciones-de-formas" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Discretización</span>
+<span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">xi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#Estos vectores es para graficar la función</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1">#plotting set-up</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$n_i(x)$&quot;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Hat function&quot;</span><span class="p">)</span>
+
+<span class="c1">#Evaluando las funciones</span>
+<span class="n">contador</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">xi</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+        <span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_fun</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],[</span><span class="n">t</span><span class="o">-</span><span class="n">dx</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">t</span><span class="o">+</span><span class="n">dx</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="s2">&quot;--&quot;</span><span class="p">,</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$n_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">contador</span><span class="p">))</span>
+    <span class="n">contador</span> <span class="o">+=</span><span class="mi">1</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f93527bf4f0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_fem_1d_8_1.png" src="../_images/notebooks_fem_1d_8_1.png" />
+</div>
+</div>
+<p>Claramente, en este caso, las funciones de prueba son simplemente funciones de interpolación lineal tales que el valor de la solución <span class="math notranslate nohighlight">\(y(x)\)</span> en <span class="math notranslate nohighlight">\(x_i &lt; x &lt; x_{i+1}\)</span> es una combinación lineal de los valores <strong>“nodales”</strong> adyacentes <span class="math notranslate nohighlight">\(y_i\)</span> e <span class="math notranslate nohighlight">\(y_{i+1}\)</span>. En la imagen anterior, se presentan las 6 funciones de forma. Es posible observar que los elementos están espaciados por un <span class="math notranslate nohighlight">\(dx=0.2\)</span> y definidos por los nodos <span class="math notranslate nohighlight">\(x_i\)</span> y <span class="math notranslate nohighlight">\(x_{i+1}\)</span>. Además, si evaluamos la
+aproximación en el interior de un elemento, solo será necesario interpolar con los valores nodales <span class="math notranslate nohighlight">\(x_i\)</span> y <span class="math notranslate nohighlight">\(x_{i+1}\)</span>, por ejemplo, la solución aproximada sería:</p>
+<div class="math notranslate nohighlight">
+\[\Large \tilde{y}(x) = y_i n(x)_i + y_{i+1} n(x)_{i+1} \quad \quad x_i \leq x \leq x_{i+1}\]</div>
+<p>Observar que la expresión anterior, es la interpolación lineal de los nodos adyacentes.</p>
+</section>
+<section id="Calculando-la-aproximación-con-los-valores-nodales">
+<h2><span class="section-number">5.4. </span>Calculando la aproximación con los valores nodales<a class="headerlink" href="#Calculando-la-aproximación-con-los-valores-nodales" title="Link to this heading"></a></h2>
+<p>En esta sección crearemos una función que nos permita evaluar la aproximación, con los valores nodales <span class="math notranslate nohighlight">\(y_i\)</span>. Nuevamente, utilizaremos un dominio unitario entre <span class="math notranslate nohighlight">\([0,1]\)</span>. Para ello, programe a continuación la rutina. En este caso, se realizará una implementación <em>naive</em>, solo con el propósito de ejemplificar como funciona este método.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">y_sol</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">yi</span><span class="p">,</span><span class="n">xi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calcula la aproximación, en base a valores nodales.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    x: float</span>
+<span class="sd">        input</span>
+<span class="sd">    yi: ndarray</span>
+<span class="sd">        y nodal values</span>
+<span class="sd">    xi: ndarray</span>
+<span class="sd">        linear spaced nodal positions</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y: float</span>
+<span class="sd">        aproximation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">xi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">xi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mf">0.</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xi</span><span class="p">):</span>
+        <span class="n">y</span> <span class="o">+=</span> <span class="n">yi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">test_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,[</span><span class="n">t</span><span class="o">-</span><span class="n">dx</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">t</span><span class="o">+</span><span class="n">dx</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">y</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Tested Cell</span>
+<span class="c1">#Parabola entre [0,1]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">101</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="c1">#Aproximación de parabola con elementos.</span>
+<span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">yi</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.</span><span class="o">*</span><span class="p">(</span><span class="n">xi</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="n">y_approx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+    <span class="n">y_approx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_sol</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">yi</span><span class="p">,</span><span class="n">xi</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exacta&quot;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y_approx</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Aproximación&quot;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$y$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f935273f760&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_fem_1d_12_1.png" src="../_images/notebooks_fem_1d_12_1.png" />
+</div>
+</div>
+</section>
+<section id="La-función-residuo">
+<h2><span class="section-number">5.5. </span>La función residuo<a class="headerlink" href="#La-función-residuo" title="Link to this heading"></a></h2>
+<p>En la sección anterior, presentamos como se puede expresar una solución a través de una combinación lineal de funciones de prueba (también llamadas de interpolación o de forma). Con el método de elementos finitos, nos interesa obtener una solución que aproxime la solución real del problema. Para ello, es crítico definit una función de <strong>error</strong> o <strong>residuo</strong>. Esta función debería ser 0 para todo <span class="math notranslate nohighlight">\(x \in \Omega\)</span>, donde <span class="math notranslate nohighlight">\(\Omega\)</span> es el dominio de estudio.</p>
+<p>En el Notebook anterior, de método de residuos ponderados se explica que es la función residuo. Sin embargo, aca se hará un pequeño repaso. Recordemos que nuestro problema está sujeto a un operador diferencial lineal <span class="math notranslate nohighlight">\(D\)</span>, que actúa sobre la función y(x).</p>
+<div class="math notranslate nohighlight">
+\[\Large D(y(x)) = p (x)\]</div>
+<p>Deseamos aproximar <span class="math notranslate nohighlight">\(y\)</span> mediante una función <span class="math notranslate nohighlight">\(\tilde{y}\)</span>, que es una combinación lineal de funciones base elegidas de un conjunto linealmente independiente. En el método de elementos finitos, estas funciones de base o de forma, están definidas por las funciones de interpolación del elemento</p>
+<div class="math notranslate nohighlight">
+\[\Large y \cong \tilde{y} = \sum_{i=1}^{M+1}y_i n_i(x)\]</div>
+<p>Ahora, cuando se sustituye la aproximación en el operador diferencial, <span class="math notranslate nohighlight">\(D\)</span>, el resultado de las operaciones no es, en general, <span class="math notranslate nohighlight">\(p(x)\)</span>. Por tanto, existira una función residuo o error:</p>
+<div class="math notranslate nohighlight">
+\[\large E(x) = R(x) = D(\tilde{y}(x))-p(x) \neq 0\]</div>
+</section>
+<section id="Minimizar-el-residuo">
+<h2><span class="section-number">5.6. </span>Minimizar el residuo<a class="headerlink" href="#Minimizar-el-residuo" title="Link to this heading"></a></h2>
+<p>Es importante definir una métrica para poder determinar el error de la aproximación, en este caso se utiliza la norma <span class="math notranslate nohighlight">\(l2\)</span> para determinar que tan distinta de cero es la función. El método de residuos ponderados permite establecer diferentes formas de minimizar este residuo o hacer que tienda a cero en todo el dominio. En este caso, utilizaremos el método de Galerkin, que nos permitirá obtener la mejor solución, tomando la norma <span class="math notranslate nohighlight">\(l2\)</span> como métrica.</p>
+<section id="Método-de-Residuos-Ponderados.">
+<h3><span class="section-number">5.6.1. </span>Método de Residuos Ponderados.<a class="headerlink" href="#Método-de-Residuos-Ponderados." title="Link to this heading"></a></h3>
+<p>El método de residuos ponderados es el que nos permite minimizar el error del residuo en un sentido ponderado. Es importante mencionar que se desea encontrar los valores de <span class="math notranslate nohighlight">\(y_i\)</span> y estos se encuentran al resolver un sistema de ecuaciones que proviene de minimizar los residuos ponderados.</p>
+<div class="math notranslate nohighlight">
+\[\large \int_X R(x)W_idx = 0 \quad i=1,2,\dots,M\]</div>
+</section>
+<section id="Método-de-Galerkin">
+<h3><span class="section-number">5.6.2. </span>Método de Galerkin<a class="headerlink" href="#Método-de-Galerkin" title="Link to this heading"></a></h3>
+<p>El método de Galerkin es cuando se utiliza la función de prueba como función de peso. Esto tiene propiedades muy importantes, como que el residuo será ortogonal a las funciones de base, es decir, la aproximación que se obtiene es la mejor que se podría obtener con las funciones de base que escogimos. Esto quiere decir, que la aproximación obtenida es la mejor en un sentido <span class="math notranslate nohighlight">\(l2\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\large W_i  = n_i(x)\]</div>
+<p>Es importante reconocer las propiedades del método de Galerkin, como la ortogonalidad o el lemma de Céa’s. Se invita a leer más acerca de estas propiedades. Enlace <a class="reference external" href="https://en.wikipedia.org/wiki/C%C3%A9a%27s_lemma">lemma de Céa’s</a> [2]</p>
+<p><img alt="logo4" class="no-scaled-link" src="../_images/gi.png" style="width: 400px;" /></p>
+</section>
+</section>
+<section id="id1">
+<h2><span class="section-number">5.7. </span>Método de elementos finitos de Galerkin<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>Recordemos que la aproximación está definida como:</p>
+<div class="math notranslate nohighlight">
+\[\tilde{y} = \sum_{i=1}^{M+1}y_i n_i(x)\]</div>
+<p>Por lo tanto, se puede definir el residuo como:</p>
+<div class="math notranslate nohighlight">
+\[R(x;y_i) = \sum_{i=1}^{M+1}[\frac{d\tilde{y}}{dx^2}+f(x)] = \sum_{i=1}^{M+1}[\frac{d}{dx^2}[y_in_i(x)]+f(x)]\]</div>
+<p>Es importante recordar que la función de residuo está condicionada a los valores nodales <span class="math notranslate nohighlight">\(y_i\)</span>. El siguiente paso es tuilizar el método de Galerkin, por lo que se obtiene que:</p>
+<div class="math notranslate nohighlight">
+\[\int_{x_a}^{x_b}n_j(x)R(x;y_i)dx =  \int_{x_a}^{x_b}n_j(x)\sum_{i=1}^{M+1}[\frac{d}{dx^2}[y_in_i(x)]+f(x)]dx = 0 \quad j=1,M+1\]</div>
+<p>Como observamos anteriormente, solo dos funciones de pruebas son distintas de cero en el interior de un elemento (<span class="math notranslate nohighlight">\(x_j \leq x \leq x_{j+1}\)</span>). Por lo tanto, la expresión anterior se puede expresar como:</p>
+<div class="math notranslate nohighlight">
+\[\int_{x_a}^{x_b}n_j(x)R(x;y_i)dx =  \int_{x_j}^{x_{j+1}} n_j(x) [\frac{d}{dx^2}[y_j n_j(x)+y_{j+1} n_{j+1}(x)]+f(x)]dx = 0 \quad j=1,M+1  \quad \quad eq. (B)\]</div>
+<p>Integrando esta ecuaciones, se llega a un sistema de ecuación de M+1 incógnitas y M+1 ecuaciones. Esto se puede escribir de la siguiente forma:</p>
+<div class="math notranslate nohighlight">
+\[\Large \mathbf{Ky = F}\]</div>
+<p>donde <span class="math notranslate nohighlight">\(\mathbf{K}\)</span> es la matriz de “rigidez” del sistema, <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> es el vector de “desplazamientos” nodales y <span class="math notranslate nohighlight">\(\mathbf{F}\)</span> es el vector de “fuerzas” nodales. La ecuación 5.14 es la declaración formal del método de elementos finitos Galerkin e incluye tanto la formación de elementos como los pasos de ensamblaje del sistema. Escrita en términos de integración sobre el dominio completo del problema, esta formulación muestra claramente que el dominio del problema, esta
+formulación muestra claramente la base matemática en el método de los residuos ponderados. Sin embargo, en la última integral es necesario integrar sobre cada elemento barra obtener las ecuaciones. Ahora procedemos a examinar la formulación de elementos separados basada en el método de Galerkin</p>
+</section>
+<section id="Formulación-del-elemento">
+<h2><span class="section-number">5.8. </span>Formulación del elemento<a class="headerlink" href="#Formulación-del-elemento" title="Link to this heading"></a></h2>
+<p><img alt="logo5" class="no-scaled-link" src="../_images/elementos.svg" width="800" /></p>
+<p>Si se obtiene la solución exacta de la ecuación (A), entonces esa solución satisface la ecuación en cualquier subdominio en (a, b) también. Consideremos el problema en el dominio de un elemento:</p>
+<div class="math notranslate nohighlight">
+\[\frac{d^2y}{dx^2} + f(x) = 0 \quad  x_j \leq \ x \leq x_{j+1}  \quad \quad eq(C)\]</div>
+<p>donde <span class="math notranslate nohighlight">\(x_j\)</span> y <span class="math notranslate nohighlight">\(x_{j+1}\)</span> están contenidos en (a, b) y definen los nodos de un elemento finito. Las condiciones de contorno apropiadas aplicables a la ecuación (C) son</p>
+<div class="math notranslate nohighlight">
+\[y(x_j) = y_j \quad y(x_{j+1}) = y_{j+1}\]</div>
+<p>y estos son los valores desconocidos de la solución en los puntos finales del subdominio. A continuación proponemos una solución aproximada de la forma</p>
+<div class="math notranslate nohighlight">
+\[y^e(x) = y_{j}N_{j}(x)+y_{j+1}N_{j+1}(x)\]</div>
+<p>donde el superíndice <span class="math notranslate nohighlight">\(e\)</span> indica que la solución es para el elemento finito y las funciones de interpolación se definen ahora como</p>
+<div class="math notranslate nohighlight">
+\[N_1(x) = \frac{x_{j+1}-x}{x_{j+1}-x_{j}} \quad x_j \leq x \leq x_{j+1}\]</div>
+<div class="math notranslate nohighlight">
+\[N_2(x) = \frac{x-x_j}{x_{j+1}-x_{j}} \quad x_j \leq x \leq x_{j+1}\]</div>
+<p>Nótese la relación entre las funciones de interpolación definidas mayúscula y las funciones de prueba con minúscula. Las funciones de <strong>interpolación corresponden a las porciones superpuestas de las funciones de prueba aplicables en un solo elemento</strong>. Obsérvese también que las funciones de interpolación satisfacen las condiciones</p>
+<div class="math notranslate nohighlight">
+\[N_1(x=x_j)=1 \quad N_1(x=x_{j+1})=0\]</div>
+<div class="math notranslate nohighlight">
+\[N_2(x=x_j)=0 \quad N_2(x=x_{j+1})=1\]</div>
+<p>tal que las condiciones de contorno (nodales) del elemento, se satisfacen idénticamente. Esta propiedad de las funciones de interpolación se referencia como la identidad kronecker. La sustitución de la solución supuesta en la ecuación del residuo da como</p>
+<div class="math notranslate nohighlight">
+\[R^e(x;y_j,y_{j+1})dx = \int_{x_j}^{x_{j+1}}N_i(x)[\frac{d^2y^e}{dx^2}+f(x)]dx \quad i=1,2\]</div>
+<p>ó</p>
+<div class="math notranslate nohighlight">
+\[\int_{x_j}^{x_{j+1}}N_i(x)\frac{d^2y^e}{dx^2}dx + \int_{x_j}^{x_{j+1}}N_i(x)f (x)dx\quad i=1,2\]</div>
+<p>Esta ecuación se puede integrar por partes, entregando el siguiente resultado:</p>
+<div class="math notranslate nohighlight">
+\[N_i(x) \frac{dy^e}{dx} \Bigr\rvert_{x_j}^{x_{j+1}} - \int_{x_j}^{x_{j+1}}\frac{dN_i^e}{dx}\frac{dy^e}{dx}dx + \int_{x_j}^{x_{j+1}}N_i(x)f(x)dx \quad i=1,2\]</div>
+<p>donde el superíndice se utiliza de nuevo para indicar que el residuo es para el elemento. Aplicando el criterio de residuo ponderado de Galerkin se obtiene</p>
+<div class="math notranslate nohighlight">
+\[\int_{x_j}^{x_{j+1}}\frac{dN_1^e}{dx}\frac{dy^e}{dx}dx = \int_{x_j}^{x_{j+1}}N_1(x)f(x)dx +  \frac{dy^e}{dx} \Bigr\rvert_{x_j}\]</div>
+<div class="math notranslate nohighlight">
+\[\int_{x_j}^{x_{j+1}}\frac{dN_2^e}{dx}\frac{dy^e}{dx}dx =  \int_{x_j}^{x_{j+1}} N_2(x)f(x)dx - \frac{dy^e}{dx} \Bigr\rvert_{x_{j+1}}\]</div>
+<p>Es importante notar, que las últimas dos ecuaciones utilizán una notación explicita para los límites de las derivadas. En este caso, se utiliza la propiedad de delta kronecker para satisfacer las condiciones de borde del elemento.</p>
+<p><strong>La integración por parte tiene 3 beneficios</strong>:</p>
+<ol class="arabic simple">
+<li><p>El orden de la ED se ha reducido en uno.</p></li>
+<li><p>Como se demostrará empíricamente, la matriz de rigidez se ha hecho simétrica. Si es que no hubiesemos integrado por partes, una de los funciones de prueba se hubiese diferenciado dos veces y la otra función de prueba no se hubiese diferenciado.</p></li>
+<li><p>La integración por partes introduce las condiciones de contorno en los nodos del elemento. El significado fisico de las condiciones de contorno de gradientes (Neumann) se vuelve aparente en las siguientes aplicaciones físicas.</p></li>
+</ol>
+<p>Para simplificar la notación, dejaremos <span class="math notranslate nohighlight">\(j=1\)</span></p>
+<div class="math notranslate nohighlight">
+\[\int_{x_1}^{x_{2}}\frac{dN_1^e}{dx}[y_1\frac{dN_1(x)}{dx}+y_2\frac{dN_2(x)}{dx}]\frac{dy^e}{dx}dx = \int_{x_1}^{x_{2}}N_1(x)f(x)dx +  \frac{dy^e}{dx} \Bigr\rvert_{x_1}\]</div>
+<div class="math notranslate nohighlight">
+\[\int_{x_1}^{x_{2}}\frac{dN_2^e}{dx}[y_1\frac{dN_1(x)}{dx}+y_2\frac{dN_2(x)}{dx}]dx =  \int_{x_1}^{x_{2}} N_2(x)f(x)dx - \frac{dy^e}{dx} \Bigr\rvert_{x_{2}}\]</div>
+<section id="Podemos-escribir-esto-de-forma-matricial:">
+<h3><span class="section-number">5.8.1. </span>Podemos escribir esto de forma matricial:<a class="headerlink" href="#Podemos-escribir-esto-de-forma-matricial:" title="Link to this heading"></a></h3>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Large \begin{bmatrix}
+k_{11} &amp; k_{12} \\
+k_{21} &amp; k_{22}
+\end{bmatrix} \begin{bmatrix}
+y_1  \\
+y_2
+\end{bmatrix} = \begin{bmatrix}
+F_1  \\
+F_2
+\end{bmatrix}\end{split}\]</div>
+<p>Donde los coeficientes de la matriz de rigidez son:</p>
+<div class="math notranslate nohighlight">
+\[\large k_{ij} =  \int_{x_1}^{x_2}\frac{dN_i}{dx} \frac{dN_j}{dx}dx \quad i,j = 1,2\]</div>
+<p>Y los términos de fuerzas, están dados por el lado derecho de la ecuación:</p>
+<div class="math notranslate nohighlight">
+\[\large F_{i} =  \int_{x_1}^{x_2}N_i(x)f(x)dx +  (-1)^{i+1}\frac{dy^e}{dx} \Bigr\rvert_{x_i} \quad i = 1,2\]</div>
+<p>Si se sigue el procedimiento Galerkin descrito para la formulación de elementos y las ecuaciones del sistema se <strong>ensamblan de la manera habitual del método de rigidez</strong>, se puede lograr obtener la solución del sistema de ecuación. Es importante notar que la ecuación diferencial, se escribe como un sistema de ecuaciones:</p>
+</section>
+<section id="Ecuación-diferencial-=&gt;-Sistema-de-ecuaciones">
+<h3><span class="section-number">5.8.2. </span>Ecuación diferencial =&gt; Sistema de ecuaciones<a class="headerlink" href="#Ecuación-diferencial-=>-Sistema-de-ecuaciones" title="Link to this heading"></a></h3>
+<p><strong>Es importante notar que, las soluciones nodales del problema son equivalentes entre elementos. Sin embargo, los gradientes de un elemento, respecto a otro en la intersección, no son iguales</strong>. Por ejemplo:</p>
+<div class="math notranslate nohighlight">
+\[\frac{dy^{e=i}}{dx}\neq\frac{dy^{e=j}}{dx} \quad  \quad i\neq j\]</div>
+<p><strong>Una forma para determinar la precisión de la aproximación es comparar la magnitud de la discontinuidad de los gradientes</strong></p>
+</section>
+</section>
+<section id="Ejemplo-1D---Elasticidad-Lineal">
+<h2><span class="section-number">5.9. </span>Ejemplo 1D - Elasticidad Lineal<a class="headerlink" href="#Ejemplo-1D---Elasticidad-Lineal" title="Link to this heading"></a></h2>
+<p>Consideraremos que tenemos una barra con un esfuerzo constante (para formular el elemento). Por lo tanto, la ecuación diferencial que modela esto es:</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\sigma_x}{dx} = \frac{d}{dx}(E\epsilon_x) = E \frac{d^2u(x)}{dx^2}=0\]</div>
+<p>Estableceremos que el área y el módulo de elasticidad serán constantes en el elemento.</p>
+<div class="math notranslate nohighlight">
+\[u(x) = u_1N_1(x) + u_2N_2(x) = u_1(1-\frac{x}{L})+u_2(\frac{x}{L})\]</div>
+<p>En este caso, la barra tendrá un largo <span class="math notranslate nohighlight">\(L\)</span>. En este caso tenemos un volumen de interés, por lo tanto, el residuo queda como:</p>
+<div class="math notranslate nohighlight">
+\[\int\int\int_V N_i(x)(E\frac{d^2u}{dx^2}dV = \int_0^LN_i(E\frac{d^2u}{dx^2})Adx = 0 \quad i=1,2\]</div>
+<p>donde <span class="math notranslate nohighlight">\(dV= Adx\)</span>. Integrando por partes se obtiene que:</p>
+<div class="math notranslate nohighlight">
+\[AE\int_0^L\frac{dN_i}{dx}\frac{du}{dx}=N_iAE\frac{du}{dx}\Bigr\rvert_{0}^L\]</div>
+<p>Al evaluar la aproximación, se obtiene que:</p>
+<div class="math notranslate nohighlight">
+\[AE\int_0^L\frac{dN_1}{dx}\frac{d}{dx}(u_1N_1+u_2N_2)=-AE\frac{du}{dx}\Bigr\rvert_{0} = -AE \epsilon\Bigr\rvert_{x=0}= -A\sigma\Bigr\rvert_{0}\]</div>
+<div class="math notranslate nohighlight">
+\[AE\int_0^L\frac{dN_2}{dx}\frac{d}{dx}(u_1N_1+u_2N_2)=AE \epsilon\Bigr\rvert_{0}= -A\sigma\Bigr\rvert_{x=L}\]</div>
+<p>Se puede observar que el lado izquierdo contiene términos relacionados a la rígidez y el lado derecho a las fuerzas nodales, ya que, <span class="math notranslate nohighlight">\(\sigma F=A\)</span>. Esta ecuaciones las podemos llevar a su formato matricial.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} AE\int_0^L\begin{bmatrix}
+\frac{dN_1}{dx}\frac{dN_1}{dx} &amp; \frac{dN_1}{dx}\frac{dN_2}{dx} \\
+\frac{dN_2}{dx}\frac{dN_1}{dx} &amp; \frac{dN_2}{dx}\frac{dN_2}{dx}
+\end{bmatrix}dx \begin{bmatrix}
+u_1  \\
+u_2
+\end{bmatrix} = \begin{bmatrix}
+F_1  \\
+F_2
+\end{bmatrix}\end{split}\]</div>
+<p>Despues de integrar los términos, se llega a la siguiente ecuación:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Large \frac{AE}{L}\begin{bmatrix}
+1 &amp; -1 \\
+-1 &amp; 1
+\end{bmatrix} \begin{bmatrix}
+u_1  \\
+u_2
+\end{bmatrix} = \begin{bmatrix}
+F_1  \\
+F_2
+\end{bmatrix}\end{split}\]</div>
+<section id="Es-importante-observar-que-hemos-llegado-a-la-misma-ecuación-que-fue-presentada-en-la-clase-de-Estructuras-con-el-método-de-elementos-finitos.-Revisar-la-diapositiva-13-del-siguiente-enlace.">
+<h3><span class="section-number">5.9.1. </span>Es importante observar que hemos llegado a la misma ecuación que fue presentada en la clase de Estructuras con el método de elementos finitos. <a class="reference external" href="https://docs.google.com/presentation/d/12ItitbEK6PySfJhxCVLco8ZsYp6ydU6we98oy6lcdfc/edit?usp=sharing">Revisar la diapositiva 13 del siguiente enlace</a>.<a class="headerlink" href="#Es-importante-observar-que-hemos-llegado-a-la-misma-ecuación-que-fue-presentada-en-la-clase-de-Estructuras-con-el-método-de-elementos-finitos.-Revisar-la-diapositiva-13-del-siguiente-enlace." title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="Ejemplo-1D---Transferencia-de-Calor">
+<h2><span class="section-number">5.10. </span>Ejemplo 1D - Transferencia de Calor<a class="headerlink" href="#Ejemplo-1D---Transferencia-de-Calor" title="Link to this heading"></a></h2>
+<p><img alt="logo6" class="no-scaled-link" src="../_images/heat_cond1d.svg" width="800" /></p>
+<p>Por ahora solo nos interesa la conducción de calor en estado estacionario <span class="math notranslate nohighlight">\(\frac{\partial T}{\partial t}=0\)</span>, por lo que la ecuación de gobierno para el estado estacionario, unidimensional se obtiene como</p>
+<div class="math notranslate nohighlight">
+\[k_x \frac{d^2T}{dx^2}+Q=0\]</div>
+<p>donde <span class="math notranslate nohighlight">\(T\)</span> es la temperatura de la barra, <span class="math notranslate nohighlight">\(Q\)</span> es el calor generado, <span class="math notranslate nohighlight">\(k_x\)</span> es el coeficiente de conducción. Es importante recordar la ley de fourier de transferencia de calor, que establece que el flujo de calor, es</p>
+<div class="math notranslate nohighlight">
+\[q_x=-k_x\frac{dT}{dx}\]</div>
+<p>A continuación, se aplica el método de elementos finitos de Galerkin a la ecuación para obtener las ecuaciones de los elementos. Se utiliza un elemento de dos nodos con funciones de interpolación lineal y la distribución de la temperatura en un elemento se expresa como</p>
+<div class="math notranslate nohighlight">
+\[T(x) = N_1(x)T_1 + N_2(x)T_2\]</div>
+<p>donde T1 y T2 son las temperaturas en los nodos 1 y 2, que definen el elemento, y las funciones de interpolación <span class="math notranslate nohighlight">\(N_1\)</span> y <span class="math notranslate nohighlight">\(N_2\)</span> vienen dadas por la función de interpolación lineal. Como en los ejemplos anteriores, la sustitución de la solución discretizada en la ecuación diferencial gobernante da como resultado las integrales residuales:</p>
+<div class="math notranslate nohighlight">
+\[\int_{x_1}^{x_2}(k_x \frac{d^2T}{dx^2}+Q)N_i(x)Adx=0 \quad i=1,2\]</div>
+<p>donde observamos que la integración es sobre el volumen del elemento, es decir, el dominio del problema, con <span class="math notranslate nohighlight">\(dV = A dx\)</span>. Integrando el primer término por partes (por las razones ya expuestas) se obtiene</p>
+<div class="math notranslate nohighlight">
+\[k_x A N_i(x)\frac{du}{dx}\Bigr\rvert_{x_1}^{x_2}-k_xA\int_{x_1}^{x_2}\frac{dN_i}{dx}\frac{dT}{dx}dx + A\int_{x_1}^{x_2}QN_i(x)dx=0 \quad i=1,2\]</div>
+<p>Evaluando el primer término y el segundo, y evaluar la aproximación se obtiene que:</p>
+<div class="math notranslate nohighlight">
+\[k_xA\int_{x_1}^{x_2}\frac{dN_1}{dx}\frac{d}{dx}[T_1N_1(x)+T_2N_2(x)]dx = A\int_{x_1}^{x_2}QN_1(x)dx -k_x A \frac{dT}{dx}\Bigr\rvert_{x_1}\]</div>
+<div class="math notranslate nohighlight">
+\[k_xA\int_{x_1}^{x_2}\frac{dN_2}{dx}\frac{d}{dx}[T_1N_1(x)+T_2N_2(x)]dx = A\int_{x_1}^{x_2}QN_2(x)dx + k_x A \frac{dT}{dx}\Bigr\rvert_{x_2}\]</div>
+<p>Estas ecuaciones se pueden escribir como</p>
+<div class="math notranslate nohighlight">
+\[\Large \mathbf{K}T=F_Q+F_g\]</div>
+<p>Donde <span class="math notranslate nohighlight">\(K\)</span> es la matriz de conductividad (“rigidez”) con términos definidos por</p>
+<div class="math notranslate nohighlight">
+\[K_{ij}=k_xA\int_{x_1}^{x_2}\frac{dN_i}{dx}\frac{dN_j}{dx}dx \quad i,j=1,2\]</div>
+<p>El vector <span class="math notranslate nohighlight">\(\mathbf{F_Q}\)</span>, representa las “fuerzas nodales”, originadas por el efecto de calor interno.</p>
+<div class="math notranslate nohighlight">
+\[F_{Q1} = A\int_{x_1}^{x_2}QN_1dx\]</div>
+<div class="math notranslate nohighlight">
+\[F_{Q2} = A\int_{x_1}^{x_2}QN_2dx\]</div>
+<p>El vector <span class="math notranslate nohighlight">\(\mathbf{F_G}\)</span> representa las condiciones de contorno de Neumann (gradientes). Si se integran los términos de la matriz de rigidez, se obtiene que:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Large K=\frac{k_xA}{L}\begin{bmatrix}
+1 &amp; -1 \\
+-1 &amp; 1
+\end{bmatrix}\end{split}\]</div>
+<p>Se puede observar la similitud con la formulación del elemento general que se había deducido. El vector <span class="math notranslate nohighlight">\(\mathbf{F_Q}\)</span> queda definido como:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{F_Q} = \begin{bmatrix}
+\frac{QAL}{2}  \\
+\frac{QAL}{2}
+\end{bmatrix}\end{split}\]</div>
+<p>El vector <span class="math notranslate nohighlight">\(\mathbf{F_G}\)</span> representa las condiciones de contorno de gradientes, en este caso <span class="math notranslate nohighlight">\(q_x\)</span>, que es el flujo de calor.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{F_G} = k_x A \begin{bmatrix}
+-\frac{dT}{dx}\Bigr\rvert_{x_1}  \\
+\frac{dT}{dx}\Bigr\rvert_{x_2}
+\end{bmatrix} =  A \begin{bmatrix}
+q_{x_1}  \\
+-q_{x_2}
+\end{bmatrix}\end{split}\]</div>
+<p>Los gradientes son tales que, en los nodos internos donde se unen los elementos, los valores de los elementos adyacentes son iguales y opuestos, cancelándose matemáticamente. En los nodos externos, es decir, en los extremos del cuerpo analizado, los valores del gradiente pueden especificarse como entrada y salida de flujo de calor conocido o calcularse si la condición de contorno especificada es una temperatura. En este último caso, el cálculo del gradiente es análogo al cálculo de las fuerzas
+de reacción en un modelo estructural. También hay que tener en cuenta que el área es un término común en las ecuaciones anteriores y, dado que se supone que constante a lo largo de la longitud del elemento, podría ignorarse en cada término.</p>
+</section>
+<section id="Problema-Ejemplo">
+<h2><span class="section-number">5.11. </span>Problema Ejemplo<a class="headerlink" href="#Problema-Ejemplo" title="Link to this heading"></a></h2>
+<p>La varilla circular representada en la siguiente figura tiene un diámetro exterior de <span class="math notranslate nohighlight">\(60 [mm]\)</span>, una longitud de <span class="math notranslate nohighlight">\(1 [m]\)</span>, y está perfectamente aislado en su circunferencia. La mitad izquierda del cilindro es de aluminio para la cual <span class="math notranslate nohighlight">\(k_x = 200 W/m-°C\)</span> y la mitad derecha es de cobre teniendo <span class="math notranslate nohighlight">\(k_x = 389 W/m-°C\)</span>. El extremo derecho del cilindro se mantiene a una temperatura de 80°C, mientras que el extremo izquierdo se somete a una tasa de entrada de calor de 4000
+<span class="math notranslate nohighlight">\([W/m2]\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Utilizando cuatro elementos de igual longitud, determine la distribución de temperatura en estado estacionario en el cilindro</p></li>
+<li><p>Obtener la solución con 100 elementos.</p></li>
+</ol>
+<p><img alt="logo7" class="no-scaled-link" src="../_images/heat_problem.svg" width="600" /></p>
+<section id="Solución">
+<h3><span class="section-number">5.11.1. </span>Solución<a class="headerlink" href="#Solución" title="Link to this heading"></a></h3>
+<p>Se presentará una implementación <em>naive</em> del problema, pero efectiva. Es importante reconocer que al momento de programar un código de elementos finitos es necesario trabajar con estructuras de datos, para asi ordenar la información de principalmente:</p>
+<ol class="arabic simple">
+<li><p>Malla (Información de nodos y elementos)</p></li>
+<li><p>Tipos de elementos (tipo de elemento y orden de interpolación)</p></li>
+<li><p>Condiciones de contorno (como aplicar una condición de contorno)</p></li>
+<li><p>Postprocesamiento (presentar los resultados)</p></li>
+<li><p>Solver del sistema de ecuaciones</p></li>
+</ol>
+<p>En este ejemplo, se utilizará una clase para estructurar la información de los elementos.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#This is a very simple example of how to work with classes and to structure the data</span>
+<span class="k">class</span> <span class="nc">Element_1d</span><span class="p">():</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">mat_prop</span><span class="p">):</span>
+        <span class="c1">#nodes = [i,j]</span>
+        <span class="c1">#mat_prop = [kx,A,L]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="n">nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span> <span class="o">=</span> <span class="n">mat_prop</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_prop</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span><span class="s2">&quot;Len. dosn&#39;t match.&quot;</span>
+
+    <span class="k">def</span> <span class="nf">k_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">k</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
+        <span class="k">return</span> <span class="n">k</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Nodes:[</span><span class="si">{}</span><span class="s2">] Kx:[</span><span class="si">{}</span><span class="s2">] A:[</span><span class="si">{}</span><span class="s2">] L = [</span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">mat_prop</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">example_problem</span><span class="p">(</span><span class="n">n_nodes</span><span class="p">):</span>
+    <span class="c1">#nodal discretization</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">n_nodes</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#material properties</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="mf">0.06</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">4.</span>
+    <span class="n">al</span> <span class="o">=</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">dx</span><span class="p">]</span>
+    <span class="n">cu</span> <span class="o">=</span> <span class="p">[</span><span class="mi">390</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">dx</span><span class="p">]</span>
+
+    <span class="c1">#elements</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Element_1d</span><span class="p">([</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="n">al</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Element_1d</span><span class="p">([</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">],</span><span class="n">cu</span><span class="p">))</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span> <span class="o">%</span><span class="k">2</span> == 0, &quot;(the num. of elements must be odd)&quot;
+
+    <span class="c1">#global stiffness matrix</span>
+    <span class="n">k_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+        <span class="n">k_l</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">k_mat</span><span class="p">()</span> <span class="c1">#calling the element stiffness matrix</span>
+        <span class="n">nodal_id</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="c1">#Local and global index loop</span>
+        <span class="k">for</span> <span class="n">i_l</span><span class="p">,</span> <span class="n">i_g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodal_id</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j_l</span><span class="p">,</span> <span class="n">j_g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodal_id</span><span class="p">):</span>
+                <span class="n">k_g</span><span class="p">[</span><span class="n">i_g</span><span class="p">,</span><span class="n">j_g</span><span class="p">]</span> <span class="o">+=</span> <span class="n">k_l</span><span class="p">[</span><span class="n">i_l</span><span class="p">,</span><span class="n">j_l</span><span class="p">]</span>
+
+    <span class="c1">#b.c at the last node (Temperature or Dirichlet b.c)</span>
+    <span class="n">T_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="mf">80.</span>
+
+    <span class="c1"># heat flux or neumann b.c</span>
+    <span class="n">q_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">q_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4000</span><span class="o">*</span><span class="n">A</span>
+
+    <span class="c1"># K_aa ,K_ab, K_ba, K_bb</span>
+    <span class="n">k_aa</span> <span class="o">=</span> <span class="n">k_g</span><span class="p">[:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">k_ab</span> <span class="o">=</span> <span class="n">k_g</span><span class="p">[:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span>
+
+    <span class="c1">#Solving the temperature</span>
+    <span class="n">T_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">k_aa</span><span class="p">,</span><span class="n">q_a</span><span class="o">-</span><span class="n">k_ab</span><span class="nd">@T_b</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">T</span><span class="p">[:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">T_a</span>
+    <span class="n">T</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">T_b</span>
+    <span class="c1"># q. sol</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">k_g</span> <span class="o">@</span> <span class="n">T</span>
+    <span class="k">return</span> <span class="n">T</span><span class="p">,</span><span class="n">q</span><span class="p">,</span><span class="n">nodes</span><span class="p">,</span><span class="n">A</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span> <span class="o">=</span> <span class="n">example_problem</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Temperature distribution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;4-elements&quot;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$T$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Heat-flux</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">q</span><span class="o">/</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Heat-flux
+ [[ 4000.]
+ [    0.]
+ [    0.]
+ [    0.]
+ [-4000.]]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_fem_1d_22_1.png" src="../_images/notebooks_fem_1d_22_1.png" />
+</div>
+</div>
+<p>Es posible apreciar, que las condiciones de contorno del problema se satisfacen de manera exacta. En este problema se encuentra la solución exacta al problema. Observar que q/A corresponde al flujo de calor y en este caso es exacto.</p>
+</section>
+</section>
+<section id="Referencias">
+<h2><span class="section-number">5.12. </span>Referencias<a class="headerlink" href="#Referencias" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Hutton, D. V. (2004). Fundamental of finite element method. Mc Gaw Hill Higher Education.</p></li>
+<li><p>Wu, H., Shen, D., Xia, B., Qiu, Y., Zhou, Y., &amp; Song, Y. (2020). Parametric problems in power system analysis: recent applications of polynomial approximation based on galerkin method. Journal of Modern Power Systems and Clean Energy, 9(1), 1-12.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metodo_residuos_ponderados.html" class="btn btn-neutral float-left" title="4. Método de residuos ponderados" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="elasticity_3d.html" class="btn btn-neutral float-right" title="6. Elasticidad Lineal en FEniCS 3D." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Repaso - Métodos Numéricos (1/2) &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Métodos Numéricos (2/2)" href="metodos_numericos_2.html" />
+    <link rel="prev" title="2. Programación Científica con Numpy" href="numpy_solved.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Repaso - Métodos Numéricos (1/2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Teorema-del-valor-intermedio-y-raíces-de-una-función">1.1. Teorema del valor intermedio y raíces de una función</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Las-raíces-sirven-para-resolver-problemas-no-lineales">1.1.1. Las raíces sirven para resolver problemas no-lineales</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Método-de-la-bisección">1.2. Método de la bisección</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Newton-raphson">1.3. Newton raphson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema:-Encontrar-las-3-raíces-del-siguiente-polinomio-utilizando-las-funciones-definidas-anteriormente">1.4. Problema: Encontrar las 3 raíces del siguiente polinomio utilizando las funciones definidas anteriormente</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Método-del-Trapecio">1.5. Método del Trapecio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Método-de-Simpson">1.6. Método de Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Gauss-Jordan">1.7. Gauss-Jordan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Derivación-numérica">1.8. Derivación numérica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problemas-Aplicados">1.9. Problemas Aplicados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema-1:-Serie-de-Fourier.">1.10. Problema 1: Serie de Fourier.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema-2:-Carro-propulsado.">1.11. Problema 2: Carro propulsado.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Referencias">1.12. Referencias</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Repaso - Métodos Numéricos (1/2)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/repaso_metodos_numericos.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Repaso---Métodos-Numéricos-(1/2)">
+<h1><span class="section-number">1. </span>Repaso - Métodos Numéricos (1/2)<a class="headerlink" href="#Repaso---Métodos-Numéricos-(1/2)" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> : Repaso de Métodos Numéricos. - Raíces de una función - Metódo de la bisección - Newton Raphson - Integración numérica (Trapecio y Simpson) - Gauss Jordan - Preliminares de derivación numérica - Problemas aplicados</p>
+<section id="Teorema-del-valor-intermedio-y-raíces-de-una-función">
+<h2><span class="section-number">1.1. </span>Teorema del valor intermedio y raíces de una función<a class="headerlink" href="#Teorema-del-valor-intermedio-y-raíces-de-una-función" title="Link to this heading"></a></h2>
+<p>Teorema del valor intermedio: Si <span class="math notranslate nohighlight">\(f\)</span> es una función continua para todo <span class="math notranslate nohighlight">\(x\)</span> en el intervalo cerrado <span class="math notranslate nohighlight">\([a,b]\)</span> y <span class="math notranslate nohighlight">\(d\)</span> está entre <span class="math notranslate nohighlight">\(f(a)\)</span> y <span class="math notranslate nohighlight">\(f(b)\)</span>, entonces hay un número <span class="math notranslate nohighlight">\(c\)</span> en <span class="math notranslate nohighlight">\((a,b)\)</span> tal que <span class="math notranslate nohighlight">\(f(c)=d\)</span></p>
+<p>Si eres más bien una persona visual, debes imaginar una función continua, en la que conoces el valor de la función en dos puntos, <span class="math notranslate nohighlight">\(x=a\)</span> y <span class="math notranslate nohighlight">\(x=b\)</span>, pero no sabes realmente qué hace la función entre los puntos <span class="math notranslate nohighlight">\(x=a\)</span> y <span class="math notranslate nohighlight">\(x=b\)</span>:</p>
+<p>El <strong>teorema del valor intermedio</strong> dice que, a pesar de que no se sabe realmente qué hace la función entre los puntos extremos, existe un punto <span class="math notranslate nohighlight">\(x=c\)</span> que da un valor intermedio para <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">5.</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="o">*</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;r-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Cos&#39;</span><span class="p">,</span><span class="s1">&#39;Raíz&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f38a73fa8f0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_repaso_metodos_numericos_3_1.png" src="../_images/notebooks_repaso_metodos_numericos_3_1.png" />
+</div>
+</div>
+<p><strong>Este teorema sirve para determinar numéricamente los intervalos en los que existen raíces</strong>. Para ello se utiliza el siguiente criterio para determinar si es que existe una raíz entre <span class="math notranslate nohighlight">\([a,b]\)</span>:</p>
+<ul class="simple">
+<li><p>Es necesario asegurar la continuidad de la función <span class="math notranslate nohighlight">\(f\)</span> en el intervalo <span class="math notranslate nohighlight">\([a,b]\)</span>.</p></li>
+<li><p>Si <span class="math notranslate nohighlight">\(f(a) \cdot f(b)&lt;0\)</span> implica que <span class="math notranslate nohighlight">\(f(a)\)</span> ó <span class="math notranslate nohighlight">\(f(b)\)</span> presentan signo opuesto y por el teorema del valor intermedio se demuestra que existe <strong>por lo menos un valor</strong> que cumple con la condición de ser raíz <span class="math notranslate nohighlight">\(f(c)=0\)</span>.</p></li>
+</ul>
+<p><strong>Teorema (Bolzano)</strong>: Si una función <span class="math notranslate nohighlight">\(f(x)\)</span> es continua en un intervalo <span class="math notranslate nohighlight">\([a, b]\)</span> y <span class="math notranslate nohighlight">\(f(a) \cdot f(b) &lt; 0\)</span>, entonces existe un valor <span class="math notranslate nohighlight">\(c \in (a, b)\)</span> para el que <span class="math notranslate nohighlight">\(f(c) = 0\)</span>.</p>
+<p><strong>Este principio se ilustra a continuación (Fuente:Wikipedia)</strong></p>
+<p><img alt="IVT" class="no-scaled-link" src="../_images/1200px-Illustration_for_the_intermediate_value_theorem.svg.png" style="width: 600px;" /></p>
+<section id="Las-raíces-sirven-para-resolver-problemas-no-lineales">
+<h3><span class="section-number">1.1.1. </span>Las raíces sirven para resolver problemas no-lineales<a class="headerlink" href="#Las-raíces-sirven-para-resolver-problemas-no-lineales" title="Link to this heading"></a></h3>
+<p>Cualquier función <span class="math notranslate nohighlight">\(f(x)=g(x)\)</span> puede ser escrita como</p>
+<div class="math notranslate nohighlight">
+\[F(x) = 0\]</div>
+<div class="math notranslate nohighlight">
+\[\]</div>
+<p>Por lo tanto, a continuación se definirá una función que encuentra los intervalos de una función en el que existe una raíz.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Definir una función para encontrar las raíces</span>
+
+<span class="k">def</span> <span class="nf">seno</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>            <span class="c1">#np.sin</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1">#Tambien es posible</span>
+
+<span class="n">seno_lambda</span>  <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">root_finder</span><span class="p">(</span><span class="n">funcion</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Esta función encuentra los intervalos en el que existen raíces</span>
+
+<span class="sd">    Parámetros</span>
+<span class="sd">    ----------</span>
+<span class="sd">    funcion : function</span>
+<span class="sd">        Function.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Punto inicial del intervalo.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Punto final del intervalo.</span>
+<span class="sd">    n : int</span>
+<span class="sd">        Numero de divisiones del intervalo</span>
+
+<span class="sd">    Retorna</span>
+<span class="sd">    -------</span>
+<span class="sd">    intervalos : ndarray (Observar que al inicio es una lista y despues se transforma)</span>
+<span class="sd">        Matriz que contiene los intervalos - Cada fila es una raíz diferente y las dos columnas son el intervalo</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="n">intervalos</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">funcion</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">funcion</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">intervalos</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">intervalos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Grafiqué la función en un intervalo entre <span class="math notranslate nohighlight">\([0,10 \pi]\)</span> y los intervalos obtenidos con la función <code class="docutils literal notranslate"><span class="pre">root_finder</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+<span class="n">roots</span> <span class="o">=</span> <span class="n">root_finder</span><span class="p">(</span><span class="n">seno</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="c1">#plt.plot(roots,roots*0.,&#39;rx&#39;)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">roots</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 2.48020473  3.30693964]
+ [ 5.78714436  6.61387927]
+ [ 9.094084    9.92081891]
+ [12.40102363 13.22775854]]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_repaso_metodos_numericos_9_1.png" src="../_images/notebooks_repaso_metodos_numericos_9_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Método-de-la-bisección">
+<h2><span class="section-number">1.2. </span>Método de la bisección<a class="headerlink" href="#Método-de-la-bisección" title="Link to this heading"></a></h2>
+<p>Para una función f(x) dada, el algoritmo del método de bisección funciona como sigue <span class="math notranslate nohighlight">\([1]\)</span>:</p>
+<ol class="arabic simple">
+<li><p>Se eligen dos valores a y b para los que <span class="math notranslate nohighlight">\(f(a) \cdot f(b) &lt; 0\)</span></p></li>
+<li><p>Se divide el intervalo por la mitad, un punto medio c se calcula como la media aritmética entre <span class="math notranslate nohighlight">\(a\)</span> y <span class="math notranslate nohighlight">\(b\)</span>, <span class="math notranslate nohighlight">\(c = (a + b) / 2\)</span></p></li>
+<li><p>La función <span class="math notranslate nohighlight">\(f(c)\)</span> es evaluada</p></li>
+<li><p>Si <span class="math notranslate nohighlight">\(f(c) = 0\)</span> solucionamos el problema</p></li>
+<li><p>Si <span class="math notranslate nohighlight">\(f(c) \neq 0\)</span> tenemos que seguir iterando <span class="math notranslate nohighlight">\(c\)</span></p>
+<ol class="arabic simple">
+<li><p>Si <span class="math notranslate nohighlight">\(f(c)\)</span> tiene el mismo signo que <span class="math notranslate nohighlight">\(f(a)\)</span> sustituimos <span class="math notranslate nohighlight">\(a\)</span> por <span class="math notranslate nohighlight">\(c\)</span> y mantenemos el mismo valor para <span class="math notranslate nohighlight">\(b\)</span></p></li>
+<li><p>Si <span class="math notranslate nohighlight">\(f(c)\)</span> tiene el mismo signo que <span class="math notranslate nohighlight">\(f(b)\)</span> sustituimos <span class="math notranslate nohighlight">\(b\)</span> por <span class="math notranslate nohighlight">\(c\)</span> y mantenemos el mismo valor para <span class="math notranslate nohighlight">\(a\)</span></p></li>
+</ol>
+</li>
+<li><p>Volvemos al paso 2. y recalculamos <span class="math notranslate nohighlight">\(c\)</span> con el nuevo valor de <span class="math notranslate nohighlight">\(a\)</span> ó <span class="math notranslate nohighlight">\(b\)</span></p></li>
+</ol>
+<p>La siguiente imagen ilustra el método (Fuente: Wikipedia):</p>
+<p><img alt="IVT" class="no-scaled-link" src="../_images/bisection.png" style="width: 300px;" /></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">biseccion</span><span class="p">(</span><span class="n">funcion</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">):</span> <span class="c1">#key argument</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Usa el método de la bisección para encontrar la raíz en el intervalo [a,b]</span>
+
+<span class="sd">    Parámetros</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fun : function</span>
+<span class="sd">        Esta es la función que queremos solucionar.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Punto inicial del intervalo.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Punto final del intervalo.</span>
+<span class="sd">    niter : int, opcional</span>
+<span class="sd">        Número máximo de iteraciones.</span>
+<span class="sd">    ftol : float, opcional</span>
+<span class="sd">        Tolerancia -&gt; Define el cero numérico.</span>
+
+<span class="sd">    Retorna</span>
+<span class="sd">    -------</span>
+<span class="sd">    x : float</span>
+<span class="sd">        Raíz aproximada.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">1.</span>  <span class="c1">#Inicializa el contador y un error de 100%</span>
+
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">niter</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">error</span> <span class="o">&gt;</span> <span class="n">ftol</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span>
+        <span class="k">if</span> <span class="n">funcion</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">funcion</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="k">elif</span> <span class="n">funcion</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="n">funcion</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">funcion</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">c</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">biseccion</span><span class="p">(</span><span class="n">seno</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">80</span><span class="p">))</span>
+<span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3.1415926535906316
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3.141592653589793
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">send</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+<span class="n">roots</span> <span class="o">=</span> <span class="n">root_finder</span><span class="p">(</span><span class="n">send</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">30</span><span class="p">,</span> <span class="mi">9000</span><span class="p">)</span>
+
+<span class="n">roots</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[31.40894444, 31.41941758],
+       [62.82836203, 62.83883516]])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">roots</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">biseccion</span><span class="p">(</span><span class="n">send</span><span class="p">,</span> <span class="n">roots</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">roots</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+31.41592653589142
+62.83185307180234
+</pre></div></div>
+</div>
+</section>
+<section id="Newton-raphson">
+<h2><span class="section-number">1.3. </span>Newton raphson<a class="headerlink" href="#Newton-raphson" title="Link to this heading"></a></h2>
+<p>El método Newton-Raphson, o método Newton, es una potente técnica para resolver ecuaciones numéricamente. Como gran parte del cálculo diferencial, se basa en la simple idea de la aproximación lineal. El método Newton, utilizado correctamente, suele llegar a una raíz con una eficacia devastadora <span class="math notranslate nohighlight">\([2]\)</span>.</p>
+<p>Las series de Taylor son las que nos permiten aproximar funciones:</p>
+<div class="math notranslate nohighlight">
+\[f(x)=\sum_{k=0}^\infty f^{(k)}(a)\frac{(x-a)^k}{k!}\]</div>
+<p>El metodo de Newton se basa en realizar una aproximación lineal de la raíz en base a las series de Taylor. Si solo consideramos el polinomio de primer orden de la serie de Taylor, entonces tenemos que</p>
+<div class="math notranslate nohighlight">
+\[0 = f(r) = f(x_0 +h) \approx f(x_0) + h f'(x_0)\]</div>
+<p>,</p>
+<p>donde, <span class="math notranslate nohighlight">\(r\)</span> es la raíz y <span class="math notranslate nohighlight">\(h\)</span> es un paso infinitesimal. Sin embargo, si consideramos que <span class="math notranslate nohighlight">\(h=(x_1-x_0)\)</span> entonces se puede obtener el valor de <span class="math notranslate nohighlight">\(x_1\)</span> y asi aproximar una raíz.</p>
+<div class="math notranslate nohighlight">
+\[0 \approx f(x_0) + (x_1-x_0) f'(x_0)\]</div>
+<p>Reordenando los términos, se obtiene que una aproximación a la raíz es:</p>
+<div class="math notranslate nohighlight">
+\[x_1 = x_0 - \frac{f(x_0)}{f'(x_0)}\]</div>
+<p>Si se repite este procedimiento, se obtiene el método de Newton:</p>
+<div class="math notranslate nohighlight">
+\[x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}\]</div>
+<p>La siguiente animación ilustra el procedimiento (Fuente: <a class="reference external" href="https://medium.com/&#64;ruhayel/an-intuitive-and-physical-approach-to-newtons-method-86a0bd812ec3">Medium</a>):</p>
+<p><img alt="asdasd" class="no-scaled-link" src="../_images/newronrapshon.gif" style="width: 450px;" /></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">newton_raphson</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Esta función utiliza el metodo de Newton raphson para encontrar la raíz de una ecuación</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : funcion</span>
+<span class="sd">        Función.</span>
+<span class="sd">    df : function</span>
+<span class="sd">        Derivada de la función.</span>
+<span class="sd">    x0 : float</span>
+<span class="sd">        Inicialización.</span>
+<span class="sd">    niter : int, opcional</span>
+<span class="sd">        Máximo numero de iteraciones.</span>
+<span class="sd">    ftol : float, opcional</span>
+<span class="sd">        Tolerancia de la raíz.</span>
+
+<span class="sd">    Retorna</span>
+<span class="sd">    -------</span>
+<span class="sd">    x : float</span>
+<span class="sd">        Solución.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">i</span> <span class="p">,</span> <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="mf">1.</span>  <span class="c1">#Inicializa el contador y un error de 100%</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x0</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">niter</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">error</span> <span class="o">&gt;</span> <span class="n">ftol</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">df</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">newton_raphson</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">ftol</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-1.6331239353195368e+16
+</pre></div></div>
+</div>
+</section>
+<section id="Problema:-Encontrar-las-3-raíces-del-siguiente-polinomio-utilizando-las-funciones-definidas-anteriormente">
+<h2><span class="section-number">1.4. </span>Problema: Encontrar las 3 raíces del siguiente polinomio utilizando las funciones definidas anteriormente<a class="headerlink" href="#Problema:-Encontrar-las-3-raíces-del-siguiente-polinomio-utilizando-las-funciones-definidas-anteriormente" title="Link to this heading"></a></h2>
+<div class="math notranslate nohighlight">
+\[f(x)=-x^3 + x^2 + 10x - 10 = 0\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mf">3.</span><span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mf">2.</span> <span class="o">+</span> <span class="mf">10.</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">10.</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_repaso_metodos_numericos_19_0.png" src="../_images/notebooks_repaso_metodos_numericos_19_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Solucionar el problema</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Método-del-Trapecio">
+<h2><span class="section-number">1.5. </span>Método del Trapecio<a class="headerlink" href="#Método-del-Trapecio" title="Link to this heading"></a></h2>
+<div class="math notranslate nohighlight">
+\[\int f(x)dx \approx \sum w_i f(x_i)\]</div>
+<p>Sea <span class="math notranslate nohighlight">\(f(x)\)</span> continua en <span class="math notranslate nohighlight">\([a,b]\)</span>. Partimos el intervalo <span class="math notranslate nohighlight">\([a,b]\)</span> en <span class="math notranslate nohighlight">\(n\)</span> subintervalos iguales, cada uno de anchura</p>
+<div class="math notranslate nohighlight">
+\[\Delta x=\frac{b-a}{n}\]</div>
+<p>Tal que:</p>
+<div class="math notranslate nohighlight">
+\[a=x_0&lt;x_1&lt;x_2&lt; \cdots &lt; x_n =b\]</div>
+<p><img alt="TPR3" class="no-scaled-link" src="../_images/trapezoidal-rule-illustration1.svg" width="450" /></p>
+<p>La integral de cada intervalo, se puede calcular como:</p>
+<div class="math notranslate nohighlight">
+\[I_i = \frac{f(x_i)+f(x_{i+1})}{2} \Delta x\]</div>
+<p>Y la integral de la función :</p>
+<div class="math notranslate nohighlight">
+\[\sum_1^n I_i\]</div>
+<div class="math notranslate nohighlight">
+\[∫^b_af(x)\,dx≈\frac{Δx}{2}\big(f(x_0)+2\,f(x_1)+2\,f(x_2)+\cdots +2\,f(x_{n-1})+f(x_n)\big).\nonumber\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">trapecio</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span> <span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Esta función utiliza el método del trapecio para integrar la función</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : funcion</span>
+<span class="sd">        Función.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Límite inferior de integración.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Límite superior de integración.</span>
+<span class="sd">    n : int, opcional</span>
+<span class="sd">        Número de puntos evaluados.</span>
+
+<span class="sd">    Retorna</span>
+<span class="sd">    -------</span>
+<span class="sd">    integral : float</span>
+<span class="sd">        Integral.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">integral</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">integral</span> <span class="o">=</span> <span class="n">dx</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span><span class="o">+</span> <span class="n">integral</span>
+    <span class="k">return</span> <span class="n">integral</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="nb">print</span><span class="p">(</span><span class="n">trapecio</span><span class="p">(</span><span class="n">seno</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span> <span class="c1"># Deberia dar 2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1.5707963267948968
+</pre></div></div>
+</div>
+</section>
+<section id="Método-de-Simpson">
+<h2><span class="section-number">1.6. </span>Método de Simpson<a class="headerlink" href="#Método-de-Simpson" title="Link to this heading"></a></h2>
+<p>El método del trapecio utiliza rectas o polinomios de primer orden para aproximar la solución. En cambio, el método de Simpson utiliza aproximaciones de segundo orden, es decir aproxima a través de parabolas.</p>
+<p><img alt="TPR" class="no-scaled-link" src="../_images/simpsons-6a.png" style="width: 250px;" /></p>
+<p>Por lo tanto, esta integral se puede aproximar utilizando la siguiente expresión</p>
+<div class="math notranslate nohighlight">
+\[{\int\limits_a^b {f\left( x \right)dx} }\approx{ {\frac{{\Delta x}}{3}}\left[ {f\left( {{x_0}} \right) + 4f\left( {{x_1}} \right) }\right.}+{\left.{ 2f\left( {{x_2}} \right) + 4f\left( {{x_3}} \right) }\right.}+{\left.{ 2f\left( {{x_4}} \right) + \cdots }\right.}+{\left.{ 4f\left( {{x_{n – 1}}} \right) + f\left( {{x_n}} \right)} \right].}\]</div>
+<p>Es posible observar que los coeficientes tienen el siguiente orden (1,4,2,4,….,4,2,4,1)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">simpson</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span> <span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Esta función utiliza el método de Newton raphson para encontrar la raíz de una ecuación</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f : funcion</span>
+<span class="sd">        Función.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Límite inferior de integración.</span>
+<span class="sd">    b : float</span>
+<span class="sd">        Límite superior de integración.</span>
+<span class="sd">    n : int, opcional</span>
+<span class="sd">        Número de puntos evaluados.</span>
+
+<span class="sd">    Retorna</span>
+<span class="sd">    -------</span>
+<span class="sd">    integral : float</span>
+<span class="sd">        Integral.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">integral</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">dx_3</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">3.</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">p</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">i</span><span class="o">%</span><span class="k">2</span> == 1:
+            <span class="n">p</span><span class="o">=</span><span class="mi">4</span>
+        <span class="k">elif</span> <span class="n">i</span><span class="o">%</span><span class="k">2</span> == 0:
+            <span class="n">p</span><span class="o">=</span><span class="mi">2</span>
+        <span class="n">integral</span> <span class="o">=</span><span class="n">p</span> <span class="o">*</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">integral</span>
+
+    <span class="k">return</span> <span class="n">integral</span> <span class="o">*</span> <span class="n">dx_3</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">simpson</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="mi">3</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2.0943951023931953
+</pre></div></div>
+</div>
+</section>
+<section id="Gauss-Jordan">
+<h2><span class="section-number">1.7. </span>Gauss-Jordan<a class="headerlink" href="#Gauss-Jordan" title="Link to this heading"></a></h2>
+<p><strong>La eliminación de Gauss-Jordan</strong> es un algoritmo que puede utilizarse para resolver sistemas de ecuaciones lineales y encontrar la inversa de cualquier matriz invertible. Se basa en tres operaciones elementales de fila que se pueden utilizar en una matriz:</p>
+<ol class="arabic simple">
+<li><p>Intercambiar las posiciones de dos de las filas</p></li>
+<li><p>Multiplicar una de las filas por un escalar no nulo</p></li>
+<li><p>Sumar o restar el múltiplo escalar de una fila a otra fila</p></li>
+</ol>
+<p>Pasos para la eliminación de Gauss-Jordan Para realizar la eliminación de Gauss-Jordan:</p>
+<ol class="arabic simple">
+<li><p>Intercambiar las filas de manera que todas las filas con todas las entradas nulas estén en la parte inferior</p></li>
+<li><p>Intercambiar las filas de modo que la fila con la mayor entrada no nula a la izquierda esté en la parte superior.</p></li>
+<li><p>Multiplica la fila superior por un escalar de forma que la entrada principal de la fila superior se convierta en 1.</p></li>
+<li><p>Sume/reste los múltiplos de la fila superior a las otras filas de modo que todas las demás entradas de la columna que contiene la entrada principal de la fila superior sean todas cero.</p></li>
+<li><p>Repita los pasos 2-4 para la siguiente entrada no nula de la izquierda hasta que todas las entradas principales sean 1.</p></li>
+<li><p>Intercambie las filas de modo que la entrada principal de cada fila distinta de cero esté a la derecha de la entrada principal de la fila superior.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#NO MODIFICAR NADA</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+
+
+
+<span class="k">def</span> <span class="nf">matrix_to_markdown</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a matrix representation [n,</span>
+<span class="sd">    :A: numpy array</span>
+<span class="sd">    :returns: LaTeX bmatrix as a string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;$ A = \begin</span><span class="si">{matrix}</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">h</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">h</span><span class="o">+=</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;x_&quot;</span><span class="o">+</span><span class="sa">r</span><span class="s2">&quot;{&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="sa">r</span><span class="s2">&quot;}&quot;</span>
+                <span class="n">h</span><span class="o">+=</span><span class="s2">&quot;+&quot;</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">h</span><span class="o">+=</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;x_&quot;</span><span class="o">+</span><span class="sa">r</span><span class="s2">&quot;{&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="sa">r</span><span class="s2">&quot;}&quot;</span>
+                <span class="n">h</span><span class="o">+=</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">rv</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">h</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="n">rv</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;\end</span><span class="si">{matrix}</span><span class="s1">$&#39;</span><span class="p">]</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span><span class="o">+</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">rv</span>
+
+<span class="k">def</span> <span class="nf">Gauss_Jordan_Latex_Equation</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function display how the Gauss Jordan method works</span>
+<span class="sd">    Solves the system of equation of a ndarray [n,n+1]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">matrix_to_markdown</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">+</span><span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">,:]</span>
+                    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;$R</span><span class="si">{:d}</span><span class="s2">+R</span><span class="si">{:d}</span><span class="s2">=$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)))</span>
+                    <span class="n">matrix_to_markdown</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+                    <span class="k">break</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">((</span><span class="s2">&quot;$R</span><span class="si">{:d}</span><span class="s2">/(</span><span class="si">{:.2f}</span><span class="s2">)=$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]))))</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">/</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">matrix_to_markdown</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="n">j</span><span class="p">):</span>
+                <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">((</span><span class="s2">&quot;$R</span><span class="si">{:d}</span><span class="s2">-R</span><span class="si">{:d}</span><span class="s2">*(</span><span class="si">{:.2f}</span><span class="s2">)=$&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]))))</span>
+                <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span><span class="o">-</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">matrix_to_markdown</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">A</span>
+
+<span class="n">A1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span><span class="o">-</span><span class="mf">12.</span><span class="p">,</span><span class="mf">44.</span><span class="p">],</span>
+             <span class="p">[</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span><span class="o">-</span><span class="mf">8.</span><span class="p">,</span><span class="mf">32.</span><span class="p">],</span>
+             <span class="p">[</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="mf">7.</span><span class="p">]])</span>
+
+
+<span class="n">Gauss_Jordan_Latex_Equation</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+<span class="c1">#NO MODIFICAR NADA</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gauss_jordan</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resuelve un sistema de ecuaciones utilizando Gauss_Jordan.</span>
+<span class="sd">    Parámetros:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    A: ndarray</span>
+<span class="sd">        Matriz de nxn+1 o n x 2n para resolver un sistema de ecuaciones</span>
+
+<span class="sd">    Retorna:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    x: ndarray</span>
+<span class="sd">        Vector o matriz que contiene la solución</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span><span class="o">=</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">/</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="n">j</span><span class="p">):</span>
+                <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span><span class="o">=</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,:]</span><span class="o">-</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">*</span><span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">4.</span><span class="p">,</span> <span class="mf">8.</span><span class="p">,</span><span class="o">-</span><span class="mf">12.</span><span class="p">,</span><span class="mf">1.</span><span class="p">],</span>
+             <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span><span class="o">-</span><span class="mf">8.</span><span class="p">,</span><span class="mf">0.</span><span class="p">],</span>
+             <span class="p">[</span><span class="o">-</span><span class="mf">2.</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">1.5</span><span class="p">,</span><span class="mf">0.</span><span class="p">]])</span>
+
+<span class="n">gauss_jordan</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([-0.08333333, -1.20833333, -0.91666667])
+</pre></div></div>
+</div>
+</section>
+<section id="Derivación-numérica">
+<h2><span class="section-number">1.8. </span>Derivación numérica<a class="headerlink" href="#Derivación-numérica" title="Link to this heading"></a></h2>
+<p>Diferenciación Hacia adelante</p>
+<div class="math notranslate nohighlight">
+\[f'(x_0) \approx \frac{f(x_0+h)-f(x_0)}{h}\]</div>
+<p>Diferenciación hacia atrás</p>
+<div class="math notranslate nohighlight">
+\[f'(x_0) \approx \frac{f(x_0)-f(x_0-h)}{h}\]</div>
+<p>Diferencia centrada</p>
+<div class="math notranslate nohighlight">
+\[f'(x_0) \approx \frac{f(x_0+h)-f(x_0-h)}{2h}\]</div>
+<div class="math notranslate nohighlight">
+\[f''(x_0) \approx \frac{f(x_0+h)-2f(x_0)+f(x_0-h)}{2h}\]</div>
+</section>
+<section id="Problemas-Aplicados">
+<h2><span class="section-number">1.9. </span>Problemas Aplicados<a class="headerlink" href="#Problemas-Aplicados" title="Link to this heading"></a></h2>
+</section>
+<section id="Problema-1:-Serie-de-Fourier.">
+<h2><span class="section-number">1.10. </span>Problema 1: Serie de Fourier.<a class="headerlink" href="#Problema-1:-Serie-de-Fourier." title="Link to this heading"></a></h2>
+<p>1-Representar la siguiente función de manera periódica a través de la serie de Fourier.</p>
+<div class="math notranslate nohighlight">
+\[f(x) = x^3 -x^2 \quad x \in [-\pi,\pi]\]</div>
+<p>Recordar que:</p>
+<div class="math notranslate nohighlight">
+\[f(x) = a_0  + \sum_{n=1}^\infty (a_n cos(\frac{2n\pi x}{T})+b_n sin(\frac{2n\pi x}{T}))\]</div>
+<div class="math notranslate nohighlight">
+\[a_0 = \frac{1}{T}\int_{-T}^{T} f(x) dx\]</div>
+<div class="math notranslate nohighlight">
+\[a_n = \frac{2}{T}\int_{-T}^{T} f(x)cos(\frac{2n\pi x}{T}) dx\]</div>
+<div class="math notranslate nohighlight">
+\[b_n = \frac{2}{T}\int_{-T}^{T} f(x)sin(\frac{2n\pi x}{T}) dx\]</div>
+<ol class="loweralpha simple">
+<li><p>Utilizar 4, 8 , 20 términos.</p></li>
+<li><p>Graficar</p></li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Para resolver este problema se separa el problema en 2 partes,</span>
+<span class="c1"># 1 .-obtener los Coeficientes 2.- evaluar la transformada de Fourier.</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">fourier_coeff</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">nf</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parámetros</span>
+<span class="sd">    -------------</span>
+<span class="sd">    f : function</span>
+<span class="sd">        Función en el intervalo</span>
+
+<span class="sd">    a : float</span>
+<span class="sd">        límite inferior del intervalo</span>
+
+<span class="sd">    b : float</span>
+<span class="sd">        límite superior intervalo</span>
+
+<span class="sd">    nf : int</span>
+<span class="sd">        cantidad de coeficientes serie de Fourier</span>
+
+<span class="sd">    Retorno</span>
+<span class="sd">    -------------</span>
+<span class="sd">    a0: float</span>
+<span class="sd">        coeficiente</span>
+<span class="sd">    an: ndarray</span>
+<span class="sd">        vector que contiene cada uno de los coeficientes a_n</span>
+<span class="sd">    bn: ndarray</span>
+<span class="sd">        vector que contiene cada uno de los coeficientes b_n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">an</span> <span class="p">,</span> <span class="n">bn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="n">nf</span><span class="p">))</span>
+
+    <span class="n">T</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="n">a0</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">T</span><span class="o">*</span><span class="n">trapecio</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">a</span> <span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nf</span><span class="p">):</span>
+        <span class="n">an</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">/</span><span class="n">T</span><span class="o">*</span><span class="n">trapecio</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="n">T</span><span class="p">),</span> <span class="n">a</span> <span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">bn</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">/</span><span class="n">T</span><span class="o">*</span><span class="n">trapecio</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="n">T</span><span class="p">),</span> <span class="n">a</span> <span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a0</span><span class="p">,</span><span class="n">an</span><span class="p">,</span><span class="n">bn</span>
+
+
+<span class="k">def</span> <span class="nf">serie_fourier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">a0</span><span class="p">,</span><span class="n">an</span><span class="p">,</span><span class="n">bn</span><span class="p">,</span><span class="n">T</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parámetros</span>
+<span class="sd">    -------------</span>
+<span class="sd">    x : float</span>
+<span class="sd">        argumento de f(x)</span>
+
+<span class="sd">    a0: float</span>
+<span class="sd">        coeficiente</span>
+<span class="sd">    an: ndarray</span>
+<span class="sd">        vector que contiene cada uno de los coeficientes a_n</span>
+<span class="sd">    bn: ndarray</span>
+<span class="sd">        vector que contiene cada uno de los coeficientes b_n</span>
+<span class="sd">    T : float</span>
+<span class="sd">        periodo</span>
+
+<span class="sd">    Retorno</span>
+<span class="sd">    -------------</span>
+<span class="sd">    y: float</span>
+<span class="sd">        approximación serie de fourier</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">a0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">an</span><span class="p">)):</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">bn</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mf">1.</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">/</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span>
+
+    <span class="k">return</span> <span class="n">y</span>
+
+<span class="c1">#Ejecución de las funciones</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">20</span><span class="p">]:</span>
+    <span class="n">a0</span><span class="p">,</span><span class="n">an</span><span class="p">,</span><span class="n">bn</span> <span class="o">=</span> <span class="n">fourier_coeff</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">nf</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">serie_fourier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">a0</span><span class="p">,</span><span class="n">an</span><span class="p">,</span><span class="n">bn</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">x1</span><span class="o">**</span><span class="mi">3</span><span class="o">-</span><span class="n">x1</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;4-Fourier&quot;</span><span class="p">,</span><span class="s2">&quot;8-Fourier&quot;</span><span class="p">,</span><span class="s2">&quot;20-Fourier&quot;</span><span class="p">,</span><span class="s2">&quot;Solución-exacta&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f38a7571450&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_repaso_metodos_numericos_35_1.png" src="../_images/notebooks_repaso_metodos_numericos_35_1.png" />
+</div>
+</div>
+</section>
+<section id="Problema-2:-Carro-propulsado.">
+<h2><span class="section-number">1.11. </span>Problema 2: Carro propulsado.<a class="headerlink" href="#Problema-2:-Carro-propulsado." title="Link to this heading"></a></h2>
+<p>Se tiene un carro de 20kg, que está siendo propulsado por un flujo másico de <span class="math notranslate nohighlight">\(\dot{m}\)</span> = <span class="math notranslate nohighlight">\(0,5kg/s\)</span> y <span class="math notranslate nohighlight">\(v_{chorro} = 5m/s\)</span>. La fuerza de arrastre de este vehı́culo es de <span class="math notranslate nohighlight">\(0,75v^2 [N]\)</span> siendo <span class="math notranslate nohighlight">\(v\)</span> la velocidad del carro en m/s. Considerar que el carro se vacı́a en 30 segundos y parte del reposo. Se pide:</p>
+<p><img alt="TPR2" class="no-scaled-link" src="../_images/carro.png" style="width: 250px;" /></p>
+<div class="math notranslate nohighlight">
+\[m(t)\frac{dv}{dt}=\dot{m}(v_{chorro}-0.75v^2)\]</div>
+<div class="math notranslate nohighlight">
+\[\int v dt = x(t)\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{dv}{dt} \approx \frac{v(t_{i+1})-v(t_i)}{dt}\]</div>
+<div class="math notranslate nohighlight">
+\[v(t_{i+1}) \approx f(t_i)\]</div>
+<ol class="arabic simple">
+<li><p>Determinar la velocidad en la cual la aceleración es nula.</p></li>
+<li><p>Obtener el perfil de velocidad hasta cuando el carro se vacía. Considerar un paso temporal de <span class="math notranslate nohighlight">\(0.05 [S]\)</span>.</p></li>
+<li><p>Obtener el perfil de desplazamiento en base al perfil de velocidad obtenido anteriormente.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">Solución</span></code> 1. <span class="math notranslate nohighlight">\(0 = \dot{m}(v_{chorro}-0.75v^2)\)</span> 2. $ v(t_{i+1}) = <span class="math">\frac{\dot{m}(v_{chorro}-0.75v^2)}{m(t)}</span> dt+ v(t_i) $ 3. Integrar la velocidad anterior</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1.- Esta parte consiste en obtener la raices de ese problema, se puede resolver facilmente</span>
+<span class="c1"># pero se utilizara newton raphson para ilustrar como solucionarlo</span>
+<span class="n">vel</span> <span class="o">=</span> <span class="n">newton_raphson</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">5</span><span class="o">-</span><span class="mf">0.75</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="mf">0.75</span><span class="o">*</span><span class="n">x</span> <span class="p">,</span> <span class="mf">10.</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">ftol</span><span class="o">=</span><span class="mf">1e-14</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cuando la aceleración es nula, la velocidad es: </span><span class="si">{:.3f}</span><span class="s2"> m/s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vel</span><span class="p">))</span>
+
+<span class="c1">#2.- Se obtendra el vector de velocidad a traves de la recursión</span>
+<span class="n">m_dot</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">v_chorro</span> <span class="o">=</span> <span class="mf">5.</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">steps</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">m_t</span> <span class="o">=</span> <span class="mf">20.</span> <span class="o">-</span> <span class="n">m_dot</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">m_dot</span><span class="o">*</span><span class="p">(</span><span class="n">v_chorro</span><span class="o">-</span><span class="mf">0.75</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">m_t</span><span class="p">)</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Tiempo [s]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Velocidad [m/s]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;Perfil de Velocidad&quot;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Observar que la velocidad se estabiliza en la velocidad terminal obtenida anteriormente&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Cuando la aceleración es nula, la velocidad es: 2.582 m/s
+Observar que la velocidad se estabiliza en la velocidad terminal obtenida anteriormente
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_repaso_metodos_numericos_37_1.png" src="../_images/notebooks_repaso_metodos_numericos_37_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#3.- Integrar con trapecio</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">dt</span><span class="o">/</span><span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">x</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Tiempo [s]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Desplazamiento [m]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;Perfil de Desplazamiento&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f38a7482bc0&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_repaso_metodos_numericos_38_1.png" src="../_images/notebooks_repaso_metodos_numericos_38_1.png" />
+</div>
+</div>
+</section>
+<section id="Referencias">
+<h2><span class="section-number">1.12. </span>Referencias<a class="headerlink" href="#Referencias" title="Link to this heading"></a></h2>
+<p>[1] Chapra, S. C., &amp; Canale, R. P. (2011). Numerical methods for engineers (Vol. 2). New York: Mcgraw-hill.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="numpy_solved.html" class="btn btn-neutral float-left" title="2. Programación Científica con Numpy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="metodos_numericos_2.html" class="btn btn-neutral float-right" title="2. Métodos Numéricos (2/2)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

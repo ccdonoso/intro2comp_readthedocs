@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mecánica Computacional &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Introducción - Programación en Python" href="notebooks/python_basics_solved.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Mecánica Computacional</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mecanica-computacional">
+<h1>Mecánica Computacional<a class="headerlink" href="#mecanica-computacional" title="Link to this heading"></a></h1>
+<p><img src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" alt="logo" width="300"/></p>
+<ul>
+<li>Autor: Claudio Canales Donoso</li>
+<li>Página <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">: <a href="https://ccdonoso.github.io/">ccdonoso.github.io</a> </li>
+<li>Clases en YouTube: <a href="https://www.youtube.com/playlist?list=PL5W3Rx4po2bkzn97mqLukP-mS1Q7Za6Lm">Lista de reproducción de clases</a></li>
+<li>Cursos: Mecánica Computacional - Diseño Computarizado</li>
+<li>Universidad de Santiago de Chile</li>
+<li>Fecha actualización: 05/03/24</li>
+</ul><p>Bienvenido/a a nuestro curso de Mecánica Computacional/Diseño Computarizado en la Universidad de Santiago! Estamos encantados de tenerte como parte de nuestra comunidad académica. Este curso es una oportunidad única para explorar y desarrollar tus habilidades en el diseño computarizado, aprendiendo sobre las herramientas y técnicas más avanzadas en este campo.</p>
+<p>A lo largo del curso esperamos que disfrutes de las clases, las actividades y los proyectos que tendrás que realizar. Estaremos contigo cada paso del camino, proporcionando el apoyo y la guía necesarios para que puedas alcanzar tus objetivos.</p>
+<p>¡Te deseamos un gran éxito en este curso y en tu carrera futura! Estamos seguros de que disfrutarás de la experiencia y que te llevará a nuevos conocimientos y habilidades.</p>
+<iframe src="_static/fem.html" height="300px" width="100%"></iframe></section>
+<section id="tabla-de-contenidos">
+<h1>Tabla de Contenidos<a class="headerlink" href="#tabla-de-contenidos" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/python_basics_solved.html">1. Introducción - Programación en Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Variables">1.1. Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Operadores-aritméticos">1.2. Operadores aritméticos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Operadores-Lógicos">1.3. Operadores Lógicos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Range">1.4. Range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Print">1.5. Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Estructura-de-Datos-Básicas-en-Python">1.6. Estructura de Datos Básicas en Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Estructuras-de-Control">1.7. Estructuras de Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Problema:-Sumatoria-de-los-100-primeros-enteros">1.8. Problema: Sumatoria de los 100 primeros enteros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/python_basics_solved.html#Problema:-Serie-de-Fibonacci">1.9. Problema: Serie de Fibonacci</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/numpy_solved.html">2. Programación Científica con Numpy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Repaso-de-Slicing">2.1. Repaso de Slicing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Matrices-y-listas-de-listas">2.2. Matrices y listas de listas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Funciones---Definiciones">2.3. Funciones - Definiciones</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Numpy">2.4. Numpy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Números-aleatorios">2.5. Números aleatorios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Indexing-and-Slicing">2.6. Indexing and Slicing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Indexing-con-máscara-booleana.">2.7. Indexing con máscara booleana.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#¿-Qué-tan-rapido-es-NumPy-vs-Librería-estándar-de-Python-?">2.8. ¿ Qué tan rapido es NumPy vs Librería estándar de Python ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Función-de-dos-variables">2.9. Función de dos variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Aplicación:-Conjunto-de-Mandelbrot">2.10. Aplicación: Conjunto de Mandelbrot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Problema-2:-\pi-con-números-aleatorios.">2.11. Problema 2: <span class="math notranslate nohighlight">\(\pi\)</span> con números aleatorios.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/numpy_solved.html#Problema-3:-Caminata-aleatoria">2.12. Problema 3: Caminata aleatoria</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Teorema-del-valor-intermedio-y-raíces-de-una-función">1.1. Teorema del valor intermedio y raíces de una función</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Método-de-la-bisección">1.2. Método de la bisección</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Newton-raphson">1.3. Newton raphson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Problema:-Encontrar-las-3-raíces-del-siguiente-polinomio-utilizando-las-funciones-definidas-anteriormente">1.4. Problema: Encontrar las 3 raíces del siguiente polinomio utilizando las funciones definidas anteriormente</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Método-del-Trapecio">1.5. Método del Trapecio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Método-de-Simpson">1.6. Método de Simpson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Gauss-Jordan">1.7. Gauss-Jordan</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Derivación-numérica">1.8. Derivación numérica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Problemas-Aplicados">1.9. Problemas Aplicados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Problema-1:-Serie-de-Fourier.">1.10. Problema 1: Serie de Fourier.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Problema-2:-Carro-propulsado.">1.11. Problema 2: Carro propulsado.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/repaso_metodos_numericos.html#Referencias">1.12. Referencias</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Gradientes-Descendientes">2.1. Gradientes Descendientes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Resolver-el-siguiente-problema-de-optimización">2.2. Resolver el siguiente problema de optimización</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Método-de-los-Gradientes-Conjugados">2.3. Método de los Gradientes Conjugados</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Cuadratura-Gaussiana">2.4. Cuadratura Gaussiana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Desafío:-Programar-la-cuadratura-Gaussiana-para-cualquier-n.">2.5. Desafío: Programar la cuadratura Gaussiana para cualquier <span class="math notranslate nohighlight">\(n\)</span>.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Método-de-Newton-Raphson-Generalizado">2.6. Método de Newton Raphson Generalizado</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Problema-:-encontrar-la-posición-de-un-avión-utilizando-tres-antenas-y-el-método-de-Newton-Raphson">2.7. Problema : encontrar la posición de un avión utilizando tres antenas y el método de Newton Raphson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Solución-numérica-con-la-información-del-avión.">2.8. Solución numérica con la información del avión.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodos_numericos_2.html#Referencias">2.9. Referencias</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/optimizacion.html">3. Optimización</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/optimizacion.html#Conceptos">3.1. Conceptos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/optimizacion.html#Optimización-con-el-método-de-Newton-y-Gradientes-Descendientes.">3.2. Optimización con el método de Newton y Gradientes Descendientes.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/optimizacion.html#Optimización-por-enjambre-de-Partículas">3.3. Optimización por enjambre de Partículas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/optimizacion.html#Bibliografía">3.4. Bibliografía</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/mecanismos.html">4. Mecanismos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mecanismos.html#Repaso-Mecanismos">4.1. Repaso Mecanismos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mecanismos.html#Problema-Resuelto:">4.2. Problema Resuelto:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mecanismos.html#Referencias:">4.3. Referencias:</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/metodo_rigidez.html">1. Método de la Rigidez</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodo_rigidez.html#Elemento-Barra">1.1. Elemento Barra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodo_rigidez.html#Elemento-Viga">1.2. Elemento Viga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodo_rigidez.html#Problema-de-método-de-la-rígidez.">1.3. Problema de método de la rígidez.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodo_rigidez.html#Tarea-:-Obtener-el-estado-de-esfuerzos-y-deformación-de-los-elementos">1.4. Tarea : Obtener el estado de esfuerzos y deformación de los elementos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/oop_pyvista.html">2. Clases y PyVista</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/oop_pyvista.html#Configuración-de-Pyvista-en-Jupyter-notebook">2.1. Configuración de Pyvista en Jupyter notebook</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/oop_pyvista.html#Introducción-Clases-Python">2.2. Introducción Clases Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/oop_pyvista.html#Nube-de-puntos">2.3. Nube de puntos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/oop_pyvista.html#Desafío:-Esponja-de-Menger">2.4. Desafío: Esponja de Menger</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/mallas.html">3. Mallas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mallas.html#¿-Qué-es-una-malla-?">3.1. ¿ Qué es una malla ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mallas.html#Atributos-de-malla-o-campos">3.2. Atributos de malla o campos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mallas.html#Celdas-o-Elementos">3.3. Celdas o Elementos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mallas.html#Malla-no-estructurada">3.4. Malla no-estructurada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mallas.html#Mallas---no-estructuradas-en-PyVista">3.5. Mallas - no estructuradas en PyVista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/mallas.html#Opcional:-Cargar-archivos-.STL">3.6. Opcional: Cargar archivos .STL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/metodo_residuos_ponderados.html">4. Método de residuos ponderados</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/metodo_residuos_ponderados.html#La-noción-en-el-MWR-es-forzar-el-residuo-a-cero-en-un-sentido-ponderado.-es-decir:">4.1. La noción en el MWR es forzar el residuo a cero en un sentido ponderado. es decir:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/fem_1d.html">5. Método de elementos finitos de Galerkin</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Programando-la-aproximación">5.1. Programando la aproximación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#La-aproximación">5.2. La aproximación</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Las-funciones-de-formas">5.3. Las funciones de formas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Calculando-la-aproximación-con-los-valores-nodales">5.4. Calculando la aproximación con los valores nodales</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#La-función-residuo">5.5. La función residuo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Minimizar-el-residuo">5.6. Minimizar el residuo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#id1">5.7. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Formulación-del-elemento">5.8. Formulación del elemento</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Ejemplo-1D---Elasticidad-Lineal">5.9. Ejemplo 1D - Elasticidad Lineal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Ejemplo-1D---Transferencia-de-Calor">5.10. Ejemplo 1D - Transferencia de Calor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Problema-Ejemplo">5.11. Problema Ejemplo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/fem_1d.html#Referencias">5.12. Referencias</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Las-ecuaciones-de-elasticidad-lineal.">6.1. Las ecuaciones de elasticidad lineal.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Problema-PDE">6.2. Problema PDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Formulación-variacional.">6.3. Formulación variacional.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Resumen-de-formulación-variacional">6.4. Resumen de formulación variacional</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Elasticidad-lineal-en-FENICS">6.5. Elasticidad lineal en FENICS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Postproceso-con-Pyvista.">6.6. Postproceso con Pyvista.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Esfuerzo-de-Von-Misses.">6.7. Esfuerzo de Von-Misses.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/elasticity_3d.html#Nota-sobre-grad(u)-vs.-nabla_grad(u)">6.8. Nota sobre <code class="docutils literal notranslate"><span class="pre">grad(u)</span></code> vs. <code class="docutils literal notranslate"><span class="pre">nabla_grad(u)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/python_basics_solved.html" class="btn btn-neutral float-right" title="1. Introducción - Programación en Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

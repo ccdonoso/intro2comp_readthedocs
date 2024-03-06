@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. Mallas &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Método de residuos ponderados" href="metodo_residuos_ponderados.html" />
+    <link rel="prev" title="2. Clases y PyVista" href="oop_pyvista.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Mallas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#¿-Qué-es-una-malla-?">3.1. ¿ Qué es una malla ?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Atributos-de-malla-o-campos">3.2. Atributos de malla o campos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Celdas-o-Elementos">3.3. Celdas o Elementos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Malla-no-estructurada">3.4. Malla no-estructurada</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Mallas---no-estructuradas-en-PyVista">3.5. Mallas - no estructuradas en PyVista</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Opcional:-Cargar-archivos-.STL">3.6. Opcional: Cargar archivos .STL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>Mallas</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/mallas.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Mallas">
+<h1><span class="section-number">3. </span>Mallas<a class="headerlink" href="#Mallas" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> - Definición de malla. - Atributos de malla o Campos. - Celdas según VTK o Elementos según FEM. - Mallas no-estructuradas en Pyvista</p>
+<section id="¿-Qué-es-una-malla-?">
+<h2><span class="section-number">3.1. </span>¿ Qué es una malla ?<a class="headerlink" href="#¿-Qué-es-una-malla-?" title="Link to this heading"></a></h2>
+<p>Aunque la estructura de datos real utilizada para almacenar la malla en memoria depende del tipo de conjunto de datos, algunas abstracciones son comunes a todos los tipos. En general, una malla está formada por <strong>vértices (puntos)</strong> y <strong>celdas (elementos, zonas)</strong>. Los <strong>elementos</strong> se utilizan para discretizar una región y pueden tener varios tipos, como tetraedros, hexaedros, etc. Cada <strong>elemento</strong> contiene un conjunto de vértices. El mapeo de las <strong>celdas(elementos)</strong> a los vértices se
+denomina <strong>conectividad de malla</strong>. Tenga en cuenta que, aunque es posible definir sets de datos como caras y aristas, VTK no los representa explícitamente. Más bien, están implícitos en el tipo de <strong>celda o elemento</strong> y en su conectividad. Una excepción a esta regla es el <strong>poliedro arbitrario</strong>, que almacena explícitamente sus caras. La Ilustración 1, es un ejemplo de malla que consta de dos <strong>elementos cuadrilateros</strong>. La primera celda está definida por los vértices <span class="math notranslate nohighlight">\((0,1,3,4)\)</span> , y la
+segunda por los vértices <span class="math notranslate nohighlight">\((1,2,4,5)\)</span>. Estas celdas son vecinas porque comparten la arista definida por los puntos.</p>
+<p>Una malla está totalmente definida por su <strong>topología</strong> y las <strong>coordenadas espaciales de sus vértices</strong>. En VTK (Visualization Toolkit, herramienta que utiliza PyVista), las coordenadas de los puntos pueden estar implícitas, o pueden estar definidas explícitamente por una matriz de datos de dimensiones <span class="math notranslate nohighlight">\((n_{puntos}\times 3 )\)</span>.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/celdas.png" style="width: 600px;" /></p>
+<h4 align="center"><p>Ilustración 1: Ejemplo de Malla.</p>
+</h4></section>
+<section id="Atributos-de-malla-o-campos">
+<h2><span class="section-number">3.2. </span>Atributos de malla o campos<a class="headerlink" href="#Atributos-de-malla-o-campos" title="Link to this heading"></a></h2>
+<p>Un atributo (o una matriz de datos o campo) define los valores discretos de un campo sobre la malla. Algunos ejemplos de atributos son la <strong>presión</strong>, la <strong>temperatura</strong>, la <strong>velocidad</strong> y el tensor de <strong>tensión</strong>. Tenga en cuenta que PyVista(VTK) no define específicamente diferentes tipos de atributos. Todos los atributos se almacenan como matrices de datos, que pueden tener un número arbitrario de componentes. Los atributos pueden estar asociados a <strong>puntos</strong> o <strong>celdas</strong>. También es posible
+tener atributos que no estén asociados a ninguno de ellos. La Ilustración 2, muestra el uso de un atributo centrado en un punto. Obsérvese que el atributo sólo se define en los vértices. La interpolación se utiliza para obtener los valores en todos los demás lugares. Las funciones de interpolación utilizadas <strong>dependen del tipo de celda</strong>. En la documentación de VTK hay más detalles.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/Cells_with_values.png" style="width: 600px;" /></p>
+<h4 align="center"><p>Ilustración 2: Campo definido por las funciones de interpolación de un elemento.</p>
+</h4></section>
+<section id="Celdas-o-Elementos">
+<h2><span class="section-number">3.3. </span>Celdas o Elementos<a class="headerlink" href="#Celdas-o-Elementos" title="Link to this heading"></a></h2>
+<p>Existen diferentes tipos de Celdas o Elementos, en la librería VTK (Librería base de PyVista), estos elementos se definen según el <strong>orden de interpolación</strong> y según la <strong>cantidad de nodos</strong>.</p>
+<p>Recapitulando, una malla esta compuesta por:</p>
+<ul class="simple">
+<li><p><strong>Nodos</strong></p></li>
+<li><p><strong>Elementos</strong></p></li>
+</ul>
+<p>Los elementos, conectan los nodos con diferentes geometrias primitivas. A continuación se presenta en la ilustación 2, los elementos de <strong>primer orden de interpolación</strong> y en la ilustración 3, los <strong>elementos de segundo orden de interpolación</strong>.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/TestLinearCellDemo.png" style="width: 800px;" /></p>
+<h4 align="center"><p>Ilustración 3: Elementos de Primer Orden.</p>
+</h4><p><img alt="logo" class="no-scaled-link" src="../_images/second_order_cells.png" style="width: 800px;" /></p>
+<h4 align="center"><p>Ilustración 4: Elementos de Segundo Orden.</p>
+</h4></section>
+<section id="Malla-no-estructurada">
+<h2><span class="section-number">3.4. </span>Malla no-estructurada<a class="headerlink" href="#Malla-no-estructurada" title="Link to this heading"></a></h2>
+<p>Una malla no estructurada, como la de la Ilustración 5, es el tipo de conjunto de datos primitivo más general. Almacena explícitamente la topología y las coordenadas de los puntos. Aunque VTK utiliza una estructura de datos de memoria eficiente para almacenar la topología, una malla no estructurada utiliza mucha más memoria para representar su malla. Por lo tanto, utilice una malla no estructurada sólo cuando no pueda representar su conjunto de datos como uno de los conjuntos de datos
+anteriores. VTK admite un gran número de tipos de celdas, todas las cuales pueden existir (de forma heterogénea) dentro de una malla no estructurada. La lista completa de todos los tipos de celdas soportados por VTK se encuentra en el archivo <code class="docutils literal notranslate"><span class="pre">vtkCellType.h</span></code> del código fuente de VTK, estos tipos de celda se presentaron en las <strong>ilustraciones 3 y 4</strong>.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/unstructured.gif" style="width: 600px;" /></p>
+<h4 align="center"><p>Ilustración 5: Malla no-estructurada</p>
+</h4></section>
+<section id="Mallas---no-estructuradas-en-PyVista">
+<h2><span class="section-number">3.5. </span>Mallas - no estructuradas en PyVista<a class="headerlink" href="#Mallas---no-estructuradas-en-PyVista" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Crearemos una malla estructurada de dos elementos cuadilateros <code class="docutils literal notranslate"><span class="pre">(VTK_QUAD)</span></code>, al igual que la ilustración 1.</p></li>
+</ol>
+<p><img alt="logo" class="no-scaled-link" src="../_images/celdas.png" style="width: 400px;" /></p>
+<h4 align="center"><p>Ilustración 1: Ejemplo de Malla.</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Importar librerias NumPy, PyVista y vtk</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+<span class="kn">import</span> <span class="nn">vtk</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crearemos los nodos (0,1,2,3,4,5)</span>
+
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]])</span>
+
+<span class="c1"># Elementos</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">3</span><span class="p">],</span>
+                  <span class="p">[</span> <span class="mi">4</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">4</span><span class="p">]])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="c1"># Conectividad de la malla, notar que .ravel() convierte la matriz en un vector.</span>
+
+<span class="n">num_cells</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">celltypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="c1">#Array tamaño(n_elementos o celdas), valores (Tipo de elemento)</span>
+<span class="n">celltypes</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">vtk</span><span class="o">.</span><span class="n">VTK_QUAD</span>  <span class="c1">#También es posible colocar el entero asociado a ese elemento (Ver las ilustraciones)</span>
+
+<span class="c1"># Tipo de elementos de las celdas.</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">celltypes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[9 9]
+</pre></div></div>
+</div>
+<p><strong>Con la información de la malla, es necesario definir una malla no estructurada en PyVista.</strong></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">UnstructuredGrid</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span><span class="n">celltypes</span><span class="p">,</span><span class="n">nodes</span><span class="p">)</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;yx&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9a87320616f245feae268ecd3c6a7ce9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<table style='width: 100%;'>
+<tr><th>UnstructuredGrid</th><th>Information</th></tr>
+<tr><td>N Cells</td><td>2</td></tr>
+<tr><td>N Points</td><td>6</td></tr>
+<tr><td>X Bounds</td><td>0.000e+00, 1.000e+00</td></tr>
+<tr><td>Y Bounds</td><td>0.000e+00, 2.000e+00</td></tr>
+<tr><td>Z Bounds</td><td>0.000e+00, 0.000e+00</td></tr>
+<tr><td>N Arrays</td><td>0</td></tr>
+</table></div>
+</div>
+<p><strong>Campo de temperatura.</strong></p>
+<p>Aplicaremos el campo de temperatura de la figura 2.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/Cells_with_values.png" style="width: 400px;" /></p>
+<h4 align="center"><p>Ilustración 2: Campo definido por las funciones de interpolación de un elemento.</p>
+</h4><div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;Temperatura&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">260</span><span class="p">,</span><span class="mf">147.96</span><span class="p">,</span><span class="mf">57.3</span><span class="p">,</span><span class="mf">31.18</span><span class="p">,</span><span class="mf">5.89</span><span class="p">,</span><span class="mf">19.12</span><span class="p">])</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;yx&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "663c31369e0b409bacaec1c1f9254631", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><strong>Crearemos una malla mixta.</strong> Crearemos una malla no-estructurada de 1 elemento <code class="docutils literal notranslate"><span class="pre">(VTK_QUAD)</span></code>, y 2 elementos triangulares <code class="docutils literal notranslate"><span class="pre">(VTK_TRIANGLE)</span></code>,al igual que la ilustración 7.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/celdas2.png" style="width: 500px;" /></p>
+<h4 align="center"><p>Ilustración 7: Malla de elementos mixtos.</p>
+</h4><div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crearemos los nodos (0,1,2,3,4,5)</span>
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]])</span>
+
+<span class="c1"># Elementos</span>
+<span class="n">cells</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">5</span><span class="p">,</span>  <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>  <span class="mi">1</span><span class="p">,</span>  <span class="mi">2</span><span class="p">,</span>  <span class="mi">5</span><span class="p">])</span>
+
+<span class="n">num_cells</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># Tres elementos ( 1 Quad 2 Tri)</span>
+
+<span class="n">celltypes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>  <span class="c1">#También es posible colocar el entero asociado a ese elemento (Ver las ilustraciones)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Ploteamos la malla</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">UnstructuredGrid</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span><span class="n">celltypes</span><span class="p">,</span><span class="n">nodes</span><span class="p">)</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;yx&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "b2b47449ca97421d955f9338d748c0b6", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span><span class="p">[</span><span class="s2">&quot;Temperatura&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">260</span><span class="p">,</span><span class="mf">147.96</span><span class="p">,</span><span class="mf">57.3</span><span class="p">,</span><span class="mf">31.18</span><span class="p">,</span><span class="mf">5.89</span><span class="p">,</span><span class="mf">19.12</span><span class="p">])</span>
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">cpos</span><span class="o">=</span><span class="s2">&quot;yx&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "f36bfe2e8a1a4e178368fa20c188e3da", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mesh</span><span class="p">))</span>
+<span class="n">mesh</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pyvista.core.pointset.UnstructuredGrid&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<table style='width: 100%;'><tr><th>Header</th><th>Data Arrays</th></tr><tr><td>
+<table style='width: 100%;'>
+<tr><th>UnstructuredGrid</th><th>Information</th></tr>
+<tr><td>N Cells</td><td>3</td></tr>
+<tr><td>N Points</td><td>6</td></tr>
+<tr><td>X Bounds</td><td>0.000e+00, 1.000e+00</td></tr>
+<tr><td>Y Bounds</td><td>0.000e+00, 2.000e+00</td></tr>
+<tr><td>Z Bounds</td><td>0.000e+00, 0.000e+00</td></tr>
+<tr><td>N Arrays</td><td>1</td></tr>
+</table>
+
+</td><td>
+<table style='width: 100%;'>
+<tr><th>Name</th><th>Field</th><th>Type</th><th>N Comp</th><th>Min</th><th>Max</th></tr>
+<tr><td><b>Temperatura</b></td><td>Points</td><td>float64</td><td>1</td><td>5.890e+00</td><td>2.600e+02</td></tr>
+</table>
+
+</td></tr> </table></div>
+</div>
+</section>
+<section id="Opcional:-Cargar-archivos-.STL">
+<h2><span class="section-number">3.6. </span>Opcional: Cargar archivos .STL<a class="headerlink" href="#Opcional:-Cargar-archivos-.STL" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mesh_test</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;files/mesh_test.stl&quot;</span><span class="p">)</span>
+<span class="n">mesh_test</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">jupyter_backend</span><span class="o">=</span><span class="s1">&#39;pythreejs&#39;</span><span class="p">,</span><span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="s2">&quot;white&quot;</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_mallas_17_0.png" src="../_images/notebooks_mallas_17_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">mesh_test</span><span class="p">))</span>
+<span class="n">mesh_test</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pyvista.core.pointset.PolyData&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<table style='width: 100%;'>
+<tr><th>PolyData</th><th>Information</th></tr>
+<tr><td>N Cells</td><td>21684</td></tr>
+<tr><td>N Points</td><td>10832</td></tr>
+<tr><td>N Strips</td><td>0</td></tr>
+<tr><td>X Bounds</td><td>-6.869e+00, 6.882e+00</td></tr>
+<tr><td>Y Bounds</td><td>-5.961e-01, 3.500e-01</td></tr>
+<tr><td>Z Bounds</td><td>-6.815e+00, 6.905e+00</td></tr>
+<tr><td>N Arrays</td><td>0</td></tr>
+</table></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="oop_pyvista.html" class="btn btn-neutral float-left" title="2. Clases y PyVista" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="metodo_residuos_ponderados.html" class="btn btn-neutral float-right" title="4. Método de residuos ponderados" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

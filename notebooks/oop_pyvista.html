@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2. Clases y PyVista &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Mallas" href="mallas.html" />
+    <link rel="prev" title="1. Método de la Rigidez" href="metodo_rigidez.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Clases y PyVista</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Configuración-de-Pyvista-en-Jupyter-notebook">2.1. Configuración de Pyvista en Jupyter notebook</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Ejemplo-1">2.1.1. Ejemplo 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Ejemplo-2">2.1.2. Ejemplo 2</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Introducción-Clases-Python">2.2. Introducción Clases Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Estructura-de-una-Clase">2.2.1. Estructura de una Clase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Ejemplo-de-una-Clase">2.2.2. Ejemplo de una Clase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Para-mayor-información-acerca-de-como-funcionan-las-clases-en-Python,-les-recomiendo-visitar:">2.2.3. Para mayor información acerca de como funcionan las clases en Python, les recomiendo visitar:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Nube-de-puntos">2.3. Nube de puntos</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Como-acceder-a-la-información-del-objeto-surf">2.3.1. Como acceder a la información del objeto surf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Desafío:-Esponja-de-Menger">2.4. Desafío: Esponja de Menger</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">2. </span>Clases y PyVista</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/oop_pyvista.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Clases-y-PyVista">
+<h1><span class="section-number">2. </span>Clases y PyVista<a class="headerlink" href="#Clases-y-PyVista" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> : OOP - Pyvista. - Configurando Pyvista - Introducción a la programación orientada a objetos. - Pyvista - Nube de puntos - Triangulación de nube de puntos - Glyphs - Esponja de Menger</p>
+<p><strong>Librerías</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+</pre></div>
+</div>
+</div>
+<section id="Configuración-de-Pyvista-en-Jupyter-notebook">
+<h2><span class="section-number">2.1. </span>Configuración de Pyvista en Jupyter notebook<a class="headerlink" href="#Configuración-de-Pyvista-en-Jupyter-notebook" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Instalar <strong>Pyvista</strong> con el comando <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyvista</span></code> Librería de visualización en Python, basada en la libreria VTK. Es capaz de combinar la velocidad de C++ con la rápida creación de prototipos de Python. Sin embargo, a pesar de esto, el código VTK programado en Python suele tener el mismo aspecto que su homólogo en C++. Esta libreria pretende simplificar la creación de mallas y el trazado sin perder funcionalidad.</p></li>
+<li><p>Instalar <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'jupyterlab&gt;=3'</span> <span class="pre">ipywidgets</span> <span class="pre">'pyvista[all,trame]'</span></code> Esta librería permite realizar la visualización con Pyvista de forma interactiva en Jupyter notebook.</p></li>
+</ul>
+<section id="Ejemplo-1">
+<h3><span class="section-number">2.1.1. </span>Ejemplo 1<a class="headerlink" href="#Ejemplo-1" title="Link to this heading"></a></h3>
+<p>Ejecutar el siguiente código. Si todo esta bien, deberian poder interactuar con la interfaz de Pyvista.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyvista</span> <span class="kn">import</span> <span class="n">examples</span>
+
+<span class="c1"># Malla de &quot;nefertiti descargada&quot;</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">download_nefertiti</span><span class="p">()</span>
+
+<span class="c1"># Una instancia para plotear off-screen.</span>
+<span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">off_screen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="c1"># Muestra la malla</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1">#mesh.plot(color=&#39;gold&#39;, pbr=True, metallic=0.9, background=&quot;white&quot;, interactive=False)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">export_html</span><span class="p">(</span><span class="s2">&quot;nefertiti&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "70b704443cf942c3aee62051b6b9d880", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyvista</span> <span class="kn">import</span> <span class="n">examples</span>
+
+<span class="c1"># Malla de &quot;nefertiti descargada&quot;</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_aero_bracket</span><span class="p">()</span>
+
+<span class="c1"># Una instancia para plotear off-screen.</span>
+<span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">off_screen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">smooth_shading</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">split_sharp_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">scalars</span><span class="o">=</span><span class="s1">&#39;von Mises stress&#39;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;bwr&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># Muestra la malla</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">cpos</span><span class="o">=</span><span class="n">cpos</span><span class="p">)</span>
+<span class="c1">#mesh.plot(color=&#39;gold&#39;, pbr=True, metallic=0.9, background=&quot;white&quot;, interactive=False)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">export_html</span><span class="p">(</span><span class="s2">&quot;fem&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "53ca38091f7c47cb93faf1e268b27869", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="Ejemplo-2">
+<h3><span class="section-number">2.1.2. </span>Ejemplo 2<a class="headerlink" href="#Ejemplo-2" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyvista</span> <span class="kn">import</span> <span class="n">demos</span>
+
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">demos</span><span class="o">.</span><span class="n">glyphs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="n">demos</span><span class="o">.</span><span class="n">logo</span><span class="o">.</span><span class="n">text_3d</span><span class="p">(</span><span class="s2">&quot;Soy interactivo!&quot;</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">text</span><span class="o">.</span><span class="n">points</span> <span class="o">*=</span> <span class="mf">0.1</span>
+<span class="n">text</span><span class="o">.</span><span class="n">translate</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+<span class="n">mesh</span> <span class="o">+=</span> <span class="n">text</span>
+<span class="n">mesh</span><span class="p">[</span><span class="s1">&#39;Example Scalars&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">mesh</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cpos</span><span class="o">=</span><span class="s1">&#39;xy&#39;</span><span class="p">,</span> <span class="n">show_scalar_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cbe267e330d84288be2c807026a21daf", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+<section id="Introducción-Clases-Python">
+<h2><span class="section-number">2.2. </span>Introducción Clases Python<a class="headerlink" href="#Introducción-Clases-Python" title="Link to this heading"></a></h2>
+<p>La programación orientada a objetos (POO) se basa en el concepto de objetos, que a su vez suelen ser generados por clases. La filosofía de la POO se resume generalmente en cuatro conceptos básicos:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Abstraction_(computer_science)">abstracción</a> - <em>mostrar sólo ciertas características al usuario</em></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Encapsulation_(programación_informática)">encapsulación</a> - <em>agrupar ciertas características</em></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Inheritance_(programación_orientada_a_objetos)">herencia</a> - <em>reutilizar y extender características</em></p></li>
+<li><p><a class="reference external" href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)">polimorfismo</a> - <em>permitir que los objetos adopten diversas formas</em></p></li>
+</ul>
+<p>Algunas de las principales ventajas que ofrece la programación orientada a objetos, directamente relacionadas con estos conceptos básicos, son las siguientes</p>
+<ul class="simple">
+<li><p><strong>reutilización</strong> - <em>minimización de la cantidad de código copiado y pegado</em></p></li>
+<li><p>Mantenibilidad: minimizar la cantidad de código que hay que cambiar para corregir un error.</p></li>
+<li><p>Seguridad: minimizar el uso indebido por parte de un usuario.</p></li>
+</ul>
+<p>En este tutorial veremos en superficialmente las clases de Python, que deberían proporcionarte todas las herramientas que necesitas para aprovechar las ventajas de la POO.</p>
+<section id="Estructura-de-una-Clase">
+<h3><span class="section-number">2.2.1. </span>Estructura de una Clase<a class="headerlink" href="#Estructura-de-una-Clase" title="Link to this heading"></a></h3>
+<p><strong>¿Qué es una clase de Python?</strong></p>
+<p>Una clase es un plano o prototipo definido por el usuario a partir del cual se crean objetos.</p>
+<p><strong>¿Por qué utilizamos las clases?</strong> Las clases proporcionan un medio para agrupar datos y funcionalidad. Al crear una nueva clase se crea un nuevo tipo de objeto, lo que permite crear nuevas instancias de ese tipo. Cada instancia de clase puede tener atributos adjuntos para mantener su estado. Las instancias de clase también pueden tener métodos (definidos por su clase) para modificar su estado.</p>
+<p>Para entender la necesidad de crear una clase, consideremos un ejemplo. Supongamos que se quiere hacer un seguimiento del número de perros que pueden tener diferentes atributos como la raza y la edad. Si se utiliza una lista, el primer elemento podría ser la raza del perro mientras que el segundo elemento podría representar su edad. Supongamos que hay 100 perros diferentes, entonces ¿cómo se sabría qué elemento se supone que es cada uno? ¿Y si quisieras añadir otras propiedades a estos perros?
+Esto carece de organización y demuestra la necesidad de las clases.</p>
+<p>Una clase crea una estructura de datos definida por el usuario, que contiene sus propios miembros de datos y funciones miembro a los que se puede acceder y utilizar creando una instancia de esa clase. Una clase es como un plano de un objeto.</p>
+<p><strong>¿Cómo se crean las clases?</strong> Aquí hay reglas simples para crear una clase en Python:</p>
+<p>Las clases se crean con la palabra clave <code class="docutils literal notranslate"><span class="pre">class</span></code>. Los <strong>atributos</strong> son las variables que pertenecen a la clase. Los atributos son siempre públicos y se puede acceder a ellos usando el operador punto (.). Ej: <code class="docutils literal notranslate"><span class="pre">Miclase.Miatributo</span></code> Los atributos pueden hacerse no visibles directamente añadiendo un prefijo de doble guión bajo a su nombre. Ej: <code class="docutils literal notranslate"><span class="pre">MiClase.__AtributoOculto</span></code> Esta es la sintaxis de una clase en Python:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ClassName</span><span class="p">:</span>
+    <span class="c1"># Statement-1</span>
+    <span class="c1"># Statement-N</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Perro</span><span class="p">:</span>
+
+    <span class="c1"># variable de la clase</span>
+    <span class="n">animal</span> <span class="o">=</span> <span class="s1">&#39;perro&#39;</span>
+
+    <span class="c1"># Método de inicialización o constructor</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raza</span><span class="p">):</span>
+
+        <span class="c1"># Variable de instancia</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raza</span><span class="o">=</span> <span class="n">raza</span>
+
+    <span class="c1"># Añade una variable a la instancia</span>
+    <span class="k">def</span> <span class="nf">setColor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+
+    <span class="c1"># recupera el valor de la variable de la instancia</span>
+    <span class="k">def</span> <span class="nf">getColor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Driver Code</span>
+<span class="n">thor</span> <span class="o">=</span> <span class="n">Perro</span><span class="p">(</span><span class="s2">&quot;Pug&quot;</span><span class="p">)</span>
+<span class="n">thor</span><span class="o">.</span><span class="n">setColor</span><span class="p">(</span><span class="s2">&quot;plateado&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">thor</span><span class="o">.</span><span class="n">getColor</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+plateado
+</pre></div></div>
+</div>
+<p>El método <code class="docutils literal notranslate"><span class="pre">init</span></code> es un constructor. Los constructores se utilizan para inicializar el estado del objeto. Al igual que los métodos, un constructor también contiene una colección de declaraciones (es decir, instrucciones) que se ejecutan en el momento de la creación del objeto. Se ejecuta tan pronto como se instancie un objeto de una clase. El método es útil para realizar cualquier inicialización que se quiera hacer con el objeto.</p>
+<p>A menudo, el primer argumento de un método se llama <code class="docutils literal notranslate"><span class="pre">self</span></code>. Esto no es más que una convención: el nombre self no tiene ningún significado especial para Python. El self representa la instancia de la clase. Usando la palabra clave <code class="docutils literal notranslate"><span class="pre">self</span></code> podemos acceder a los atributos y métodos de la clase en python.</p>
+<p>No damos un valor para este parámetro cuando llamamos al método, Python lo proporciona. Si tenemos un método que no toma argumentos, entonces todavía tenemos que tener un argumento. Cuando llamamos a un método de este objeto como <code class="docutils literal notranslate"><span class="pre">miobjeto.método(arg1,</span> <span class="pre">arg2)</span></code>, esto es automáticamente convertido por Python en <code class="docutils literal notranslate"><span class="pre">MiClase.método(miobjeto,</span> <span class="pre">arg1,</span> <span class="pre">arg2)</span></code>.</p>
+<p><strong>¿Qué es un objeto de Python?</strong> Un objeto es una instancia de una clase.</p>
+<p><strong>¿Por qué usamos un objeto?</strong> Una clase es como un plano mientras que una instancia es una copia de la clase con valores reales. Ya no es una idea, es un perro real, como un perro que tiene la raza de pug y tiene siete años. Puedes tener muchos perros para crear muchas instancias diferentes, pero sin la clase como guía, estarías perdido, sin saber qué información se requiere.</p>
+<p>Un objeto se compone de :</p>
+<ul class="simple">
+<li><p>Estado : Está representado por los atributos de un objeto. También refleja las propiedades de un objeto.</p></li>
+<li><p>Comportamiento : Está representado por los métodos de un objeto. También refleja la respuesta de un objeto con otros objetos.</p></li>
+<li><p>Identidad : Da un nombre único a un objeto y permite que un objeto interactúe con otros objetos</p></li>
+</ul>
+<p>¿Cómo creamos objetos (también llamado instanciar una clase)? Cuando se crea un objeto de una clase, se dice que la clase está instanciada. Todas las instancias comparten los atributos y el comportamiento de la clase. Pero los valores de esos atributos, es decir, los estados, son únicos para cada objeto. Una misma clase puede tener cualquier número de instancias.</p>
+<p>Las variables de instancia son para los datos que son únicos para cada instancia. Las variables de clase son para atributos y métodos compartidos por todas las instancias de la clase. Las variables de instancia son variables cuyo valor se asigna dentro de un constructor o método con self mientras que las variables de clase son variables cuyo valor se asigna en la clase.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/clases.svg" width="600" /></p>
+</section>
+<section id="Ejemplo-de-una-Clase">
+<h3><span class="section-number">2.2.2. </span>Ejemplo de una Clase<a class="headerlink" href="#Ejemplo-de-una-Clase" title="Link to this heading"></a></h3>
+<p>En este ejemplo, se creara una clase de un planeta. La idea principal es crear una estructura de datos que contenga los atributos de</p>
+<ul class="simple">
+<li><p>nombre</p></li>
+<li><p>masa</p></li>
+<li><p>radio</p></li>
+<li><p>gravedad</p></li>
+</ul>
+<p>También es necesario definir un mètodo que muestre por pantalla todas las propiedades del planeta.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define a planet class</span>
+<span class="k">class</span> <span class="nc">Planet</span><span class="p">:</span>
+
+    <span class="c1"># class variable</span>
+    <span class="n">object_type</span> <span class="o">=</span> <span class="s1">&#39;planet&#39;</span>
+
+    <span class="c1"># class initialiser</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">mass</span><span class="p">,</span> <span class="n">gravity</span><span class="p">):</span>
+
+        <span class="c1"># instance variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mass</span> <span class="o">=</span> <span class="n">mass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gravity</span> <span class="o">=</span> <span class="n">gravity</span>
+
+    <span class="c1"># class instance method</span>
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># Print the object properties</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - Radius: </span><span class="si">{}</span><span class="s1">km&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - Mass: </span><span class="si">{}</span><span class="s1">kg&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mass</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - Gravity: </span><span class="si">{}</span><span class="s1">m/s&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gravity</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create class instances</span>
+<span class="n">earth</span> <span class="o">=</span> <span class="n">Planet</span><span class="p">(</span><span class="s1">&#39;Earth&#39;</span><span class="p">,</span> <span class="mi">6371</span><span class="p">,</span> <span class="mf">5.97e24</span><span class="p">,</span> <span class="mf">9.8</span><span class="p">)</span>
+<span class="n">earth</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">jupiter</span> <span class="o">=</span> <span class="n">Planet</span><span class="p">(</span><span class="s1">&#39;Jupiter&#39;</span><span class="p">,</span> <span class="mi">69911</span><span class="p">,</span> <span class="mf">1.89e27</span><span class="p">,</span> <span class="mf">24.79</span><span class="p">)</span>
+<span class="n">jupiter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">saturn</span> <span class="o">=</span> <span class="n">Planet</span><span class="p">(</span><span class="s1">&#39;Saturn&#39;</span><span class="p">,</span> <span class="mi">58232</span><span class="p">,</span> <span class="mf">5.68e26</span><span class="p">,</span> <span class="mf">10.45</span><span class="p">)</span>
+<span class="n">saturn</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Para-mayor-información-acerca-de-como-funcionan-las-clases-en-Python,-les-recomiendo-visitar:">
+<h3><span class="section-number">2.2.3. </span>Para mayor información acerca de como funcionan las clases en Python, les recomiendo visitar:<a class="headerlink" href="#Para-mayor-información-acerca-de-como-funcionan-las-clases-en-Python,-les-recomiendo-visitar:" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3.7/tutorial/classes.html">Tutorial oficial de Python y Clases</a></p></li>
+<li><p><a class="reference external" href="https://github.com/Euclid-Python/Python-and-OOP">Jupyter Notebooks con un tutorial completo y avanzado de Clases</a></p></li>
+</ul>
+<p>Referencias:</p>
+<p>Copyright (c) 2020 HDVI</p>
+<p>Copyright (c) 2019 Euclid-Python</p>
+</section>
+</section>
+<section id="Nube-de-puntos">
+<h2><span class="section-number">2.3. </span>Nube de puntos<a class="headerlink" href="#Nube-de-puntos" title="Link to this heading"></a></h2>
+<p>Crear un objeto <code class="docutils literal notranslate"><span class="pre">:class:pyvista.PolyData</span></code> partir de una nube de puntos de vértices y matrices escalares para esos puntos</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_face</span><span class="p">()</span><span class="o">.</span><span class="n">points</span>
+<span class="c1"># Se imprimiran los primeros cinco puntos de la malla de la matriz (n_points x 3)</span>
+<span class="c1"># Las columnas son (X Y Z)</span>
+<span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+pyvista_ndarray([[ 0.      , -0.2048  , -0.090616],
+                 [ 0.      , -0.2016  , -0.091464],
+                 [ 0.      , -0.1984  , -0.09232 ],
+                 [ 0.      , -0.1952  , -0.093296],
+                 [ 0.      , -0.192   , -0.094312]], dtype=float32)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>  <span class="c1"># ¿ Qué hace esta linea ?</span>
+<span class="n">point_cloud</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<table style='width: 100%;'>
+<tr><th>PolyData</th><th>Information</th></tr>
+<tr><td>N Cells</td><td>2205</td></tr>
+<tr><td>N Points</td><td>2205</td></tr>
+<tr><td>N Strips</td><td>0</td></tr>
+<tr><td>X Bounds</td><td>0.000e+00, 1.056e-01</td></tr>
+<tr><td>Y Bounds</td><td>-2.048e-01, -5.120e-02</td></tr>
+<tr><td>Z Bounds</td><td>-1.190e-01, 4.112e-03</td></tr>
+<tr><td>N Arrays</td><td>0</td></tr>
+</table></div>
+</div>
+<p>np.allclose(points, point_cloud.points)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">point_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e7247e3ce15d4e34ac0593faf95f46d9", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make data array using z-component of points array</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Add that data to the mesh with the name &quot;uniform dist&quot;</span>
+<span class="n">point_cloud</span><span class="p">[</span><span class="s2">&quot;profundidad&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">point_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">render_points_as_spheres</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "e5572686948e4897bf87ba3a4d3b9d19", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Siguiente paso es mallar la nube de puntos</span>
+
+<span class="n">surf</span> <span class="o">=</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">delaunay_2d</span><span class="p">()</span>
+
+<span class="n">surf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">show_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "430d8378e3f14eca9e6b3421224d38d0", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">surf</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<table style='width: 100%;'><tr><th>Header</th><th>Data Arrays</th></tr><tr><td>
+<table style='width: 100%;'>
+<tr><th>PolyData</th><th>Information</th></tr>
+<tr><td>N Cells</td><td>4246</td></tr>
+<tr><td>N Points</td><td>2205</td></tr>
+<tr><td>N Strips</td><td>0</td></tr>
+<tr><td>X Bounds</td><td>0.000e+00, 1.056e-01</td></tr>
+<tr><td>Y Bounds</td><td>-2.048e-01, -5.120e-02</td></tr>
+<tr><td>Z Bounds</td><td>-1.190e-01, 4.112e-03</td></tr>
+<tr><td>N Arrays</td><td>1</td></tr>
+</table>
+
+</td><td>
+<table style='width: 100%;'>
+<tr><th>Name</th><th>Field</th><th>Type</th><th>N Comp</th><th>Min</th><th>Max</th></tr>
+<tr><td><b>profundidad</b></td><td>Points</td><td>float32</td><td>1</td><td>0.000e+00</td><td>1.056e-01</td></tr>
+</table>
+
+</td></tr> </table></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">surf</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;pyvista.core.pointset.PolyData&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#help(pv.PolyData)</span>
+</pre></div>
+</div>
+</div>
+<section id="Como-acceder-a-la-información-del-objeto-surf">
+<h3><span class="section-number">2.3.1. </span>Como acceder a la información del objeto surf<a class="headerlink" href="#Como-acceder-a-la-información-del-objeto-surf" title="Link to this heading"></a></h3>
+<p>Primero accederemos a los puntos o nodos de la malla. Para ello, tenemos que acceder a <code class="docutils literal notranslate"><span class="pre">obj_polydata.points</span></code>. Estamos accediento al atributo points de la malla y esto nos devolvera un vector 1D de numpy, de dimensión (npuntos * 3). Cambiaremos la forma de este vector, para que represente una matriz de <span class="math notranslate nohighlight">\(N_{puntos} \times 3\)</span>. Para ello, utilizaremos el método <code class="docutils literal notranslate"><span class="pre">np.reshape</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">surf</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Como pueden ver, cada fila representa un nodo en formato <span class="math notranslate nohighlight">\((X,Y,Z)\)</span>. Sin embargo, ahora nuestra malla esta compuesta por unidades geométricas basicas. En este caso, esta definida por triangulos que conectan los nodos o puntos de <strong>surf</strong>. El índice de los nodos esta ordenado según el índice de la fila de la matriz. En este caso, el nodo 0, es la primera fila.</p>
+<p>Por lo tanto, para generar los triangulos, solo es necesario decir el tipo de elemento (asociado al número 3) y especificar los nodos. Ejemplo de un elemento triangulo <span class="math notranslate nohighlight">\([3,110,12,87]\)</span>. Notar que el arreglo es de tipo entero, el primer entero es el número de nodos, y los otros indican los nodos conectados.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">surf</span><span class="o">.</span><span class="n">faces</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">surf</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">surf</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Desafío:-Esponja-de-Menger">
+<h2><span class="section-number">2.4. </span>Desafío: Esponja de Menger<a class="headerlink" href="#Desafío:-Esponja-de-Menger" title="Link to this heading"></a></h2>
+<p>En este problema, tendran que utilizar PyVista, para obtener el fractal de Menger, el cual se presenta ilustrado en la siguiente imagén.</p>
+<p><img alt="logo" class="no-scaled-link" src="../_images/menger4.jpg" style="width: 600px;" /></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cubo</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">r</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+
+    <span class="k">def</span> <span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>
+        <span class="n">cubos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+                    <span class="n">suma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                    <span class="n">n_r</span> <span class="o">=</span> <span class="n">r</span><span class="o">/</span><span class="mf">3.</span>
+                    <span class="k">if</span> <span class="n">suma</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">b</span> <span class="o">=</span> <span class="n">Cubo</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">n_r</span><span class="p">,</span> <span class="n">y</span><span class="o">+</span> <span class="n">j</span><span class="o">*</span><span class="n">n_r</span><span class="p">,</span> <span class="n">z</span> <span class="o">+</span> <span class="n">k</span><span class="o">*</span><span class="n">n_r</span><span class="p">,</span> <span class="n">n_r</span><span class="p">)</span>
+                        <span class="n">cubos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cubos</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge_sponge_mesh</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">cubes</span> <span class="o">=</span> <span class="p">[</span><span class="n">Cubo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">sponge</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">sponge</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cubes</span><span class="p">:</span>
+            <span class="n">sponge</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">generate</span><span class="p">())</span>
+        <span class="n">cubes</span> <span class="o">=</span> <span class="n">sponge</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">sponge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">r</span>
+    <span class="k">for</span> <span class="n">cube</span> <span class="ow">in</span> <span class="n">sponge</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">pos</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">points</span><span class="p">),</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">merge_sponge_mesh</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[-0.48148148 -0.48148148 -0.48148148]
+ [-0.48148148 -0.48148148 -0.44444444]
+ [-0.48148148 -0.48148148 -0.40740741]
+ ...
+ [ 0.48148148  0.48148148  0.40740741]
+ [ 0.48148148  0.48148148  0.44444444]
+ [ 0.48148148  0.48148148  0.48148148]] 0.037037037037037035
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sponge_data</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># ¿ Qué hace esta linea ?</span>
+<span class="n">geom</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Cube</span><span class="p">(</span><span class="n">x_length</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">y_length</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">z_length</span><span class="o">=</span><span class="n">r</span><span class="p">)</span>
+<span class="n">glyphs</span> <span class="o">=</span> <span class="n">sponge_data</span><span class="o">.</span><span class="n">glyph</span><span class="p">(</span><span class="n">geom</span><span class="o">=</span><span class="n">geom</span><span class="p">)</span>
+<span class="n">pl</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">lighting</span><span class="o">=</span><span class="s2">&quot;three lights&quot;</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">glyphs</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gold&#39;</span><span class="p">,</span> <span class="n">metallic</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">background_color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+<span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/ccdonosoo/.local/lib/python3.10/site-packages/pyvista/core/filters/data_set.py:2293: UserWarning: No data to use for scale. scale will be set to False.
+  warnings.warn(&#34;No data to use for scale. scale will be set to False.&#34;)
+/home/ccdonosoo/.local/lib/python3.10/site-packages/pyvista/core/filters/data_set.py:2320: UserWarning: No vector-like data to use for orient. orient will be set to False.
+  warnings.warn(&#34;No vector-like data to use for orient. orient will be set to False.&#34;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "9749d638f00a4cc594ba3a54c2e68941", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#help(pv.Plotter())</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metodo_rigidez.html" class="btn btn-neutral float-left" title="1. Método de la Rigidez" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mallas.html" class="btn btn-neutral float-right" title="3. Mallas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

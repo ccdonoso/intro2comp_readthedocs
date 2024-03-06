@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Método de la Rigidez &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Clases y PyVista" href="oop_pyvista.html" />
+    <link rel="prev" title="4. Mecanismos" href="mecanismos.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Método de la Rigidez</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Elemento-Barra">1.1. Elemento Barra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Elemento-Viga">1.2. Elemento Viga</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema-de-método-de-la-rígidez.">1.3. Problema de método de la rígidez.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Solución">1.3.1. Solución</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Simplificación-del-modelo.">1.3.2. Simplificación del modelo.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Grados-de-libertad-de-la-estructura">1.3.3. Grados de libertad de la estructura</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Matriz-de-rigidez-de-los-elementos">1.3.4. Matriz de rigidez de los elementos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Matriz-de-Rigidez-Elemento-1-(barra).">1.3.5. Matriz de Rigidez Elemento 1 (barra).</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Matriz-de-Rigidez-Elemento-2-(viga).">1.3.6. Matriz de Rigidez Elemento 2 (viga).</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Matriz-de-Rigidez-Elemento-3-(viga).">1.3.7. Matriz de Rigidez Elemento 3 (viga).</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#¿Cómo-ensamblar-estas-matrices?">1.3.8. ¿Cómo ensamblar estas matrices?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Matriz-Local-Elemento-1-(Barra)">1.3.9. Matriz Local Elemento 1 (Barra)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Matriz-Local-escrita-con-todos-los-gl.">1.3.10. Matriz Local escrita con todos los gl.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Ensamblaje">1.3.11. Ensamblaje</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Postproceso">1.3.12. Postproceso</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">1.3.13. Matriz de Rigidez Elemento 1 (barra).</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">1.3.14. Matriz de Rigidez Elemento 2 (viga).</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">1.3.15. Matriz de Rigidez Elemento 3 (viga).</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Tarea-:-Obtener-el-estado-de-esfuerzos-y-deformación-de-los-elementos">1.4. Tarea : Obtener el estado de esfuerzos y deformación de los elementos</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Método de la Rigidez</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/metodo_rigidez.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Método-de-la-Rigidez">
+<h1><span class="section-number">1. </span>Método de la Rigidez<a class="headerlink" href="#Método-de-la-Rigidez" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> : Método de la Rigidez. - Elemento Barra 2D - Elemento Viga 2D - Resolución de un Problema</p>
+<p><strong>NOTA: Este código no tiene como propósito hacer ensamblaje automatico de las matrices. El principal objetivo es ilustrar como resolver un problema</strong></p>
+<p><strong>Es penalizado el uso de este código en evaluaciones</strong></p>
+<p><strong>Librerías</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Math</span><span class="p">,</span> <span class="n">Latex</span>
+
+
+<span class="c1"># Esto permite convertir las matrices en latex</span>
+<span class="k">def</span> <span class="nf">bmatrix</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">supress</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span><span class="n">precision</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Regresa una matriz de LaTeX bmatrix</span>
+
+<span class="sd">    :a: ndarray</span>
+<span class="sd">    :returns: LaTeX bmatrix como String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;bmatrix can at most display two dimensions&#39;</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array2string</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">precision</span><span class="o">=</span><span class="n">precision</span><span class="p">,</span><span class="n">suppress_small</span><span class="o">=</span><span class="kc">True</span> <span class="ow">and</span> <span class="n">supress</span><span class="p">,</span><span class="n">max_line_width</span><span class="o">=</span><span class="mi">160</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;0.0e00&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+
+    <span class="n">lines</span> <span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e0&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;e-0&#39;</span><span class="p">,</span> <span class="s1">&#39;e-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;\begin</span><span class="si">{bmatrix}</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="n">rv</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;  &#39;</span> <span class="o">+</span> <span class="s1">&#39; &amp; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+    <span class="n">rv</span> <span class="o">+=</span>  <span class="p">[</span><span class="sa">r</span><span class="s1">&#39;\end</span><span class="si">{bmatrix}</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Elemento-Barra">
+<h2><span class="section-number">1.1. </span>Elemento Barra<a class="headerlink" href="#Elemento-Barra" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">k_barra</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    E,A,L,alpha : floats</span>
+<span class="sd">        Valores escalares de la barra</span>
+<span class="sd">    Return:</span>
+<span class="sd">    -------</span>
+<span class="sd">    K: ndarray</span>
+<span class="sd">        Matriz de rigidez</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">K</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">K</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">K</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">:,:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">K</span><span class="p">[:</span><span class="mi">2</span><span class="p">,:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">K</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">L</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Elemento-Viga">
+<h2><span class="section-number">1.2. </span>Elemento Viga<a class="headerlink" href="#Elemento-Viga" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">k_viga_horizontal</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">I</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    -----------</span>
+<span class="sd">    E,A,L,I : floats</span>
+<span class="sd">        Valores escalares de la viga</span>
+<span class="sd">    Return:</span>
+<span class="sd">    -------</span>
+<span class="sd">    K: ndarray</span>
+<span class="sd">        Matriz de rigidez</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">E</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">E</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">E</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">E</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">12.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">3.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">12.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">3.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">12.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">3.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">12.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">3.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="p">(</span><span class="n">L</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">4.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">4.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="n">L</span>
+    <span class="n">K</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="n">I</span><span class="o">/</span><span class="n">L</span>
+    <span class="k">return</span> <span class="n">K</span>
+
+<span class="k">def</span> <span class="nf">rot_viga</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">3</span><span class="p">:,</span><span class="mi">3</span><span class="p">:]</span> <span class="o">=</span> <span class="n">R</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">R</span>
+
+<span class="k">def</span> <span class="nf">k_viga</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">alpha</span><span class="p">):</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">k_viga_horizontal</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">rot_viga</span><span class="p">(</span><span class="n">K</span><span class="p">,</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">R</span> <span class="o">@</span> <span class="n">K</span> <span class="o">@</span> <span class="n">R</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Problema-de-método-de-la-rígidez.">
+<h2><span class="section-number">1.3. </span>Problema de método de la rígidez.<a class="headerlink" href="#Problema-de-método-de-la-rígidez." title="Link to this heading"></a></h2>
+<p>La estructura presentada en la Fig 1., esta conformada por dos pilares, una viga y dos cables. Todo está hecho de acero <span class="math notranslate nohighlight">\((E = 210x10^9 Pa)\)</span>. Los cables tienen un diámetro de <span class="math notranslate nohighlight">\(4 [mm]\)</span>; la viga y los pilares están hechos de perfiles comerciales W360x634 y W360x421, respectivamente. Estos tienen como tiene como propiedades</p>
+<div class="math notranslate nohighlight">
+\[I = 2740\times 10^{−6} m^4, \quad A = 80,8 \times 10^{−3} m^2 \quad (W360x634) \quad ,\]</div>
+<div class="math notranslate nohighlight">
+\[I = 1600\times 10^{−6} m^4, \quad A = 53,7 \times 10^{−3} m^2 \quad (W360x421) \quad .\]</div>
+<p><img alt="logo" class="no-scaled-link" src="../_images/estructura.png" style="width: 700px;" /></p>
+<section id="Solución">
+<h3><span class="section-number">1.3.1. </span>Solución<a class="headerlink" href="#Solución" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Definir los gl y elementos del problema</p></li>
+<li><p>Calcular las matrices de rigidez de cada uno de los elementos</p></li>
+<li><p>Ensamblar estas matrices.</p></li>
+<li><p>Postproceso de los resultados</p></li>
+</ol>
+</section>
+<section id="Simplificación-del-modelo.">
+<h3><span class="section-number">1.3.2. </span>Simplificación del modelo.<a class="headerlink" href="#Simplificación-del-modelo." title="Link to this heading"></a></h3>
+<p><img alt="logo" class="no-scaled-link" src="../_images/model_red.png" style="width: 700px;" /></p>
+</section>
+<section id="Grados-de-libertad-de-la-estructura">
+<h3><span class="section-number">1.3.3. </span>Grados de libertad de la estructura<a class="headerlink" href="#Grados-de-libertad-de-la-estructura" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[107]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;u1&#39;</span><span class="p">,</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span><span class="s1">&#39;u2&#39;</span><span class="p">,</span><span class="s1">&#39;v2&#39;</span><span class="p">,</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span><span class="s1">&#39;u3&#39;</span><span class="p">,</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span><span class="s1">&#39;r3&#39;</span><span class="p">,</span><span class="s1">&#39;u4&#39;</span><span class="p">,</span><span class="s1">&#39;v4&#39;</span><span class="p">,</span><span class="s1">&#39;r4&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;U1&#39;</span><span class="p">,</span><span class="s1">&#39;V1&#39;</span><span class="p">,</span><span class="s1">&#39;U2&#39;</span><span class="p">,</span><span class="s1">&#39;V2&#39;</span><span class="p">,</span><span class="s1">&#39;M2&#39;</span><span class="p">,</span><span class="s1">&#39;U3&#39;</span><span class="p">,</span><span class="s1">&#39;V3&#39;</span><span class="p">,</span><span class="s1">&#39;M3&#39;</span><span class="p">,</span><span class="s1">&#39;U4&#39;</span><span class="p">,</span><span class="s1">&#39;V4&#39;</span><span class="p">,</span><span class="s1">&#39;M4&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="s2">&quot;[K_G]&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">f</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle [K_G]\begin{bmatrix}
+  u1\\
+  v1\\
+  u2\\
+  v2\\
+  r2\\
+  u3\\
+  v3\\
+  r3\\
+  u4\\
+  v4\\
+  r4\\
+\end{bmatrix}=\begin{bmatrix}
+  U1\\
+  V1\\
+  U2\\
+  V2\\
+  M2\\
+  U3\\
+  V3\\
+  M3\\
+  U4\\
+  V4\\
+  M4\\
+\end{bmatrix}$</div></div>
+</div>
+</section>
+<section id="Matriz-de-rigidez-de-los-elementos">
+<h3><span class="section-number">1.3.4. </span>Matriz de rigidez de los elementos<a class="headerlink" href="#Matriz-de-rigidez-de-los-elementos" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Elem.</p></th>
+<th class="head"><p>Tipo</p></th>
+<th class="head"><p>Nodo i</p></th>
+<th class="head"><p>Nodo j</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(\alpha\)</span>º</p></th>
+<th class="head"><p>Largo <span class="math notranslate nohighlight">\([m]\)</span></p></th>
+<th class="head"><p>Área <span class="math notranslate nohighlight">\([m^2]\)</span></p></th>
+<th class="head"><p>I <span class="math notranslate nohighlight">\([m^4]\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>I</p></td>
+<td><p>Barra</p></td>
+<td><p>1</p></td>
+<td><p>3</p></td>
+<td><p>60</p></td>
+<td><p>5.773</p></td>
+<td><p><span class="math notranslate nohighlight">\(\pi(2 x10^{-3})\)</span></p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>II</p></td>
+<td><p>Viga</p></td>
+<td><p>2</p></td>
+<td><p>3</p></td>
+<td><p>90</p></td>
+<td><p>5</p></td>
+<td><p>0.00537</p></td>
+<td><p><span class="math notranslate nohighlight">\(1600 x10^{-6}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>III</p></td>
+<td><p>Viga</p></td>
+<td><p>3</p></td>
+<td><p>4</p></td>
+<td><p>0</p></td>
+<td><p>7</p></td>
+<td><p>0.00808</p></td>
+<td><p><span class="math notranslate nohighlight">\(2740 x10^{-6}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">E</span> <span class="o">=</span> <span class="mf">210e+9</span>
+
+<span class="n">k1</span> <span class="o">=</span> <span class="n">k_barra</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">))</span><span class="o">**</span><span class="mf">2.</span><span class="p">,</span><span class="mf">5.773</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="o">*</span><span class="mf">60.</span><span class="p">)</span> <span class="c1"># Matriz de Rigidez de Barra 1</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;u1&#39;</span><span class="p">,</span><span class="s1">&#39;v1&#39;</span><span class="p">,</span><span class="s1">&#39;u3&#39;</span><span class="p">,</span><span class="s1">&#39;v3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#Desplazamientos 1</span>
+
+<span class="n">k2</span> <span class="o">=</span> <span class="n">k_viga</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="mf">0.00537</span><span class="p">,</span><span class="mf">1600e-6</span><span class="p">,</span><span class="mf">5.</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span> <span class="c1"># Matriz de Rigidez de viga 1</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;u2&#39;</span><span class="p">,</span><span class="s1">&#39;v2&#39;</span><span class="p">,</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span><span class="s1">&#39;u3&#39;</span><span class="p">,</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span><span class="s1">&#39;r3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#Desplazamientos 2</span>
+
+<span class="n">k3</span> <span class="o">=</span> <span class="n">k_viga</span><span class="p">(</span><span class="n">E</span><span class="p">,</span><span class="mf">0.00808</span><span class="p">,</span><span class="mf">2740e-6</span><span class="p">,</span><span class="mf">7.</span><span class="p">,</span><span class="mf">0.</span><span class="p">)</span> <span class="c1"># Matriz de Rigidez de viga 2</span>
+<span class="n">u3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;u3&#39;</span><span class="p">,</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span><span class="s1">&#39;r3&#39;</span><span class="p">,</span><span class="s1">&#39;u4&#39;</span><span class="p">,</span><span class="s1">&#39;v4&#39;</span><span class="p">,</span><span class="s1">&#39;r4&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#Desplazamientos 3</span>
+
+<span class="k">class</span> <span class="nc">Elements</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">u</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span>
+
+<span class="n">e1</span> <span class="o">=</span> <span class="n">Elements</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span><span class="n">u1</span><span class="p">)</span>
+<span class="n">e2</span> <span class="o">=</span> <span class="n">Elements</span><span class="p">(</span><span class="n">k2</span><span class="p">,</span><span class="n">u2</span><span class="p">)</span>
+<span class="n">e3</span> <span class="o">=</span> <span class="n">Elements</span><span class="p">(</span><span class="n">k3</span><span class="p">,</span><span class="n">u3</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+<section id="Matriz-de-Rigidez-Elemento-1-(barra).">
+<h3><span class="section-number">1.3.5. </span>Matriz de Rigidez Elemento 1 (barra).<a class="headerlink" href="#Matriz-de-Rigidez-Elemento-1-(barra)." title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k1</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_1]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  114279.3 &amp; 197937.6 &amp; -114279.3 &amp; -197937.6\\
+  197937.6 &amp; 342837.9 &amp; -197937.6 &amp; -342837.9\\
+  -114279.3 &amp; -197937.6 &amp; 114279.3 &amp; 197937.6\\
+  -197937.6 &amp; -342837.9 &amp; 197937.6 &amp; 342837.9\\
+\end{bmatrix}\begin{bmatrix}
+  u1\\
+  v1\\
+  u3\\
+  v3\\
+\end{bmatrix}= [F_1]$</div></div>
+</div>
+</section>
+<section id="Matriz-de-Rigidez-Elemento-2-(viga).">
+<h3><span class="section-number">1.3.6. </span>Matriz de Rigidez Elemento 2 (viga).<a class="headerlink" href="#Matriz-de-Rigidez-Elemento-2-(viga)." title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k2</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_2]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  3.2e7 &amp; 1.2e-8 &amp; -8.1e7 &amp; -3.2e7 &amp; -1.2e-8 &amp; -8.1e7\\
+  1.2e-8 &amp; 2.3e8 &amp; 4.9e-9 &amp; -1.2e-8 &amp; -2.3e8 &amp; 4.9e-9\\
+  -8.1e7 &amp; 4.9e-9 &amp; 2.7e8 &amp; 8.1e7 &amp; -4.9e-9 &amp; 1.3e8\\
+  -3.2e7 &amp; -1.2e-8 &amp; 8.1e7 &amp; 3.2e7 &amp; 1.2e-8 &amp; 8.1e7\\
+  -1.2e-8 &amp; -2.3e8 &amp; -4.9e-9 &amp; 1.2e-8 &amp; 2.3e8 &amp; -4.9e-9\\
+  -8.1e7 &amp; 4.9e-9 &amp; 1.3e8 &amp; 8.1e7 &amp; -4.9e-9 &amp; 2.7e8\\
+\end{bmatrix}\begin{bmatrix}
+  u2\\
+  v2\\
+  r2\\
+  u3\\
+  v3\\
+  r3\\
+\end{bmatrix}= [F_2]$</div></div>
+</div>
+</section>
+<section id="Matriz-de-Rigidez-Elemento-3-(viga).">
+<h3><span class="section-number">1.3.7. </span>Matriz de Rigidez Elemento 3 (viga).<a class="headerlink" href="#Matriz-de-Rigidez-Elemento-3-(viga)." title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[111]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k3</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_3]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  2.4e8 &amp; 0 &amp; 0 &amp; -2.4e8 &amp; 0 &amp; 0\\
+  0 &amp; 2.0e7 &amp; 7.0e7 &amp; 0 &amp; -2.0e7 &amp; 7.0e7\\
+  0 &amp; 7.0e7 &amp; 3.3e8 &amp; 0 &amp; -7.0e7 &amp; 1.6e8\\
+  -2.4e8 &amp; 0 &amp; 0 &amp; 2.4e8 &amp; 0 &amp; 0\\
+  0 &amp; -2.0e7 &amp; -7.0e7 &amp; 0 &amp; 2.0e7 &amp; -7.0e7\\
+  0 &amp; 7.0e7 &amp; 1.6e8 &amp; 0 &amp; -7.0e7 &amp; 3.3e8\\
+\end{bmatrix}\begin{bmatrix}
+  u3\\
+  v3\\
+  r3\\
+  u4\\
+  v4\\
+  r4\\
+\end{bmatrix}= [F_3]$</div></div>
+</div>
+</section>
+<section id="¿Cómo-ensamblar-estas-matrices?">
+<h3><span class="section-number">1.3.8. </span>¿Cómo ensamblar estas matrices?<a class="headerlink" href="#¿Cómo-ensamblar-estas-matrices?" title="Link to this heading"></a></h3>
+<p>Cada una de estas matrices de rigidez, presenta gl en común, por lo tanto existe una relación entre cada una de estas matrices de rigidez y esta determinada por como están conectados los elementos. Es posible sumar cada una de las matrices de rigidez, si es que estas están escritas en termino de los gl globales. Por ejemplo, la relación local del elemento barra esta dada por:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}[K_1] \begin{bmatrix}
+  u1\\
+  v1\\
+  u3\\
+  v3\\
+\end{bmatrix}= [F_1]\end{split}\]</div>
+<p>Queremos escribir esta ecuación en término de los gl globales, es decir:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} [K_{e1}][u_G]=[K_{e1}] \begin{bmatrix}
+  u1\\
+  v1\\
+  u2\\
+  v2\\
+  r2\\
+  u3\\
+  v3\\
+  r3\\
+  u4\\
+  v4\\
+  r4\\
+\end{bmatrix}= [F_{e1}]\end{split}\]</div>
+<p>Para ellos es necesario extender la matriz de rigidez de los elementos, <span class="math notranslate nohighlight">\([K_1] \neq [K_{e1}]\)</span> y $[F_1] :nbsphinx-math:<a href="#id1"><span class="problematic" id="id2">`</span></a>neq [F_{e1}]  <a href="#id3"><span class="problematic" id="id4">`</span></a>$.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[112]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">id_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">id_j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u1</span><span class="p">):</span>
+        <span class="n">r</span> <span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">u</span><span class="o">==</span><span class="n">id_i</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">u</span><span class="o">==</span><span class="n">id_j</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">kg1</span><span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">k1</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Matriz-Local-Elemento-1-(Barra)">
+<h3><span class="section-number">1.3.9. </span>Matriz Local Elemento 1 (Barra)<a class="headerlink" href="#Matriz-Local-Elemento-1-(Barra)" title="Link to this heading"></a></h3>
+<div class="math notranslate nohighlight">
+\[[K_1][u_1] = [F_1]\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[113]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u1</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k1</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_1]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  u1 &amp; v1 &amp; u3 &amp; v3\\
+\end{bmatrix}$</div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  114279.3 &amp; 197937.6 &amp; -114279.3 &amp; -197937.6\\
+  197937.6 &amp; 342837.9 &amp; -197937.6 &amp; -342837.9\\
+  -114279.3 &amp; -197937.6 &amp; 114279.3 &amp; 197937.6\\
+  -197937.6 &amp; -342837.9 &amp; 197937.6 &amp; 342837.9\\
+\end{bmatrix}\begin{bmatrix}
+  u1\\
+  v1\\
+  u3\\
+  v3\\
+\end{bmatrix}= [F_1]$</div></div>
+</div>
+</section>
+<section id="Matriz-Local-escrita-con-todos-los-gl.">
+<h3><span class="section-number">1.3.10. </span>Matriz Local escrita con todos los gl.<a class="headerlink" href="#Matriz-Local-escrita-con-todos-los-gl." title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[114]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">kg1</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_</span><span class="si">{e1}</span><span class="s2">]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  u1 &amp; v1 &amp; u2 &amp; v2 &amp; r2 &amp; u3 &amp; v3 &amp; r3 &amp; u4 &amp; v4 &amp; r4\\
+\end{bmatrix}$</div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  114279.3 &amp; 197937.6 &amp; 0. &amp; 0. &amp; 0. &amp; -114279.3 &amp; -197937.6 &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  197937.6 &amp; 342837.9 &amp; 0. &amp; 0. &amp; 0. &amp; -197937.6 &amp; -342837.9 &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  -114279.3 &amp; -197937.6 &amp; 0. &amp; 0. &amp; 0. &amp; 114279.3 &amp; 197937.6 &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  -197937.6 &amp; -342837.9 &amp; 0. &amp; 0. &amp; 0. &amp; 197937.6 &amp; 342837.9 &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+  0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0. &amp; 0.\\
+\end{bmatrix}\begin{bmatrix}
+  u1\\
+  v1\\
+  u2\\
+  v2\\
+  r2\\
+  u3\\
+  v3\\
+  r3\\
+  u4\\
+  v4\\
+  r4\\
+\end{bmatrix}= [F_{e1}]$</div></div>
+</div>
+<p><strong>Esta operación permite escribir la matriz de rigidez local, en termino de todos los gl de desplazamientos del modelo.</strong></p>
+<div class="math notranslate nohighlight">
+\[[K_1][u_1] = [F_1]\]</div>
+<p>Pero esta igualdad se puede escribir en terminos del vector de desplazamientos globales.</p>
+<div class="math notranslate nohighlight">
+\[[K_{e1}][u_{G}] = [F_{e1}]\]</div>
+<p>Si es que sumamos cada una de las matrices de rigidez de los elementos, en termino de los gl globales, obtenemos la matriz de rigidez global.</p>
+<div class="math notranslate nohighlight">
+\[([K_{e1}]+[K_{e2}]+[K_{e3}])[u_{G}] = [F_{ext}]\]</div>
+<p>Es decir, la suma de cada una de las matrices de rigidez en término de los gl globales, nos da la matriz de rigidez global.</p>
+<div class="math notranslate nohighlight">
+\[([K_{e1}]+[K_{e2}]+[K_{e3}])=[K_{G}]\]</div>
+<p>Así, se obtiene la relación entre la matriz de rigidez global. Esta expresión relaciona linealmente los desplazamientos, con las fuerzas externas del modelo.</p>
+<div class="math notranslate nohighlight">
+\[[K_{G}][u_{G}] = [F_{ext}]\]</div>
+</section>
+<section id="Ensamblaje">
+<h3><span class="section-number">1.3.11. </span>Ensamblaje<a class="headerlink" href="#Ensamblaje" title="Link to this heading"></a></h3>
+<p>Para ensamblar utilizaremos el código anterior, pero sumando todos los elementos.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[115]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">elem</span> <span class="o">=</span> <span class="p">[</span><span class="n">e1</span><span class="p">,</span><span class="n">e2</span><span class="p">,</span><span class="n">e3</span><span class="p">]</span>
+
+<span class="n">kg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">11</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span> <span class="c1"># Matriz Global con ceros</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">id_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">u</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">id_j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">u</span><span class="p">):</span>
+            <span class="n">r</span> <span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">u</span><span class="o">==</span><span class="n">id_i</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">u</span><span class="o">==</span><span class="n">id_j</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">kg</span><span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">kg</span><span class="p">[</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">]</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">k</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[116]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">kg</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_</span><span class="si">{ext}</span><span class="s2">]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  1.1e5 &amp; 2.0e5 &amp; 0 &amp; 0 &amp; 0 &amp; -1.1e5 &amp; -2.0e5 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
+  2.0e5 &amp; 3.4e5 &amp; 0 &amp; 0 &amp; 0 &amp; -2.0e5 &amp; -3.4e5 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
+  0 &amp; 0 &amp; 3.2e7 &amp; 1.2e-8 &amp; -8.1e7 &amp; -3.2e7 &amp; -1.2e-8 &amp; -8.1e7 &amp; 0 &amp; 0 &amp; 0\\
+  0 &amp; 0 &amp; 1.2e-8 &amp; 2.3e8 &amp; 4.9e-9 &amp; -1.2e-8 &amp; -2.3e8 &amp; 4.9e-9 &amp; 0 &amp; 0 &amp; 0\\
+  0 &amp; 0 &amp; -8.1e7 &amp; 4.9e-9 &amp; 2.7e8 &amp; 8.1e7 &amp; -4.9e-9 &amp; 1.3e8 &amp; 0 &amp; 0 &amp; 0\\
+  -1.1e5 &amp; -2.0e5 &amp; -3.2e7 &amp; -1.2e-8 &amp; 8.1e7 &amp; 2.7e8 &amp; 2.0e5 &amp; 8.1e7 &amp; -2.4e8 &amp; 0 &amp; 0\\
+  -2.0e5 &amp; -3.4e5 &amp; -1.2e-8 &amp; -2.3e8 &amp; -4.9e-9 &amp; 2.0e5 &amp; 2.5e8 &amp; 7.0e7 &amp; 0 &amp; -2.0e7 &amp; 7.0e7\\
+  0 &amp; 0 &amp; -8.1e7 &amp; 4.9e-9 &amp; 1.3e8 &amp; 8.1e7 &amp; 7.0e7 &amp; 6.0e8 &amp; 0 &amp; -7.0e7 &amp; 1.6e8\\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -2.4e8 &amp; 0 &amp; 0 &amp; 2.4e8 &amp; 0 &amp; 0\\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -2.0e7 &amp; -7.0e7 &amp; 0 &amp; 2.0e7 &amp; -7.0e7\\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 7.0e7 &amp; 1.6e8 &amp; 0 &amp; -7.0e7 &amp; 3.3e8\\
+\end{bmatrix}\begin{bmatrix}
+  u1\\
+  v1\\
+  u2\\
+  v2\\
+  r2\\
+  u3\\
+  v3\\
+  r3\\
+  u4\\
+  v4\\
+  r4\\
+\end{bmatrix}= [F_{ext}]$</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[117]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u_desconocidos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;u3&#39;</span><span class="p">,</span><span class="s1">&#39;v3&#39;</span><span class="p">,</span><span class="s1">&#39;r3&#39;</span><span class="p">,</span><span class="s1">&#39;v4&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">f_conocidas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="o">-</span><span class="mf">4000e3</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ind_u_desconocidos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">u_desconocidos</span><span class="o">==</span><span class="n">u</span><span class="p">)[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ind_u_conocidos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">)),</span> <span class="n">ind_u_desconocidos</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Para resolver este problema, es necesario ordenar la matriz anterior de acuerdo a:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[118]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kaa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">ind_u_desconocidos</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">ind_u_desconocidos</span><span class="p">)))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ii</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ind_u_desconocidos</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">jj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ind_u_desconocidos</span><span class="p">):</span>
+        <span class="n">kaa</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">kg</span><span class="p">[</span><span class="n">ii</span><span class="p">,</span><span class="n">jj</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[119]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">kaa</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u_desconocidos</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span> <span class="n">f_conocidas</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  2.7e8 &amp; 2.0e5 &amp; 8.1e7 &amp; 0\\
+  2.0e5 &amp; 2.5e8 &amp; 7.0e7 &amp; -2.0e7\\
+  8.1e7 &amp; 7.0e7 &amp; 6.0e8 &amp; -7.0e7\\
+  0 &amp; -2.0e7 &amp; -7.0e7 &amp; 2.0e7\\
+\end{bmatrix}\begin{bmatrix}
+  u3\\
+  v3\\
+  r3\\
+  v4\\
+\end{bmatrix}=\begin{bmatrix}
+  0.\\
+  0.\\
+  0.\\
+  -4000000.\\
+\end{bmatrix}$</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[120]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">kaa</span><span class="p">,</span><span class="n">f_conocidas</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ux</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 0.01256584]
+ [-0.01771931]
+ [-0.04277296]
+ [-0.36612702]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[121]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ug</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">u</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ii</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ind_u_desconocidos</span><span class="p">):</span>
+    <span class="n">ug</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">ux</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="s2">&quot;[K_G]&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">ug</span><span class="p">,</span><span class="n">supress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">precision</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; = &quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">kg</span><span class="nd">@ug</span><span class="p">)</span> <span class="o">+</span><span class="s2">&quot;= [F_</span><span class="si">{ext}</span><span class="s2">]&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle [K_G]\begin{bmatrix}
+  0.\\
+  0.\\
+  0.\\
+  0.\\
+  0.\\
+  0.013\\
+  -0.018\\
+  -0.043\\
+  0.\\
+  -0.366\\
+  0.\\
+\end{bmatrix} = \begin{bmatrix}
+  2071.3\\
+  3587.6\\
+  3043887.9\\
+  3996412.4\\
+  -4735376.7\\
+  -0.\\
+  0.\\
+  0.\\
+  -3045959.2\\
+  -4000000.\\
+  17515937.4\\
+\end{bmatrix}= [F_{ext}]$</div></div>
+</div>
+</section>
+<section id="Postproceso">
+<h3><span class="section-number">1.3.12. </span>Postproceso<a class="headerlink" href="#Postproceso" title="Link to this heading"></a></h3>
+<p>Ya que conocemos los desplazamientos, podemos obtener las fuerzas internas de cada uno de los elementos, con las matrices locales.</p>
+</section>
+<section id="id5">
+<h3><span class="section-number">1.3.13. </span>Matriz de Rigidez Elemento 1 (barra).<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[122]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ul1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">u1</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">c</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ii</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ii</span> <span class="ow">in</span> <span class="n">u1</span><span class="p">):</span>
+        <span class="n">ul1</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">ug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k1</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_1]&quot;</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k1</span> <span class="o">@</span> <span class="n">ul1</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">esfuerzo_barra</span><span class="o">=</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  114279.3 &amp; 197937.6 &amp; -114279.3 &amp; -197937.6\\
+  197937.6 &amp; 342837.9 &amp; -197937.6 &amp; -342837.9\\
+  -114279.3 &amp; -197937.6 &amp; 114279.3 &amp; 197937.6\\
+  -197937.6 &amp; -342837.9 &amp; 197937.6 &amp; 342837.9\\
+\end{bmatrix}\begin{bmatrix}
+  u1\\
+  v1\\
+  u3\\
+  v3\\
+\end{bmatrix}= [F_1]=\begin{bmatrix}
+  2071.3\\
+  3587.6\\
+  -2071.3\\
+  -3587.6\\
+\end{bmatrix}$</div></div>
+</div>
+</section>
+<section id="id6">
+<h3><span class="section-number">1.3.14. </span>Matriz de Rigidez Elemento 2 (viga).<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[123]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ul2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">u2</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">c</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ii</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ii</span> <span class="ow">in</span> <span class="n">u2</span><span class="p">):</span>
+        <span class="n">ul2</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">ug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k2</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u2</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_2]&quot;</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k2</span> <span class="o">@</span> <span class="n">ul2</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  3.2e7 &amp; 1.2e-8 &amp; -8.1e7 &amp; -3.2e7 &amp; -1.2e-8 &amp; -8.1e7\\
+  1.2e-8 &amp; 2.3e8 &amp; 4.9e-9 &amp; -1.2e-8 &amp; -2.3e8 &amp; 4.9e-9\\
+  -8.1e7 &amp; 4.9e-9 &amp; 2.7e8 &amp; 8.1e7 &amp; -4.9e-9 &amp; 1.3e8\\
+  -3.2e7 &amp; -1.2e-8 &amp; 8.1e7 &amp; 3.2e7 &amp; 1.2e-8 &amp; 8.1e7\\
+  -1.2e-8 &amp; -2.3e8 &amp; -4.9e-9 &amp; 1.2e-8 &amp; 2.3e8 &amp; -4.9e-9\\
+  -8.1e7 &amp; 4.9e-9 &amp; 1.3e8 &amp; 8.1e7 &amp; -4.9e-9 &amp; 2.7e8\\
+\end{bmatrix}\begin{bmatrix}
+  u2\\
+  v2\\
+  r2\\
+  u3\\
+  v3\\
+  r3\\
+\end{bmatrix}= [F_2]=\begin{bmatrix}
+  3043887.9\\
+  3996412.4\\
+  -4735376.7\\
+  -3043887.9\\
+  -3996412.4\\
+  -10484062.6\\
+\end{bmatrix}$</div></div>
+</div>
+</section>
+<section id="id7">
+<h3><span class="section-number">1.3.15. </span>Matriz de Rigidez Elemento 3 (viga).<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[125]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ul3</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">u3</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">c</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">ii</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ii</span> <span class="ow">in</span> <span class="n">u3</span><span class="p">):</span>
+        <span class="n">ul3</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">ug</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">Math</span><span class="p">(</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k3</span><span class="p">)</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">u3</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;= [F_3]&quot;</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="n">bmatrix</span><span class="p">(</span><span class="n">k3</span> <span class="o">@</span> <span class="n">ul3</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \begin{bmatrix}
+  2.4e8 &amp; 0 &amp; 0 &amp; -2.4e8 &amp; 0 &amp; 0\\
+  0 &amp; 2.0e7 &amp; 7.0e7 &amp; 0 &amp; -2.0e7 &amp; 7.0e7\\
+  0 &amp; 7.0e7 &amp; 3.3e8 &amp; 0 &amp; -7.0e7 &amp; 1.6e8\\
+  -2.4e8 &amp; 0 &amp; 0 &amp; 2.4e8 &amp; 0 &amp; 0\\
+  0 &amp; -2.0e7 &amp; -7.0e7 &amp; 0 &amp; 2.0e7 &amp; -7.0e7\\
+  0 &amp; 7.0e7 &amp; 1.6e8 &amp; 0 &amp; -7.0e7 &amp; 3.3e8\\
+\end{bmatrix}\begin{bmatrix}
+  u3\\
+  v3\\
+  r3\\
+  u4\\
+  v4\\
+  r4\\
+\end{bmatrix}= [F_3]=\begin{bmatrix}
+  3045959.2\\
+  4000000.\\
+  10484062.6\\
+  -3045959.2\\
+  -4000000.\\
+  17515937.4\\
+\end{bmatrix}$</div></div>
+</div>
+</section>
+</section>
+<section id="Tarea-:-Obtener-el-estado-de-esfuerzos-y-deformación-de-los-elementos">
+<h2><span class="section-number">1.4. </span>Tarea : Obtener el estado de esfuerzos y deformación de los elementos<a class="headerlink" href="#Tarea-:-Obtener-el-estado-de-esfuerzos-y-deformación-de-los-elementos" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mecanismos.html" class="btn btn-neutral float-left" title="4. Mecanismos" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="oop_pyvista.html" class="btn btn-neutral float-right" title="2. Clases y PyVista" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

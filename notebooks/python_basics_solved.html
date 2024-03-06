@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Introducción - Programación en Python &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Programación Científica con Numpy" href="numpy_solved.html" />
+    <link rel="prev" title="Mecánica Computacional" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introducción - Programación en Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Variables">1.1. Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Operadores-aritméticos">1.2. Operadores aritméticos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Operadores-Lógicos">1.3. Operadores Lógicos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Range">1.4. Range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Print">1.5. Print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Estructura-de-Datos-Básicas-en-Python">1.6. Estructura de Datos Básicas en Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Listas">1.6.1. Listas</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Indexing">1.6.1.1. Indexing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Slicing">1.6.1.2. Slicing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Métodos-(funciones)-de-las-listas">1.6.1.3. Métodos (funciones) de las listas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#append">1.6.1.4. append</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extend">1.6.1.5. extend</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#index()">1.6.1.6. index()</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#insert(x,y)">1.6.1.7. insert(x,y)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pop">1.6.1.8. pop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Remove">1.6.1.9. Remove</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Sorting">1.6.1.10. Sorting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Copiando-una-lista">1.6.1.11. Copiando una lista</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Tuplas">1.6.2. Tuplas</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Estructuras-de-Control">1.7. Estructuras de Control</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#if">1.7.1. if</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#If-else">1.7.2. If-else</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#if-elif">1.7.3. if-elif</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#For">1.7.4. For</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#while">1.7.5. while</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Break">1.7.6. Break</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Continue">1.7.7. Continue</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema:-Sumatoria-de-los-100-primeros-enteros">1.8. Problema: Sumatoria de los 100 primeros enteros</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problema:-Serie-de-Fibonacci">1.9. Problema: Serie de Fibonacci</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodo_residuos_ponderados.html">4. Método de residuos ponderados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Introducción - Programación en Python</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/python_basics_solved.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Introducción---Programación-en-Python">
+<h1><span class="section-number">1. </span>Introducción - Programación en Python<a class="headerlink" href="#Introducción---Programación-en-Python" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> : Introducción a Python - Variables - Listas - Tuplas - Slicing - Ciclos For - If - While - Suma de los <span class="math notranslate nohighlight">\(n\)</span> Enteros y Serie de Fibonacci</p>
+<p><strong>Desarrollar este Notebook en Clase y en Conjunto</strong></p>
+<section id="Variables">
+<h2><span class="section-number">1.1. </span>Variables<a class="headerlink" href="#Variables" title="Link to this heading"></a></h2>
+<p>Es un espacio reservado de memoria que tiene la capacidad de cambiar de valor mientras se desarrolla la ejecución del programa y se le asigna un nombre .</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">integer</span> <span class="o">=</span> <span class="mi">101</span>
+<span class="n">logical</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">string</span> <span class="o">=</span> <span class="s1">&#39;Hola!&#39;</span>
+<span class="n">flotante</span> <span class="o">=</span> <span class="mf">101.</span>
+<span class="n">complejo</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="o">+</span> <span class="mf">3.2</span><span class="n">j</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">integer</span><span class="p">,</span><span class="n">logical</span><span class="p">,</span><span class="n">string</span><span class="p">,</span><span class="n">flotante</span><span class="p">,</span><span class="n">complejo</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hola&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+101 True Hola! 101.0 (1.1+3.2j)
+Hola
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">integer</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">logical</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">flotante</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">complejo</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;int&#39;&gt;
+&lt;class &#39;bool&#39;&gt;
+&lt;class &#39;str&#39;&gt;
+&lt;class &#39;float&#39;&gt;
+&lt;class &#39;complex&#39;&gt;
+</pre></div></div>
+</div>
+</section>
+<section id="Operadores-aritméticos">
+<h2><span class="section-number">1.2. </span>Operadores aritméticos<a class="headerlink" href="#Operadores-aritméticos" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Caracter</p></th>
+<th class="head"><p>Operación</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(+\)</span></p></td>
+<td><p>Suma</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(-\)</span></p></td>
+<td><p>Resta</p></td>
+</tr>
+<tr class="row-even"><td><p>/</p></td>
+<td><p>division</p></td>
+</tr>
+<tr class="row-odd"><td><p>%</p></td>
+<td><p>módulo</p></td>
+</tr>
+<tr class="row-even"><td><p>*</p></td>
+<td><p>multiplicación</p></td>
+</tr>
+<tr class="row-odd"><td><p>//</p></td>
+<td><p>Divisón floor</p></td>
+</tr>
+<tr class="row-even"><td><p>**</p></td>
+<td><p>Elevado a la potencia</p></td>
+</tr>
+</tbody>
+</table>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uno</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uno</span> <span class="o">==</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">uno</span> <span class="o">&lt;</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="o">%</span><span class="k">3</span>,13//3)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+8 2 4
+</pre></div></div>
+</div>
+</section>
+<section id="Operadores-Lógicos">
+<h2><span class="section-number">1.3. </span>Operadores Lógicos<a class="headerlink" href="#Operadores-Lógicos" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Caracter</p></th>
+<th class="head"><p>Operación</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>and</p></td>
+<td><p>AND</p></td>
+</tr>
+<tr class="row-odd"><td><p>or</p></td>
+<td><p>OR</p></td>
+</tr>
+<tr class="row-even"><td><p>^</p></td>
+<td><p>XOR</p></td>
+</tr>
+<tr class="row-odd"><td><p>~</p></td>
+<td><p>Negación</p></td>
+</tr>
+</tbody>
+</table>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="mi">5</span> <span class="o">&gt;</span> <span class="mi">4</span> <span class="ow">or</span> <span class="mi">6</span> <span class="o">&lt;</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+</section>
+<section id="Range">
+<h2><span class="section-number">1.4. </span>Range<a class="headerlink" href="#Range" title="Link to this heading"></a></h2>
+<p>Crea una lista de enteros entre cierto rango definido por un intervalo</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rango</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># {2,4,6,8}</span>
+<span class="n">range2</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># {0,1,2}</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">rango</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;class &#39;range&#39;&gt;
+</pre></div></div>
+</div>
+</section>
+<section id="Print">
+<h2><span class="section-number">1.5. </span>Print<a class="headerlink" href="#Print" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">print()</span></code> Imprime por pantalla diferentes textos</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Concatenación</span>
+<span class="n">text1</span> <span class="o">=</span> <span class="s2">&quot;Hola </span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="n">text2</span> <span class="o">=</span> <span class="s2">&quot;Mundo!&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">text1</span><span class="o">+</span><span class="n">text2</span><span class="p">)</span>
+<span class="n">pi</span> <span class="o">=</span> <span class="mf">3.14159265</span>
+<span class="n">numero</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;El valor de PI es:</span><span class="si">{}</span><span class="s2"> y el valor del numero es </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span><span class="n">numero</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Hola
+Mundo!
+El valor de PI es:3.14159265 y el valor del numero es 12
+</pre></div></div>
+</div>
+</section>
+<section id="Estructura-de-Datos-Básicas-en-Python">
+<h2><span class="section-number">1.6. </span>Estructura de Datos Básicas en Python<a class="headerlink" href="#Estructura-de-Datos-Básicas-en-Python" title="Link to this heading"></a></h2>
+<p>Es una forma de ordenar y agrupar particulares estructuras de información</p>
+<section id="Listas">
+<h3><span class="section-number">1.6.1. </span>Listas<a class="headerlink" href="#Listas" title="Link to this heading"></a></h3>
+<p>Listas son uno de las estructuras de datos más usadas. Es una secuencia de información ordenada que se encuentra entre brackets y separado por una coma. Cada uno de estos elementos en las listas son accesibles por un índice.</p>
+<p>Para crear una lista vacia , solo es necesario definir una variable y inicializar</p>
+<p><code class="docutils literal notranslate"><span class="pre">mi_lista</span> <span class="pre">=</span> <span class="pre">[]</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi_lista</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">type</span><span class="p">(</span><span class="n">mi_lista</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+list
+</pre></div></div>
+</div>
+<p>Es posible asignar de forma directa una lista</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi_lista1</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;naranja&quot;</span><span class="p">,</span><span class="s2">&quot;papa&quot;</span><span class="p">,</span><span class="mf">12.42</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">mi_lista1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&#39;naranja&#39;, &#39;papa&#39;, 12.42]
+</pre></div></div>
+</div>
+<section id="Indexing">
+<h4><span class="section-number">1.6.1.1. </span>Indexing<a class="headerlink" href="#Indexing" title="Link to this heading"></a></h4>
+<p>Los índices en Python comienzan en cero. “mi_lista1” tiene 3 elements “0” -&gt; “naranja”, “1” -&gt; “papa” , “2” -&gt; 12.42</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi_lista1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+12.42
+</pre></div></div>
+</div>
+<p>El índice puede ser ordenado dde forma inversa. “-3” -&gt; “naranja”, “-2” -&gt; “papa” , “-1” -&gt; 12.42</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi_lista1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+12.42
+</pre></div></div>
+</div>
+<p>Podemos tambien hacer lista en listas, a continuación se ilustra</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi_lista2</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="mi">2</span><span class="n">j</span><span class="p">,</span> <span class="s2">&quot;Hola&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lista_lista</span> <span class="o">=</span> <span class="p">[</span><span class="n">mi_lista1</span><span class="p">,</span><span class="n">mi_lista2</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lista_lista</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[&#39;naranja&#39;, &#39;papa&#39;, 12.42], [False, (1+2j), &#39;Hola&#39;]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lista_lista</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;papa&#39;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p>Acceder a un elemento de una lista dentro de otra lista</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Slicing">
+<h4><span class="section-number">1.6.1.2. </span>Slicing<a class="headerlink" href="#Slicing" title="Link to this heading"></a></h4>
+<p>Al utiliar los indíces es posible acceder a solo un valor, en cambio utilizando slicing es posible obtener una lista de una lista utilizando la siguiente notación : [a,b] donde a y b son enteros y definen un intervalo de valores</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">331</span><span class="p">,</span><span class="mi">52</span><span class="p">,</span><span class="mi">65</span><span class="p">,</span><span class="mi">73</span><span class="p">,</span><span class="mi">82</span><span class="p">,</span><span class="mi">91</span><span class="p">]</span>
+    <span class="c1">#  0 1 2 3 4 ...            9</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="nb">print</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">7</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[7, 52]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Métodos-(funciones)-de-las-listas">
+<h4><span class="section-number">1.6.1.3. </span>Métodos (funciones) de las listas<a class="headerlink" href="#Métodos-(funciones)-de-las-listas" title="Link to this heading"></a></h4>
+<p>Para encontrar la longitud de la lista o el número de elementos de una lista, se utiliza len( ).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+10
+</pre></div></div>
+</div>
+<p>Si la lista está formada por todos los elementos enteros, entonces min( ) y max( ) dan el valor mínimo y máximo de la lista.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">min</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">max</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+331
+</pre></div></div>
+</div>
+<p>Las listas se pueden concatenar añadiendo, ‘+’ a las mismas. La lista resultante contendrá todos los elementos de las listas que se añadieron. La lista resultante no será una lista anidada.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 2, 3, 4, 5, 6]
+</pre></div></div>
+</div>
+<p>Puede surgir un requisito en el que necesite comprobar si un elemento concreto está en una lista predefinida. Considere la siguiente lista.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nombres</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bastian&quot;</span><span class="p">,</span><span class="s2">&quot;franco&quot;</span><span class="p">,</span><span class="s2">&quot;ignacio&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>Para comprobar si ‘Fire’ y ‘Rajath’ están presentes en los nombres de la lista. Un enfoque convencional sería utilizar un bucle for e iterar sobre la lista y utilizar la condición if. Pero en python puedes usar el concepto ‘a in b’ que devolvería ‘True’ si a está presente en b y ‘False’ si no.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;bastian&quot;</span> <span class="ow">in</span> <span class="n">nombres</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;Rajath&quot;</span> <span class="ow">in</span> <span class="n">nombres</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+False
+</pre></div></div>
+</div>
+</section>
+<section id="append">
+<h4><span class="section-number">1.6.1.4. </span>append<a class="headerlink" href="#append" title="Link to this heading"></a></h4>
+<p>append( ) se utiliza para añadir un elemento al final de la lista.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[71]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 1, 4, 8, 7, 1]
+</pre></div></div>
+</div>
+<p>La función append( ) también puede utilizarse para añadir una lista completa al final. Observe que la lista resultante se convierte en una lista anidada.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
+<span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lst1</span><span class="p">)</span> <span class="c1">#nombre_lista.append()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 1, 4, 8, 7, 1, [5, 4, 2, 8]]
+</pre></div></div>
+</div>
+</section>
+<section id="extend">
+<h4><span class="section-number">1.6.1.5. </span>extend<a class="headerlink" href="#extend" title="Link to this heading"></a></h4>
+<p>Pero si la lista anidada no es lo que se desea, se puede utilizar la función <strong>extend( )</strong>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[74]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">lst1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 1, 4, 8, 7, 1, [5, 4, 2, 8], 5, 4, 2, 8]
+</pre></div></div>
+</div>
+</section>
+<section id="index()">
+<h4><span class="section-number">1.6.1.6. </span>index()<a class="headerlink" href="#index()" title="Link to this heading"></a></h4>
+<p>index( ) se utiliza para encontrar el valor del índice de un elemento concreto. Tenga en cuenta que si hay varios elementos con el mismo valor, se devuelve el primer valor de índice de ese elemento.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[75]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2
+</pre></div></div>
+</div>
+</section>
+<section id="insert(x,y)">
+<h4><span class="section-number">1.6.1.7. </span>insert(x,y)<a class="headerlink" href="#insert(x,y)" title="Link to this heading"></a></h4>
+<p>index( ) se utiliza para encontrar el valor del índice de un elemento concreto. Tenga en cuenta que si hay varios elementos con el mismo valor, se devuelve el primer valor de índice de ese elemento.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[76]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;nombre&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 1, 4, 8, 7, &#39;nombre&#39;, 1, [5, 4, 2, 8], 5, 4, 2, 8]
+</pre></div></div>
+</div>
+<p>insert(x,y) inserta pero no reemplaza el elemento. Si quieres reemplazar el elemento con otro elemento simplemente asigna el valor a ese índice en particular</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[77]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Python&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 1, 4, 8, 7, &#39;Python&#39;, 1, [5, 4, 2, 8], 5, 4, 2, 8]
+</pre></div></div>
+</div>
+</section>
+<section id="pop">
+<h4><span class="section-number">1.6.1.8. </span>pop<a class="headerlink" href="#pop" title="Link to this heading"></a></h4>
+<p>pop( ) se utiliza para eliminar un elemento basándose en su valor de índice, que puede asignarse a una variable. También se puede eliminar un elemento especificando el propio elemento mediante la función remove( ).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[78]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+8
+</pre></div></div>
+</div>
+<p>Se puede especificar el valor del índice para que aparezca un elemento ceratin correspondiente a ese valor del índice.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[79]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1
+</pre></div></div>
+</div>
+</section>
+<section id="Remove">
+<h4><span class="section-number">1.6.1.9. </span>Remove<a class="headerlink" href="#Remove" title="Link to this heading"></a></h4>
+<p>pop( ) se utiliza para eliminar un elemento basándose en su valor de índice, que puede asignarse a una variable. También se puede eliminar un elemento especificando el propio elemento mediante la función remove( ).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[80]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;Python&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 4, 8, 7, 1, [5, 4, 2, 8], 5, 4, 2]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[81]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">del</span> <span class="n">lst</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 4, 8, 7, 1, 5, 4, 2]
+</pre></div></div>
+</div>
+</section>
+<section id="Sorting">
+<h4><span class="section-number">1.6.1.10. </span>Sorting<a class="headerlink" href="#Sorting" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[82]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 1, 2, 4, 4, 5, 7, 8]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[83]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[8, 7, 5, 4, 4, 2, 1, 1]
+</pre></div></div>
+</div>
+</section>
+<section id="Copiando-una-lista">
+<h4><span class="section-number">1.6.1.11. </span>Copiando una lista<a class="headerlink" href="#Copiando-una-lista" title="Link to this heading"></a></h4>
+<p><strong>La mayoría de los nuevos programadores de python cometen este error. Considere lo siguiente</strong>*</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lista</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">listab</span> <span class="o">=</span> <span class="n">lista</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">listab</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[2, 1, 4, 3]
+</pre></div></div>
+</div>
+<p>Aquí, hemos declarado una lista, lista = [2,1,4,3]. Esta lista se copia a listab asignándole su valor y se copia como se ve. Ahora realizamos algunas operaciones aleatorias sobre lista.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[86]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lista</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="n">lista</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lista</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[2, 1, 4, 9]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[87]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="nb">id</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+140688004661552 140688004661552
+</pre></div></div>
+</div>
+<p>Como Solucionarlo?</p>
+<p>lista = [2,1,4,3] listb = lista[:] print(listb) lista.pop() print(lista) lista.append(9) print(lista)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<p><strong>Opción 2</strong></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Tuplas">
+<h3><span class="section-number">1.6.2. </span>Tuplas<a class="headerlink" href="#Tuplas" title="Link to this heading"></a></h3>
+<p>Las tuplas son similares a las listas, pero la única gran diferencia es que los elementos de una lista pueden cambiarse, pero en las tuplas no. Piensa en las tuplas como algo que tiene que ser True para algo en particular y no puede ser True para ningún otro valor.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tupla</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="s2">&quot;hola&quot;</span><span class="p">,</span><span class="s2">&quot;Mundo&quot;</span><span class="p">,</span><span class="n">pi</span><span class="p">])</span>
+<span class="n">tupla</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[88]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&#39;hola&#39;, &#39;Mundo&#39;, 3.14159265)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[89]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tupla</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(&#39;hola&#39;, &#39;Mundo&#39;, 3.14159265)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="n">tupla</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[90]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+tuple
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Estructuras-de-Control">
+<h2><span class="section-number">1.7. </span>Estructuras de Control<a class="headerlink" href="#Estructuras-de-Control" title="Link to this heading"></a></h2>
+<section id="if">
+<h3><span class="section-number">1.7.1. </span>if<a class="headerlink" href="#if" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hola&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="If-else">
+<h3><span class="section-number">1.7.2. </span>If-else<a class="headerlink" href="#If-else" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;else&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+else
+</pre></div></div>
+</div>
+</section>
+<section id="if-elif">
+<h3><span class="section-number">1.7.3. </span>if-elif<a class="headerlink" href="#if-elif" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&gt;y&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x &lt; y&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x=y&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+x=y
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">11</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x&gt;y&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x &lt; y&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="mi">10</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x=10&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x=y&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+x&gt;y
+</pre></div></div>
+</div>
+</section>
+<section id="For">
+<h3><span class="section-number">1.7.4. </span>For<a class="headerlink" href="#For" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span> <span class="c1">#[0,1,2,3,4]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+1
+2
+3
+4
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">colores</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;azul&quot;</span><span class="p">,</span><span class="s2">&quot;rojo&quot;</span><span class="p">,</span><span class="s2">&quot;morado&quot;</span><span class="p">,</span><span class="s2">&quot;verde&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">colores</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+azul
+rojo
+morado
+verde
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_of_lists</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">list_of_lists</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 2, 3] 1
+[1, 2, 3] 2
+[1, 2, 3] 3
+[4, 5, 6] 4
+[4, 5, 6] 5
+[4, 5, 6] 6
+[7, 8, 9] 7
+[7, 8, 9] 8
+[7, 8, 9] 9
+</pre></div></div>
+</div>
+</section>
+<section id="while">
+<h3><span class="section-number">1.7.5. </span>while<a class="headerlink" href="#while" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;termino&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1
+2
+termino
+</pre></div></div>
+</div>
+</section>
+<section id="Break">
+<h3><span class="section-number">1.7.6. </span>Break<a class="headerlink" href="#Break" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;=</span><span class="mi">7</span><span class="p">:</span>
+        <span class="k">break</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hola&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+1
+2
+3
+4
+5
+6
+7
+Hola
+</pre></div></div>
+</div>
+</section>
+<section id="Continue">
+<h3><span class="section-number">1.7.7. </span>Continue<a class="headerlink" href="#Continue" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span><span class="o">&gt;</span><span class="mi">4</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;i&gt;4&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No me voy a ejecutar nunca&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">7</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+----
+1
+----
+2
+----
+3
+----
+4
+----
+i&gt;4
+i&gt;4
+i&gt;4
+i&gt;4
+i&gt;4
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">27</span><span class="o">*</span><span class="n">z</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">27</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[27, 54, 81, 108, 135, 162, 189, 216, 243, 270]
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Problema:-Sumatoria-de-los-100-primeros-enteros">
+<h2><span class="section-number">1.8. </span>Problema: Sumatoria de los 100 primeros enteros<a class="headerlink" href="#Problema:-Sumatoria-de-los-100-primeros-enteros" title="Link to this heading"></a></h2>
+<div class="math notranslate nohighlight">
+\[\sum_i^{n} i=\frac{n(n+1)}{2}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">suma</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">101</span><span class="p">):</span>
+    <span class="n">suma</span> <span class="o">=</span> <span class="n">suma</span> <span class="o">+</span> <span class="n">i</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sumatoria:</span><span class="si">{}</span><span class="s2"> y resultado analitico:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">suma</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+5050
+</pre></div></div>
+</div>
+</section>
+<section id="Problema:-Serie-de-Fibonacci">
+<h2><span class="section-number">1.9. </span>Problema: Serie de Fibonacci<a class="headerlink" href="#Problema:-Serie-de-Fibonacci" title="Link to this heading"></a></h2>
+<div class="math notranslate nohighlight">
+\[f_0 = 0\]</div>
+<div class="math notranslate nohighlight">
+\[f_1 = 1\]</div>
+<div class="math notranslate nohighlight">
+\[f_n = f_{n-1} + f_{n-2}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">an</span> <span class="o">=</span> <span class="n">a0</span><span class="o">+</span><span class="n">a1</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="n">a1</span>
+    <span class="n">a1</span> <span class="o">=</span> <span class="n">an</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;El valor </span><span class="si">{}</span><span class="s2"> de la Serie de Fibonacci es:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">an</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+El valor 0 de la Serie de Fibonacci es:1
+El valor 1 de la Serie de Fibonacci es:2
+El valor 2 de la Serie de Fibonacci es:3
+El valor 3 de la Serie de Fibonacci es:5
+El valor 4 de la Serie de Fibonacci es:8
+El valor 5 de la Serie de Fibonacci es:13
+El valor 6 de la Serie de Fibonacci es:21
+El valor 7 de la Serie de Fibonacci es:34
+El valor 8 de la Serie de Fibonacci es:55
+El valor 9 de la Serie de Fibonacci es:89
+El valor 10 de la Serie de Fibonacci es:144
+El valor 11 de la Serie de Fibonacci es:233
+El valor 12 de la Serie de Fibonacci es:377
+El valor 13 de la Serie de Fibonacci es:610
+El valor 14 de la Serie de Fibonacci es:987
+El valor 15 de la Serie de Fibonacci es:1597
+El valor 16 de la Serie de Fibonacci es:2584
+El valor 17 de la Serie de Fibonacci es:4181
+El valor 18 de la Serie de Fibonacci es:6765
+El valor 19 de la Serie de Fibonacci es:10946
+El valor 20 de la Serie de Fibonacci es:17711
+El valor 21 de la Serie de Fibonacci es:28657
+El valor 22 de la Serie de Fibonacci es:46368
+El valor 23 de la Serie de Fibonacci es:75025
+El valor 24 de la Serie de Fibonacci es:121393
+El valor 25 de la Serie de Fibonacci es:196418
+El valor 26 de la Serie de Fibonacci es:317811
+El valor 27 de la Serie de Fibonacci es:514229
+El valor 28 de la Serie de Fibonacci es:832040
+El valor 29 de la Serie de Fibonacci es:1346269
+El valor 30 de la Serie de Fibonacci es:2178309
+El valor 31 de la Serie de Fibonacci es:3524578
+El valor 32 de la Serie de Fibonacci es:5702887
+El valor 33 de la Serie de Fibonacci es:9227465
+El valor 34 de la Serie de Fibonacci es:14930352
+El valor 35 de la Serie de Fibonacci es:24157817
+El valor 36 de la Serie de Fibonacci es:39088169
+El valor 37 de la Serie de Fibonacci es:63245986
+El valor 38 de la Serie de Fibonacci es:102334155
+El valor 39 de la Serie de Fibonacci es:165580141
+El valor 40 de la Serie de Fibonacci es:267914296
+El valor 41 de la Serie de Fibonacci es:433494437
+El valor 42 de la Serie de Fibonacci es:701408733
+El valor 43 de la Serie de Fibonacci es:1134903170
+El valor 44 de la Serie de Fibonacci es:1836311903
+El valor 45 de la Serie de Fibonacci es:2971215073
+El valor 46 de la Serie de Fibonacci es:4807526976
+El valor 47 de la Serie de Fibonacci es:7778742049
+El valor 48 de la Serie de Fibonacci es:12586269025
+El valor 49 de la Serie de Fibonacci es:20365011074
+El valor 50 de la Serie de Fibonacci es:32951280099
+El valor 51 de la Serie de Fibonacci es:53316291173
+El valor 52 de la Serie de Fibonacci es:86267571272
+El valor 53 de la Serie de Fibonacci es:139583862445
+El valor 54 de la Serie de Fibonacci es:225851433717
+El valor 55 de la Serie de Fibonacci es:365435296162
+El valor 56 de la Serie de Fibonacci es:591286729879
+El valor 57 de la Serie de Fibonacci es:956722026041
+El valor 58 de la Serie de Fibonacci es:1548008755920
+El valor 59 de la Serie de Fibonacci es:2504730781961
+El valor 60 de la Serie de Fibonacci es:4052739537881
+El valor 61 de la Serie de Fibonacci es:6557470319842
+El valor 62 de la Serie de Fibonacci es:10610209857723
+El valor 63 de la Serie de Fibonacci es:17167680177565
+El valor 64 de la Serie de Fibonacci es:27777890035288
+El valor 65 de la Serie de Fibonacci es:44945570212853
+El valor 66 de la Serie de Fibonacci es:72723460248141
+El valor 67 de la Serie de Fibonacci es:117669030460994
+El valor 68 de la Serie de Fibonacci es:190392490709135
+El valor 69 de la Serie de Fibonacci es:308061521170129
+El valor 70 de la Serie de Fibonacci es:498454011879264
+El valor 71 de la Serie de Fibonacci es:806515533049393
+El valor 72 de la Serie de Fibonacci es:1304969544928657
+El valor 73 de la Serie de Fibonacci es:2111485077978050
+El valor 74 de la Serie de Fibonacci es:3416454622906707
+El valor 75 de la Serie de Fibonacci es:5527939700884757
+El valor 76 de la Serie de Fibonacci es:8944394323791464
+El valor 77 de la Serie de Fibonacci es:14472334024676221
+El valor 78 de la Serie de Fibonacci es:23416728348467685
+El valor 79 de la Serie de Fibonacci es:37889062373143906
+El valor 80 de la Serie de Fibonacci es:61305790721611591
+El valor 81 de la Serie de Fibonacci es:99194853094755497
+El valor 82 de la Serie de Fibonacci es:160500643816367088
+El valor 83 de la Serie de Fibonacci es:259695496911122585
+El valor 84 de la Serie de Fibonacci es:420196140727489673
+El valor 85 de la Serie de Fibonacci es:679891637638612258
+El valor 86 de la Serie de Fibonacci es:1100087778366101931
+El valor 87 de la Serie de Fibonacci es:1779979416004714189
+El valor 88 de la Serie de Fibonacci es:2880067194370816120
+El valor 89 de la Serie de Fibonacci es:4660046610375530309
+El valor 90 de la Serie de Fibonacci es:7540113804746346429
+El valor 91 de la Serie de Fibonacci es:12200160415121876738
+El valor 92 de la Serie de Fibonacci es:19740274219868223167
+El valor 93 de la Serie de Fibonacci es:31940434634990099905
+El valor 94 de la Serie de Fibonacci es:51680708854858323072
+El valor 95 de la Serie de Fibonacci es:83621143489848422977
+El valor 96 de la Serie de Fibonacci es:135301852344706746049
+El valor 97 de la Serie de Fibonacci es:218922995834555169026
+El valor 98 de la Serie de Fibonacci es:354224848179261915075
+El valor 99 de la Serie de Fibonacci es:573147844013817084101
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Mecánica Computacional" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="numpy_solved.html" class="btn btn-neutral float-right" title="2. Programación Científica con Numpy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

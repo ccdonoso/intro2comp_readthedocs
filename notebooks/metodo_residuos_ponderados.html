@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>4. Método de residuos ponderados &mdash; Introducción - Mecánica Computacional</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Método de elementos finitos de Galerkin" href="fem_1d.html" />
+    <link rel="prev" title="3. Mallas" href="mallas.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Intro2ComputationalMechanics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares - Python.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_basics_solved.html">1. Introducción - Programación en Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_solved.html">2. Programación Científica con Numpy</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Métodos Numéricos.</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="repaso_metodos_numericos.html">1. Repaso - Métodos Numéricos (1/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metodos_numericos_2.html">2. Métodos Numéricos (2/2)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optimizacion.html">3. Optimización</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mecanismos.html">4. Mecanismos</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Fundamentos de FEM.</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="metodo_rigidez.html">1. Método de la Rigidez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="oop_pyvista.html">2. Clases y PyVista</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mallas.html">3. Mallas</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Método de residuos ponderados</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#La-noción-en-el-MWR-es-forzar-el-residuo-a-cero-en-un-sentido-ponderado.-es-decir:">4.1. La noción en el MWR es forzar el residuo a cero en un sentido ponderado. es decir:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Método-de-colocación">4.1.1. Método de colocación</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Método-del-sub-dominio">4.1.2. Método del sub-dominio</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Método-de-los-mínimos-cuadrados">4.1.3. Método de los mínimos cuadrados</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Método-de-Galerkin">4.1.4. Método de Galerkin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Método-de-momentos">4.1.5. Método de momentos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Ejemplo:-Método-de-Galerkin-de-Residuos-Ponderados.">4.1.6. Ejemplo: Método de Galerkin de Residuos Ponderados.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Tarea:-Desarrollar-la-solución-de-la-ODE,-de-forma-simbolica-con-Sympy-y-2-términos.">4.1.7. Tarea: Desarrollar la solución de la ODE, de forma simbolica con Sympy y 2 términos.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Referencias">4.1.8. Referencias</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fem_1d.html">5. Método de elementos finitos de Galerkin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elasticity_3d.html">6. Elasticidad Lineal en FEniCS 3D.</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intro2ComputationalMechanics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>Método de residuos ponderados</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/metodo_residuos_ponderados.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Método-de-residuos-ponderados">
+<h1><span class="section-number">4. </span>Método de residuos ponderados<a class="headerlink" href="#Método-de-residuos-ponderados" title="Link to this heading"></a></h1>
+<p><img alt="logo" class="no-scaled-link" src="https://github.com/ccdonoso/Intro2_Computational_Mechanics/blob/master/img/logo_usach_dimec.png?raw=true" style="width: 300px;" /></p>
+<ul class="simple">
+<li><p>Autor: Claudio Canales Donoso</p></li>
+<li><p>Página: <a class="reference external" href="https://ccdonoso.github.io/">ccdonoso.github.io</a></p></li>
+<li><p>Cursos: Mecánica Computacional - Diseño Computarizado</p></li>
+<li><p>Universidad de Santiago de Chile</p></li>
+<li><p>Fecha: 05/03/24</p></li>
+</ul>
+<p>License: BSD 3 clause</p>
+<p><strong>Contenido</strong> - MWR 1. Método de colocación. 2. Método del sub-dominio 3. Método de los mínimos cuadrados 4. Método de Galerkin 5. Método de momentos</p>
+<p>Antes del desarrollo del Método de los Elementos Finitos, existía una técnica de técnica de aproximación para resolver ecuaciones diferenciales llamada Método de los Residuos Ponderados (MWR). Este método se presentará como una introducción, antes de utilizar una subclase particular de MWR, el Método de Galerkin de Residuos Ponderados, para derivar las ecuaciones del elemento, para el método de elementos finitos.</p>
+<p>Supongamos que tenemos un operador diferencial lineal <span class="math notranslate nohighlight">\(D\)</span> que actúa sobre una función <span class="math notranslate nohighlight">\(u\)</span> para producir una función <span class="math notranslate nohighlight">\(p\)</span></p>
+<div class="math notranslate nohighlight">
+\[D(u(x)) = p (x)\]</div>
+<p>Deseamos aproximar <span class="math notranslate nohighlight">\(u\)</span> mediante una función <span class="math notranslate nohighlight">\(\tilde{u}\)</span>, que es una combinación lineal de funciones base elegidas de un conjunto linealmente independiente. Es decir,</p>
+<div class="math notranslate nohighlight">
+\[u \cong \tilde{u} = \sum_{i=1}^{n} a_i \varphi_i\]</div>
+<p>Ahora, cuando se sustituye en el operador diferencial, <span class="math notranslate nohighlight">\(D\)</span>, el resultado de las operaciones no es, en general, <span class="math notranslate nohighlight">\(p(x)\)</span>. Por tanto, existira una función residuo o error:</p>
+<div class="math notranslate nohighlight">
+\[E(x) = R(x) = D(\tilde{u}(x))-p(x) \neq 0\]</div>
+<section id="La-noción-en-el-MWR-es-forzar-el-residuo-a-cero-en-un-sentido-ponderado.-es-decir:">
+<h2><span class="section-number">4.1. </span>La noción en el MWR es forzar el residuo a cero en un sentido ponderado. es decir:<a class="headerlink" href="#La-noción-en-el-MWR-es-forzar-el-residuo-a-cero-en-un-sentido-ponderado.-es-decir:" title="Link to this heading"></a></h2>
+<div class="math notranslate nohighlight">
+\[\int_X R(x)W_idx = 0 \quad i=1,2,\dots,n\]</div>
+<p>donde el número de funciones de peso <span class="math notranslate nohighlight">\(W_i\)</span> es exactamente igual al número de constantes desconocidas ai en <span class="math notranslate nohighlight">\(\tilde{u}\)</span>. El resultado es un conjunto de <span class="math notranslate nohighlight">\(n\)</span> ecuaciones algebraicas para las constantes desconocidas <span class="math notranslate nohighlight">\(a_i\)</span>.Hay (al menos) cinco submétodos MWR, según las elecciones de las <span class="math notranslate nohighlight">\(W_i\)</span>. Estos cinco métodos son:</p>
+<ol class="arabic simple">
+<li><p>Método de colocación.</p></li>
+<li><p>Método del sub-dominio</p></li>
+<li><p>Método de los mínimos cuadrados</p></li>
+<li><p>Método de Galerkin</p></li>
+<li><p>Método de momentos</p></li>
+</ol>
+<section id="Método-de-colocación">
+<h3><span class="section-number">4.1.1. </span>Método de colocación<a class="headerlink" href="#Método-de-colocación" title="Link to this heading"></a></h3>
+<p>En este método, las funciones de ponderación se toman de la familia de funciones Dirac <span class="math notranslate nohighlight">\(\delta\)</span> en el dominio. Es decir, <span class="math notranslate nohighlight">\(W_i(x) = \delta(x-x_i)\)</span>. La función Dirac <span class="math notranslate nohighlight">\(\delta\)</span> tiene la propiedad de que</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\delta(x-x_i) = \left\{\begin{matrix}1 \quad x=x_i \\0 \quad x \neq x_i \end{matrix}\right.\end{split}\]</div>
+<p>Por lo tanto, la integración de la declaración del residuo ponderado tiene como resultado el forzar el residuo a cero en determinados puntos del dominio. Es decir la integral de residuo con <span class="math notranslate nohighlight">\(W_i(x) = \delta(x - x_i)\)</span> resulta en</p>
+<div class="math notranslate nohighlight">
+\[R(x_i) = 0\]</div>
+</section>
+<section id="Método-del-sub-dominio">
+<h3><span class="section-number">4.1.2. </span>Método del sub-dominio<a class="headerlink" href="#Método-del-sub-dominio" title="Link to this heading"></a></h3>
+<p>Este método no utiliza factores de ponderación explícitamente, por lo que no es, estrictamente hablando, un miembro de la familia de los residuos ponderados. Sin embargo, puede considerarse una modificación del método de colocación. La idea es forzar el residuo ponderado a cero no sólo en puntos fijos del dominio, sino en varias subsecciones del mismo. Para ello, las funciones de peso se fijan en la unidad, y la integral sobre todo el dominio se divide en un número de subdominios suficiente para
+evaluar todos los parámetros desconocidos. Es decir</p>
+<div class="math notranslate nohighlight">
+\[\int_X R(x)W_idx = \sum(\int_{X_i} R(x)W_idx) = 0 \quad i=1,2,\dots,n\]</div>
+</section>
+<section id="Método-de-los-mínimos-cuadrados">
+<h3><span class="section-number">4.1.3. </span>Método de los mínimos cuadrados<a class="headerlink" href="#Método-de-los-mínimos-cuadrados" title="Link to this heading"></a></h3>
+<p>Si se minimiza la suma continua de todos los residuos al cuadrado, se puede ver la razón de ser del nombre. En otras palabras, un mínimo de</p>
+<div class="math notranslate nohighlight">
+\[S = \int_X R(x)R(x)dx = \int_X R(x)^2dx\]</div>
+<p>Para conseguir un mínimo de esta función escalar, las derivadas de <span class="math notranslate nohighlight">\(S\)</span> con respecto a todos los parámetros desconocidos deben ser cero. Es decir, es,</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial S}{\partial a_i} = 0 = 2 \int_X R(x)\frac{\partial R}{\partial a_i}dx\]</div>
+<p>En este caso, las funciones de peso, serián:</p>
+<div class="math notranslate nohighlight">
+\[W_i = 2 \frac{\partial R}{\partial a_i}\]</div>
+<p>Sin embargo, el “2” puede suprimirse, ya que se anula en la ecuación. Por lo tanto, las funciones de peso para el método de los mínimos cuadrados son simplemente las derivadas del residuo con respecto a las constantes desconocidas:</p>
+<div class="math notranslate nohighlight">
+\[W_i = \frac{\partial R}{\partial a_i}\]</div>
+</section>
+<section id="Método-de-Galerkin">
+<h3><span class="section-number">4.1.4. </span>Método de Galerkin<a class="headerlink" href="#Método-de-Galerkin" title="Link to this heading"></a></h3>
+<p>Este método puede considerarse una modificación del método de los mínimos cuadrados. En lugar de utilizar la derivada del residuo con respecto a la incógnita <span class="math notranslate nohighlight">\(a_i\)</span>, se utiliza la derivada de la función de aproximación <span class="math notranslate nohighlight">\(\tilde{u}\)</span>. Es decir,</p>
+<div class="math notranslate nohighlight">
+\[\tilde{u} = \sum_{i=1}^{n} a_i \varphi_i\]</div>
+<div class="math notranslate nohighlight">
+\[W_i = \frac{\partial \tilde{u}}{\partial a_i} = \varphi_i\]</div>
+</section>
+<section id="Método-de-momentos">
+<h3><span class="section-number">4.1.5. </span>Método de momentos<a class="headerlink" href="#Método-de-momentos" title="Link to this heading"></a></h3>
+<p>En este método, las funciones de peso se eligen de la familia de polinomios. Es decir</p>
+<div class="math notranslate nohighlight">
+\[W_i = x^i \quad i = 0,1,2,\dots,n-1\]</div>
+</section>
+<section id="Ejemplo:-Método-de-Galerkin-de-Residuos-Ponderados.">
+<h3><span class="section-number">4.1.6. </span>Ejemplo: Método de Galerkin de Residuos Ponderados.<a class="headerlink" href="#Ejemplo:-Método-de-Galerkin-de-Residuos-Ponderados." title="Link to this heading"></a></h3>
+<p>Resolver la siguiente ecuación diferencial:</p>
+<div class="math notranslate nohighlight">
+\[\frac{d^2u}{dx^2}-10x^2 = 5 \quad 0 \leq x \leq 1\]</div>
+<p>Condiciones de borde:</p>
+<div class="math notranslate nohighlight">
+\[\quad u(0) = u(1) = 0\]</div>
+<p>Propongamos que la solución es una familia de funciones que cumplen con las condiciones de borde, esta familia de funciones podría ser:</p>
+<div class="math notranslate nohighlight">
+\[\varphi = (x-x_a)^p (x-x_b)^q ,\quad p,q = 1,2,\dots,n\]</div>
+<p>En este caso <span class="math notranslate nohighlight">\(x_a\)</span> y <span class="math notranslate nohighlight">\(x_b\)</span> son (0,1), respectivamente.</p>
+<p><strong>Método de Galerkin</strong></p>
+<p>La propuesta de solución es:</p>
+<div class="math notranslate nohighlight">
+\[\tilde{u} = \sum_{i=1}^{n} a_i \varphi_i\]</div>
+<p>Para encontrar la aproximación a la solución, utilizaremos las funciones de forma como ponderadores:</p>
+<div class="math notranslate nohighlight">
+\[\int_X R(x)W_idx = 0 \quad i=1,2,\dots,n\]</div>
+<p>En este caso <span class="math notranslate nohighlight">\(W_i = \varphi_i\)</span>, por lo tanto, tendremos que solucionar el siguiente sistema de ecuación lineal:</p>
+<div class="math notranslate nohighlight">
+\[\int_X R(x)\varphi_idx = 0 \quad i=1,2,\dots,n\]</div>
+<p>Esto nos permitira conocer los valores de las constantes <span class="math notranslate nohighlight">\(a_i\)</span>. <span class="math notranslate nohighlight">\(n\)</span> ecuaciones y <span class="math notranslate nohighlight">\(n\)</span> incongintas para <span class="math notranslate nohighlight">\(a_i\)</span>.</p>
+<p><strong>Caso 1: Solo 1 término</strong></p>
+<div class="math notranslate nohighlight">
+\[\frac{d^2u}{dx^2}-10x^2 = 5 \quad 0 \leq x \leq 1\]</div>
+<p>La función de forma será:</p>
+<div class="math notranslate nohighlight">
+\[\varphi_1= x(x-1)\]</div>
+<p>La aproximación será una combinación lineal de funciones linealmente independientes:</p>
+<div class="math notranslate nohighlight">
+\[\tilde{u} =a_1 \varphi_1 = a_1 x(x-1)\]</div>
+<p>Las derivadas de la aproximación son:</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\tilde{u}}{dx} = a_1 (2x-1)\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{d^2\tilde{u}}{dx^2} = 2a_1\]</div>
+<p>Por lo tanto, el residuo esta definido por:</p>
+<div class="math notranslate nohighlight">
+\[R(x;a_1) = 2a_1-10x^2-5\]</div>
+<p>Ahora, utilizaremos el método de los residuos ponderados, para determinar el mejor valor de las constantes <span class="math notranslate nohighlight">\(a_i\)</span>, para obtener la mejor aproximación.</p>
+<div class="math notranslate nohighlight">
+\[\int_X R(x)\varphi_idx = 0 \quad i=1,2,\dots,n\]</div>
+<p>En este caso:</p>
+<div class="math notranslate nohighlight">
+\[\int_X (2a_1-10x^2-5) (x(x-1))dx = 0\]</div>
+<p>Al solucionar este problema, se obtiene que:</p>
+<div class="math notranslate nohighlight">
+\[a_1 = 4\]</div>
+<p>Por ende, la aproximación es:</p>
+<div class="math notranslate nohighlight">
+\[\tilde{u} = 4 x(x-1)\]</div>
+<p>En este caso, la solución exacta es:</p>
+<div class="math notranslate nohighlight">
+\[u(x) = \frac{5}{6}x^4+\frac{5}{2}x^2-\frac{10}{3}x\]</div>
+<p>En el siguiente gráfico, compararemos la solución:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">5</span><span class="o">/</span><span class="mi">6</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">4</span><span class="o">+</span><span class="mi">5</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">10</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="n">x</span>
+<span class="n">u_tilde</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exacta&quot;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">u_tilde</span><span class="p">,</span><span class="s1">&#39;k--&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Galerkin&quot;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$u$&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Tarea:-Desarrollar-la-solución-de-la-ODE,-de-forma-simbolica-con-Sympy-y-2-términos.">
+<h3><span class="section-number">4.1.7. </span>Tarea: Desarrollar la solución de la ODE, de forma simbolica con Sympy y 2 términos.<a class="headerlink" href="#Tarea:-Desarrollar-la-solución-de-la-ODE,-de-forma-simbolica-con-Sympy-y-2-términos." title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Desarrollo</span>
+<br/><br/><br/></pre></div>
+</div>
+</div>
+</section>
+<section id="Referencias">
+<h3><span class="section-number">4.1.8. </span>Referencias<a class="headerlink" href="#Referencias" title="Link to this heading"></a></h3>
+<p>1.- Hutton, D. V. (2004). Fundamental of finite element method. Mc Gaw Hill Higher Education.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mallas.html" class="btn btn-neutral float-left" title="3. Mallas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fem_1d.html" class="btn btn-neutral float-right" title="5. Método de elementos finitos de Galerkin" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Claudio Canales D..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
